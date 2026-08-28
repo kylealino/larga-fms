@@ -1,0 +1,636 @@
+ERROR - 2026-04-24 23:40:43 --> mysqli_sql_exception: Table 'mjeshter.tbl_members' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT\r\n ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT\r\n ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT\r\n ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT\r\n ...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('members-managem...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\AccountSettingsController.php(24): view('members-managem...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-04-24 23:40:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_members' doesn't exist
+[Method: GET, Route: myaccount]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:40:43 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_members' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 7 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:40:43 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_members' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 8 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-24 23:41:23 --> mysqli_sql_exception: Unknown column 'contact_number' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT\r\n ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT\r\n ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT\r\n ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT\r\n ...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('members-managem...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\AccountSettingsController.php(24): view('members-managem...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-04-24 23:41:23 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'contact_number' in 'field list'
+[Method: GET, Route: myaccount]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:41:23 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'contact_number' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 7 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:41:23 --> [Caused by] mysqli_sql_exception: Unknown column 'contact_number' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 8 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-24 23:42:23 --> mysqli_sql_exception: Unknown column 'contact_number' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT\r\n ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT\r\n ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT\r\n ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT\r\n ...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('members-managem...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\AccountSettingsController.php(24): view('members-managem...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-04-24 23:42:23 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'contact_number' in 'field list'
+[Method: GET, Route: myaccount]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:42:23 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'contact_number' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 7 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:42:23 --> [Caused by] mysqli_sql_exception: Unknown column 'contact_number' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 4 APPPATH\Views\members-management\account-main.php(20): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `username` = \'ADMIN-KYLE\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 8 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:42:48 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: myaccount]
+in APPPATH\Views\members-management\account-main.php on line 41.
+ 1 APPPATH\Views\members-management\account-main.php(41): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php', 41)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:43:29 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: myaccount]
+in APPPATH\Views\members-management\account-main.php on line 41.
+ 1 APPPATH\Views\members-management\account-main.php(41): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php', 41)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-24 23:44:02 --> ErrorException: Trying to access array offset on value of type null
+[Method: GET, Route: myaccount]
+in APPPATH\Views\members-management\account-main.php on line 41.
+ 1 APPPATH\Views\members-management\account-main.php(41): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php', 41)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\account-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/account-main', [], true)
+ 5 APPPATH\Controllers\AccountSettingsController.php(24): view('members-management/account-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountSettingsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountSettingsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

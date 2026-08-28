@@ -1,0 +1,75 @@
+CRITICAL - 2026-04-04 14:09:26 --> ErrorException: Undefined variable $pdf
+[Method: GET, Route: mymembers]
+in APPPATH\Views\members-management\members-profile-pdf.php on line 36.
+ 1 APPPATH\Views\members-management\members-profile-pdf.php(36): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $pdf', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php', 36)
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(330): PDF->Header()
+ 3 APPPATH\Views\members-management\members-profile-pdf.php(59): FPDF->AddPage()
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-profile-pdf', [], true)
+ 7 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-profile-pdf')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-04 14:09:53 --> Exception: FPDF error: No page has been added yet
+[Method: GET, Route: mymembers]
+in APPPATH\ThirdParty\fpdf\fpdf.php on line 267.
+ 1 APPPATH\ThirdParty\fpdf\fpdf.php(1463): FPDF->Error('No page has been added yet')
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(929): FPDF->_out('q 141.73 0 0 141.73 28.35 671.81 cm /I1 Do Q')
+ 3 APPPATH\Views\members-management\members-profile-pdf.php(36): FPDF->Image('C:\\xampp\\htdocs\\sslais\\public\\assets/images/logos/sslai.png', 10, 10, 50)
+ 4 APPPATH\ThirdParty\fpdf\fpdf.php(330): PDF->Header()
+ 5 APPPATH\Views\members-management\members-profile-pdf.php(59): FPDF->AddPage()
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-profile-pdf', [], true)
+ 9 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-profile-pdf')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-04 14:13:29 --> ErrorException: Undefined variable $formattedDate
+[Method: GET, Route: mymembers]
+in APPPATH\Views\members-management\members-profile-pdf.php on line 411.
+ 1 APPPATH\Views\members-management\members-profile-pdf.php(411): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $formattedDate', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php', 411)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-profile-pdf', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-profile-pdf')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-04 14:14:09 --> ErrorException: Undefined variable $currentDate
+[Method: GET, Route: mymembers]
+in APPPATH\Views\members-management\members-profile-pdf.php on line 6.
+ 1 APPPATH\Views\members-management\members-profile-pdf.php(6): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $currentDate', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php', 6)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-profile-pdf.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-profile-pdf', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-profile-pdf')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-04 14:18:29 --> Error: Call to undefined method CodeIgniter\View\View::GetPageWidth()
+[Method: GET, Route: mymembers]
+in APPPATH\Views\members-management\members-profile-pdf.php on line 46.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-profile-pdf', [], true)
+ 4 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-profile-pdf')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

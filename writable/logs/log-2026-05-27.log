@@ -1,0 +1,78 @@
+CRITICAL - 2026-05-27 21:10:45 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\MembersManagementController.php(80): CodeIgniter\Model->__call('getProgressImages', [])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-27 21:10:46 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\MembersManagementController.php(80): CodeIgniter\Model->__call('getProgressImages', [])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-27 21:10:57 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\MembersManagementController.php(80): CodeIgniter\Model->__call('getProgressImages', [])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-27 21:11:26 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Controllers\MembersManagementController.php(75): CodeIgniter\Model->__call('uploadProgressImage', [])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-27 22:08:51 --> ErrorException: Undefined variable $currentWeight
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 586.
+ 1 APPPATH\Views\MyClientDashboard.php(586): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $currentWeight', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php', 586)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 5 APPPATH\Controllers\MyClientDashboard.php(163): view('MyClientDashboard', [...])
+ 6 APPPATH\Controllers\MyClientDashboard.php(46): App\Controllers\MyClientDashboard->showDashboard('0007553966')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-27 22:13:33 --> ErrorException: Undefined variable $goalWeight
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 587.
+ 1 APPPATH\Views\MyClientDashboard.php(587): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $goalWeight', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php', 587)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 5 APPPATH\Controllers\MyClientDashboard.php(163): view('MyClientDashboard', [...])
+ 6 APPPATH\Controllers\MyClientDashboard.php(46): App\Controllers\MyClientDashboard->showDashboard('0007553966')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

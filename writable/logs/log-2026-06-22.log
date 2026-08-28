@@ -1,0 +1,256 @@
+ERROR - 2026-06-22 16:38:20 --> mysqli_sql_exception: Unknown column 'updated_by' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            U...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            U...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            U...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\ProductsModel.php(55): CodeIgniter\Database\BaseConnection->query('\r\n            U...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-22 16:38:20 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'updated_by' in 'field list'
+[Method: POST, Route: products]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\ProductsModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?,
+                `updated_at` = NOW(),
+                `updated_by` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 2 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-22 16:38:20 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'updated_by' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = \'COKEeee\',
+                `category` = \'Beverages\',
+                `purchase_price` = \'222\',
+                `selling_price` = \'444\',
+                `updated_at` = NOW(),
+                `updated_by` = \'ADMIN\'
+            WHERE `product_id` = \'29\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = \'COKEeee\',
+                `category` = \'Beverages\',
+                `purchase_price` = \'222\',
+                `selling_price` = \'444\',
+                `updated_at` = NOW(),
+                `updated_by` = \'ADMIN\'
+            WHERE `product_id` = \'29\'
+        ')
+ 3 APPPATH\Models\ProductsModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?,
+                `updated_at` = NOW(),
+                `updated_by` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 4 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-22 16:38:20 --> [Caused by] mysqli_sql_exception: Unknown column 'updated_by' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = \'COKEeee\',
+                `category` = \'Beverages\',
+                `purchase_price` = \'222\',
+                `selling_price` = \'444\',
+                `updated_at` = NOW(),
+                `updated_by` = \'ADMIN\'
+            WHERE `product_id` = \'29\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = \'COKEeee\',
+                `category` = \'Beverages\',
+                `purchase_price` = \'222\',
+                `selling_price` = \'444\',
+                `updated_at` = NOW(),
+                `updated_by` = \'ADMIN\'
+            WHERE `product_id` = \'29\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = \'COKEeee\',
+                `category` = \'Beverages\',
+                `purchase_price` = \'222\',
+                `selling_price` = \'444\',
+                `updated_at` = NOW(),
+                `updated_by` = \'ADMIN\'
+            WHERE `product_id` = \'29\'
+        ')
+ 4 APPPATH\Models\ProductsModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?,
+                `updated_at` = NOW(),
+                `updated_by` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 5 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-22 16:39:02 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,
+                `category` = ?,
+                `purchase_price` = ?,
+ ...' at line 3 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            U...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            U...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            U...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\ProductsModel.php(53): CodeIgniter\Database\BaseConnection->query('\r\n            U...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-22 16:39:02 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,
+                `category` = ?,
+                `purchase_price` = ?,
+ ...' at line 3
+[Method: POST, Route: products]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\ProductsModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 2 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-22 16:39:02 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,
+                `category` = ?,
+                `purchase_price` = ?,
+ ...' at line 3
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ')
+ 3 APPPATH\Models\ProductsModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 4 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-22 16:39:02 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?,
+                `category` = ?,
+                `purchase_price` = ?,
+ ...' at line 3
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ')
+ 4 APPPATH\Models\ProductsModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_products`
+            SET 
+                `product_name` = ?,
+                `category` = ?,
+                `purchase_price` = ?,
+                `selling_price` = ?
+            WHERE `product_id` = ?
+        ', [...])
+ 5 APPPATH\Controllers\ProductsController.php(28): App\Models\ProductsModel->updateProduct()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\ProductsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ProductsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

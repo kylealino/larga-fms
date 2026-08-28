@@ -1,0 +1,368 @@
+ERROR - 2026-05-17 14:02:08 --> mysqli_sql_exception: Table 'mjeshter.tbl_general_journal' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM t...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM t...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM t...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\generaljournal\general-journal-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM t...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('generaljournal/...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\GeneralJournalController.php(24): view('generaljournal/...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-17 14:02:08 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_general_journal' doesn't exist
+[Method: GET, Route: general-journal]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\generaljournal\general-journal-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 5 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 14:02:08 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_general_journal' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 3 APPPATH\Views\generaljournal\general-journal-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 7 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 14:02:08 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_general_journal' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 4 APPPATH\Views\generaljournal\general-journal-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_general_journal ORDER BY journal_id DESC')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 8 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-17 14:14:30 --> mysqli_sql_exception: Unknown column 'amount' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT COALESCE...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COALESCE...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COALESCE...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\generaljournal\general-journal-main.php(15): CodeIgniter\Database\BaseConnection->query('SELECT COALESCE...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('generaljournal/...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\GeneralJournalController.php(24): view('generaljournal/...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-17 14:14:30 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'amount' in 'field list'
+[Method: GET, Route: general-journal]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\generaljournal\general-journal-main.php(15): CodeIgniter\Database\BaseConnection->query('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 5 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 14:14:30 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'amount' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 3 APPPATH\Views\generaljournal\general-journal-main.php(15): CodeIgniter\Database\BaseConnection->query('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 7 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 14:14:30 --> [Caused by] mysqli_sql_exception: Unknown column 'amount' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 4 APPPATH\Views\generaljournal\general-journal-main.php(15): CodeIgniter\Database\BaseConnection->query('SELECT COALESCE(SUM(amount),0) as total FROM tbl_general_journal')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\generaljournal\\general-journal-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('generaljournal/general-journal-main', [], true)
+ 8 APPPATH\Controllers\GeneralJournalController.php(24): view('generaljournal/general-journal-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\GeneralJournalController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\GeneralJournalController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-17 15:29:21 --> mysqli_sql_exception: Duplicate entry 'kylealino@gmail.com' for key 'email' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(79): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-17 15:29:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'kylealino@gmail.com' for key 'email'
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(79): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 15:29:21 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'kylealino@gmail.com' for key 'email'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'10230120310\', \'120310230102\', \'TEST\', \'KYLE\', \'ASDASD\', \'Male\', \'1999-10-04\', \'26\', \'kylealino@gmail.com\', \'09158018602\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, NULL, 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'10230120310\', \'120310230102\', \'TEST\', \'KYLE\', \'ASDASD\', \'Male\', \'1999-10-04\', \'26\', \'kylealino@gmail.com\', \'09158018602\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, NULL, 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MembersManagementModel.php(79): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 15:29:21 --> [Caused by] mysqli_sql_exception: Duplicate entry 'kylealino@gmail.com' for key 'email'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'10230120310\', \'120310230102\', \'TEST\', \'KYLE\', \'ASDASD\', \'Male\', \'1999-10-04\', \'26\', \'kylealino@gmail.com\', \'09158018602\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, NULL, 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'10230120310\', \'120310230102\', \'TEST\', \'KYLE\', \'ASDASD\', \'Male\', \'1999-10-04\', \'26\', \'kylealino@gmail.com\', \'09158018602\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, NULL, 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'10230120310\', \'120310230102\', \'TEST\', \'KYLE\', \'ASDASD\', \'Male\', \'1999-10-04\', \'26\', \'kylealino@gmail.com\', \'09158018602\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, NULL, 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MembersManagementModel.php(79): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-17 16:15:26 --> mysqli_sql_exception: Duplicate entry '1231231' for key 'member_no' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(80): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-17 16:15:26 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry '1231231' for key 'member_no'
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(80): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 16:15:26 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry '1231231' for key 'member_no'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1231231\', \'231231512\', \'asdasd\', \'asd\', \'asdasd\', \'Male\', \'1999-10-04\', \'26\', \'asdadas@gmail.com\', \'1231231\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1231231\', \'231231512\', \'asdasd\', \'asd\', \'asdasd\', \'Male\', \'1999-10-04\', \'26\', \'asdadas@gmail.com\', \'1231231\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MembersManagementModel.php(80): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-17 16:15:26 --> [Caused by] mysqli_sql_exception: Duplicate entry '1231231' for key 'member_no'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1231231\', \'231231512\', \'asdasd\', \'asd\', \'asdasd\', \'Male\', \'1999-10-04\', \'26\', \'asdadas@gmail.com\', \'1231231\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1231231\', \'231231512\', \'asdasd\', \'asd\', \'asdasd\', \'Male\', \'1999-10-04\', \'26\', \'asdadas@gmail.com\', \'1231231\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1231231\', \'231231512\', \'asdasd\', \'asd\', \'asdasd\', \'Male\', \'1999-10-04\', \'26\', \'asdadas@gmail.com\', \'1231231\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', NULL, NULL, NULL, \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MembersManagementModel.php(80): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(49): App\Models\MembersManagementModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

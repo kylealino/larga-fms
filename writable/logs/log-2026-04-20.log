@@ -1,0 +1,156 @@
+CRITICAL - 2026-04-20 15:32:21 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\MyDashboardDev.php on line 14.
+ 1 APPPATH\Views\MyDashboardDev.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php', 14)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 5 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:32:58 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\MyDashboardDev.php on line 14.
+ 1 APPPATH\Views\MyDashboardDev.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php', 14)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 5 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:42:26 --> ErrorException: Undefined variable $expiringToday
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\MyDashboardDev.php on line 48.
+ 1 APPPATH\Views\MyDashboardDev.php(48): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $expiringToday', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php', 48)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 5 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:43:01 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\templates\myheader.php on line 603.
+ 1 APPPATH\Views\templates\myheader.php(603): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php', 603)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('templates/myheader.php', [], true)
+ 5 APPPATH\Views\MyDashboardDev.php(150): view('templates/myheader.php')
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 9 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:43:36 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\templates\myheader.php on line 603.
+ 1 APPPATH\Views\templates\myheader.php(603): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php', 603)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('templates/myheader.php', [], true)
+ 5 APPPATH\Views\MyDashboardDev.php(171): view('templates/myheader.php')
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 9 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:44:14 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\templates\myheader.php on line 603.
+ 1 APPPATH\Views\templates\myheader.php(603): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php', 603)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('templates/myheader.php', [], true)
+ 5 APPPATH\Views\MyDashboardDev.php(165): view('templates/myheader.php')
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 9 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:44:15 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\templates\myheader.php on line 603.
+ 1 APPPATH\Views\templates\myheader.php(603): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php', 603)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('templates/myheader.php', [], true)
+ 5 APPPATH\Views\MyDashboardDev.php(165): view('templates/myheader.php')
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 9 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 15:44:21 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\templates\myheader.php on line 603.
+ 1 APPPATH\Views\templates\myheader.php(603): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php', 603)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\templates\\myheader.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('templates/myheader.php', [], true)
+ 5 APPPATH\Views\MyDashboardDev.php(165): view('templates/myheader.php')
+ 6 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyDashboardDev.php')
+ 7 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 9 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 16:04:47 --> ParseError: syntax error, unexpected token "/"
+[Method: GET, Route: mydashboard]
+in APPPATH\Views\MyDashboardDev.php on line 322.
+ 1 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 3 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-20 21:27:02 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "MyDashboardDev.php"
+[Method: GET, Route: mydashboard]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('MyDashboardDev.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyDashboardDev', [], true)
+ 3 APPPATH\Controllers\MyDashboard.php(26): view('MyDashboardDev')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyDashboard->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

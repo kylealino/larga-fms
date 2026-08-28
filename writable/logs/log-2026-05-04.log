@@ -1,0 +1,28 @@
+CRITICAL - 2026-05-04 21:20:17 --> ErrorException: Undefined variable $category
+[Method: GET, Route: inventory]
+in APPPATH\Views\inventory\inventory-main.php on line 208.
+ 1 APPPATH\Views\inventory\inventory-main.php(208): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $category', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php', 208)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('inventory/inventory-main', [], true)
+ 5 APPPATH\Controllers\InventoryController.php(25): view('inventory/inventory-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-04 21:22:06 --> ErrorException: Undefined variable $category
+[Method: GET, Route: inventory]
+in APPPATH\Views\inventory\inventory-main.php on line 218.
+ 1 APPPATH\Views\inventory\inventory-main.php(218): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $category', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php', 218)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('inventory/inventory-main', [], true)
+ 5 APPPATH\Controllers\InventoryController.php(25): view('inventory/inventory-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

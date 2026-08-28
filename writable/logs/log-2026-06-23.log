@@ -1,0 +1,636 @@
+ERROR - 2026-06-23 13:28:55 --> mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-23 13:28:55 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:28:55 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:28:55 --> [Caused by] mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 4 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-23 13:28:56 --> mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-23 13:28:56 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:28:56 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:28:56 --> [Caused by] mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 4 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-23 13:29:54 --> mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-23 13:29:54 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:29:54 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:29:54 --> [Caused by] mysqli_sql_exception: Unknown column 'uploaded_date' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = \'29\'
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ')
+ 4 APPPATH\Models\MembersManagementModel.php(231): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                progress_id,
+                member_id,
+                quarter,
+                year,
+                image_path,
+                notes,
+                uploaded_by,
+                DATE_FORMAT(uploaded_date, \'%M %d, %Y\') as uploaded_date
+            FROM tbl_member_progress_images
+            WHERE member_id = ?
+            ORDER BY year DESC, FIELD(quarter,\'Q1\',\'Q2\',\'Q3\',\'Q4\') DESC
+        ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(80): App\Models\MembersManagementModel->getProgressImages()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:34:48 --> ErrorException: Undefined variable $imageBaseUrl
+[Method: GET, Route: membersmanagement]
+in APPPATH\Views\members-management\members-main.php on line 1549.
+ 1 APPPATH\Views\members-management\members-main.php(1549): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $imageBaseUrl', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php', 1549)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(35): view('members-management/members-main', [...])
+ 6 APPPATH\Controllers\MembersManagementController.php(45): App\Controllers\MembersManagementController->loadMembersListView()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:35:43 --> ErrorException: Undefined variable $imageBaseUrl
+[Method: GET, Route: membersmanagement]
+in APPPATH\Views\members-management\members-main.php on line 1549.
+ 1 APPPATH\Views\members-management\members-main.php(1549): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $imageBaseUrl', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php', 1549)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\members-management\\members-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(35): view('members-management/members-main', [...])
+ 6 APPPATH\Controllers\MembersManagementController.php(45): App\Controllers\MembersManagementController->loadMembersListView()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:36:54 --> Error: Class "Config\Image" not found
+[Method: GET, Route: membersmanagement]
+in APPPATH\Views\members-management\members-main.php on line 7.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 4 APPPATH\Controllers\MembersManagementController.php(35): view('members-management/members-main', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(45): App\Controllers\MembersManagementController->loadMembersListView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:37:32 --> Error: Class "Config\Image" not found
+[Method: GET, Route: membersmanagement]
+in APPPATH\Views\members-management\members-main.php on line 6.
+ 1 SYSTEMPATH\View\View.php(224): include()
+ 2 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 3 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 4 APPPATH\Controllers\MembersManagementController.php(35): view('members-management/members-main', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(45): App\Controllers\MembersManagementController->loadMembersListView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 13:37:58 --> Error: Class "Config\Image" not found
+[Method: GET, Route: membersmanagement]
+in APPPATH\Controllers\MembersManagementController.php on line 9.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(316): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MembersManagementController.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MembersManagementController')
+ 4 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MembersManagementController')
+ 5 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MembersManagementController', true)
+ 6 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:39:36 --> ErrorException: Undefined variable $allMonths
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 881.
+ 1 APPPATH\Views\MyAdminDashboard.php(881): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $allMonths', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 881)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:42:56 --> ErrorException: Undefined global variable $timeSlots
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 151.
+ 1 APPPATH\Views\MyAdminDashboard.php(151): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined global variable $timeSlots', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 151)
+ 2 APPPATH\Views\MyAdminDashboard.php(1039): isEventAtSlot([...], 1, '08:00')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 6 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:46:15 --> ErrorException: Undefined global variable $timeSlots
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 147.
+ 1 APPPATH\Views\MyAdminDashboard.php(147): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined global variable $timeSlots', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 147)
+ 2 APPPATH\Views\MyAdminDashboard.php(1028): isEventAtSlot([...], 1, '08:00')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 6 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:46:18 --> ErrorException: Undefined global variable $timeSlots
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 147.
+ 1 APPPATH\Views\MyAdminDashboard.php(147): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined global variable $timeSlots', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 147)
+ 2 APPPATH\Views\MyAdminDashboard.php(1028): isEventAtSlot([...], 1, '08:00')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 6 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:48:10 --> TypeError: array_search(): Argument #2 ($haystack) must be of type array, null given
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 149.
+ 1 APPPATH\Views\MyAdminDashboard.php(149): array_search('08:00', null)
+ 2 APPPATH\Views\MyAdminDashboard.php(1035): isEventAtSlot([...], 1, '08:00')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 6 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:55:45 --> ErrorException: Undefined global variable $timeSlots
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 151.
+ 1 APPPATH\Views\MyAdminDashboard.php(151): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined global variable $timeSlots', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 151)
+ 2 APPPATH\Views\MyAdminDashboard.php(1039): isEventAtSlot([...], 1, '08:00')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 6 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-23 15:55:48 --> ErrorException: Undefined variable $allMonths
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 881.
+ 1 APPPATH\Views\MyAdminDashboard.php(881): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $allMonths', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 881)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

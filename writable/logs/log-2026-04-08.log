@@ -1,0 +1,588 @@
+ERROR - 2026-04-08 09:24:17 --> mysqli_sql_exception: Unknown column 'a.role' in 'field list' in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+#5 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-08 09:24:17 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.role' in 'field list'
+[Method: GET, Route: mymembers]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 2 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-08 09:24:17 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.role' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 3 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-08 09:24:17 --> [Caused by] mysqli_sql_exception: Unknown column 'a.role' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 5 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-08 09:25:11 --> mysqli_sql_exception: Unknown column 'a.role' in 'group statement' in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+#5 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-08 09:25:11 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.role' in 'group statement'
+[Method: GET, Route: mymembers]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 2 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-08 09:25:11 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.role' in 'group statement'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 3 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-08 09:25:11 --> [Caused by] mysqli_sql_exception: Unknown column 'a.role' in 'group statement'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(44): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l 
+            ON l.member_id = a.member_id
+
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            a.role
+
+        ORDER BY a.member_id DESC;
+        ')
+ 5 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

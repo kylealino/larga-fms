@@ -1,0 +1,1040 @@
+CRITICAL - 2026-06-24 10:23:17 --> ErrorException: finfo_file(C:\xampp\tmp\php8226.tmp): Failed to open stream: No such file or directory
+[Method: POST, Route: transactions]
+in SYSTEMPATH\Files\File.php on line 137.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'finfo_file(C:\\xampp\\tmp\\php8226.tmp): Failed to open stream: No such file or directory', 'C:\\xampp\\htdocs\\qsrms\\system\\Files\\File.php', 137)
+ 2 SYSTEMPATH\Files\File.php(137): finfo_file(Object(finfo), 'C:\\xampp\\tmp\\php8226.tmp')
+ 3 APPPATH\Models\TransactionsModel.php(303): CodeIgniter\Files\File->getMimeType()
+ 4 APPPATH\Controllers\TransactionsController.php(53): App\Models\TransactionsModel->uploadDocument()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\TransactionsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\TransactionsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 10:23:25 --> ErrorException: finfo_file(C:\xampp\tmp\phpA10A.tmp): Failed to open stream: No such file or directory
+[Method: POST, Route: transactions]
+in SYSTEMPATH\Files\File.php on line 137.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'finfo_file(C:\\xampp\\tmp\\phpA10A.tmp): Failed to open stream: No such file or directory', 'C:\\xampp\\htdocs\\qsrms\\system\\Files\\File.php', 137)
+ 2 SYSTEMPATH\Files\File.php(137): finfo_file(Object(finfo), 'C:\\xampp\\tmp\\phpA10A.tmp')
+ 3 APPPATH\Models\TransactionsModel.php(303): CodeIgniter\Files\File->getMimeType()
+ 4 APPPATH\Controllers\TransactionsController.php(53): App\Models\TransactionsModel->uploadDocument()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\TransactionsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\TransactionsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 13:03:41 --> mysqli_sql_exception: Unknown column 'updated_at' in 'field list' in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            U...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            U...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            U...')
+#3 C:\xampp\htdocs\qsrms\app\Models\RangeAssistantsModel.php(88): CodeIgniter\Database\BaseConnection->query('\r\n            U...', Array)
+#4 C:\xampp\htdocs\qsrms\app\Controllers\RangeAssistantsController.php(33): App\Models\RangeAssistantsModel->updateAssistant()
+#5 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+#6 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+#7 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-24 13:03:41 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'updated_at' in 'field list'
+[Method: POST, Route: rangeassistants]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\RangeAssistantsModel.php(88): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = ?,
+                `badge_number` = ?,
+                `position` = ?,
+                `status` = ?,
+                `updated_at` = NOW()
+            WHERE `assistant_id` = ?
+            ', [...])
+ 2 APPPATH\Controllers\RangeAssistantsController.php(33): App\Models\RangeAssistantsModel->updateAssistant()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 13:03:41 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'updated_at' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = \'PO1 Mark Reyes\',
+                `badge_number` = \'#2345\',
+                `position` = \'Range Assistant\',
+                `status` = \'INACTIVE\',
+                `updated_at` = NOW()
+            WHERE `assistant_id` = \'1\'
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = \'PO1 Mark Reyes\',
+                `badge_number` = \'#2345\',
+                `position` = \'Range Assistant\',
+                `status` = \'INACTIVE\',
+                `updated_at` = NOW()
+            WHERE `assistant_id` = \'1\'
+            ')
+ 3 APPPATH\Models\RangeAssistantsModel.php(88): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = ?,
+                `badge_number` = ?,
+                `position` = ?,
+                `status` = ?,
+                `updated_at` = NOW()
+            WHERE `assistant_id` = ?
+            ', [...])
+ 4 APPPATH\Controllers\RangeAssistantsController.php(33): App\Models\RangeAssistantsModel->updateAssistant()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 13:03:41 --> [Caused by] mysqli_sql_exception: Unknown column 'updated_at' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = \'PO1 Mark Reyes\',
+                `badge_number` = \'#2345\',
+                `position` = \'Range Assistant\',
+                `status` = \'INACTIVE\',
+                `updated_at` = NOW()
+            WHERE `assistant_id` = \'1\'
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = \'PO1 Mark Reyes\',
+                `badge_number` = \'#2345\',
+                `position` = \'Range Assistant\',
+                `status` = \'INACTIVE\',
+                `updated_at` = NOW()
+            WHERE `assistant_id` = \'1\'
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = \'PO1 Mark Reyes\',
+                `badge_number` = \'#2345\',
+                `position` = \'Range Assistant\',
+                `status` = \'INACTIVE\',
+                `updated_at` = NOW()
+            WHERE `assistant_id` = \'1\'
+            ')
+ 4 APPPATH\Models\RangeAssistantsModel.php(88): CodeIgniter\Database\BaseConnection->query('
+            UPDATE `tbl_range_assistants`
+            SET 
+                `full_name` = ?,
+                `badge_number` = ?,
+                `position` = ?,
+                `status` = ?,
+                `updated_at` = NOW()
+            WHERE `assistant_id` = ?
+            ', [...])
+ 5 APPPATH\Controllers\RangeAssistantsController.php(33): App\Models\RangeAssistantsModel->updateAssistant()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 13:17:11 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ORDER BY bay_id ASC' at line 1 in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM t...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM t...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM t...')
+#3 C:\xampp\htdocs\qsrms\app\Views\baystatus\baystatus-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM t...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('baystatus/bayst...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\BayStatusController.php(48): view('baystatus/bayst...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\BayStatusController->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BayStatusController))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-06-24 13:17:11 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ORDER BY bay_id ASC' at line 1
+[Method: GET, Route: baystatus]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\baystatus\baystatus-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\baystatus\\baystatus-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('baystatus/baystatus-main', [], true)
+ 5 APPPATH\Controllers\BayStatusController.php(48): view('baystatus/baystatus-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\BayStatusController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BayStatusController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 13:17:11 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ORDER BY bay_id ASC' at line 1
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 3 APPPATH\Views\baystatus\baystatus-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\baystatus\\baystatus-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('baystatus/baystatus-main', [], true)
+ 7 APPPATH\Controllers\BayStatusController.php(48): view('baystatus/baystatus-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\BayStatusController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BayStatusController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 13:17:11 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ORDER BY bay_id ASC' at line 1
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 4 APPPATH\Views\baystatus\baystatus-main.php(8): CodeIgniter\Database\BaseConnection->query('SELECT * FROM tbl_bay_status ORDER BY stage_id ORDER BY bay_id ASC')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\baystatus\\baystatus-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('baystatus/baystatus-main', [], true)
+ 8 APPPATH\Controllers\BayStatusController.php(48): view('baystatus/baystatus-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\BayStatusController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BayStatusController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 13:20:31 --> ErrorException: Undefined variable $available_bays
+[Method: GET, Route: baystatus]
+in APPPATH\Views\baystatus\baystatus-main.php on line 682.
+ 1 APPPATH\Views\baystatus\baystatus-main.php(682): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $available_bays', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\baystatus\\baystatus-main.php', 682)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\baystatus\\baystatus-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('baystatus/baystatus-main', [], true)
+ 5 APPPATH\Controllers\BayStatusController.php(48): view('baystatus/baystatus-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\BayStatusController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\BayStatusController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:07:54 --> ErrorException: Undefined property: PDF::$cuser
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php on line 93.
+ 1 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: PDF::$cuser', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php', 93)
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(279): PDF->Footer()
+ 3 APPPATH\ThirdParty\fpdf\fpdf.php(988): FPDF->Close()
+ 4 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(285): FPDF->Output()
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 8 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:11:05 --> ErrorException: Undefined property: PDF::$cuser
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php on line 93.
+ 1 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: PDF::$cuser', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php', 93)
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(279): PDF->Footer()
+ 3 APPPATH\ThirdParty\fpdf\fpdf.php(988): FPDF->Close()
+ 4 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(285): FPDF->Output()
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 8 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:15:53 --> ErrorException: Undefined property: PDF::$cuser
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php on line 93.
+ 1 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: PDF::$cuser', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php', 93)
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(279): PDF->Footer()
+ 3 APPPATH\ThirdParty\fpdf\fpdf.php(988): FPDF->Close()
+ 4 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(275): FPDF->Output()
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 8 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:17:44 --> ErrorException: Undefined property: PDF::$cuser
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php on line 93.
+ 1 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(93): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: PDF::$cuser', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php', 93)
+ 2 APPPATH\ThirdParty\fpdf\fpdf.php(279): PDF->Footer()
+ 3 APPPATH\ThirdParty\fpdf\fpdf.php(988): FPDF->Close()
+ 4 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(280): FPDF->Output()
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 8 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:18:44 --> Exception: FPDF error: Undefined font: calibri B
+[Method: GET, Route: rangereports]
+in APPPATH\ThirdParty\fpdf\fpdf.php on line 267.
+ 1 APPPATH\ThirdParty\fpdf\fpdf.php(513): FPDF->Error('Undefined font: calibri B')
+ 2 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(109): FPDF->SetFont('calibri', 'B', 8)
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 6 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:18:52 --> Exception: FPDF error: Undefined font: calibri body B
+[Method: GET, Route: rangereports]
+in APPPATH\ThirdParty\fpdf\fpdf.php on line 267.
+ 1 APPPATH\ThirdParty\fpdf\fpdf.php(513): FPDF->Error('Undefined font: calibri body B')
+ 2 APPPATH\Views\rangereports\rangereports-daily-summary-pdf.php(109): FPDF->SetFont('calibri body', 'B', 8)
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-daily-summary-pdf.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-daily-summary-pdf', [], true)
+ 6 APPPATH\Controllers\RangeReportsController.php(27): view('rangereports/rangereports-daily-summary-pdf')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:29:49 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-main.php on line 526.
+ 1 APPPATH\Views\rangereports\rangereports-main.php(526): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php', 526)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-main', [], true)
+ 5 APPPATH\Controllers\RangeReportsController.php(47): view('rangereports/rangereports-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:30:12 --> ErrorException: Undefined variable $position
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-main.php on line 531.
+ 1 APPPATH\Views\rangereports\rangereports-main.php(531): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $position', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php', 531)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-main', [], true)
+ 5 APPPATH\Controllers\RangeReportsController.php(47): view('rangereports/rangereports-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:30:13 --> ErrorException: Undefined variable $position
+[Method: GET, Route: rangereports]
+in APPPATH\Views\rangereports\rangereports-main.php on line 531.
+ 1 APPPATH\Views\rangereports\rangereports-main.php(531): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $position', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php', 531)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\rangereports\\rangereports-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('rangereports/rangereports-main', [], true)
+ 5 APPPATH\Controllers\RangeReportsController.php(47): view('rangereports/rangereports-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeReportsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeReportsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 14:40:37 --> mysqli_sql_exception: Unknown column 'duty_status' in 'field list' in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT \r\n...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT \r\n...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT \r\n...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT \r\n...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-06-24 14:40:37 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'duty_status' in 'field list'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:40:37 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'duty_status' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:40:37 --> [Caused by] mysqli_sql_exception: Unknown column 'duty_status' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 14:41:49 --> mysqli_sql_exception: Unknown column 'assigned_stage' in 'field list' in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT \r\n...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT \r\n...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT \r\n...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT \r\n...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-06-24 14:41:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'assigned_stage' in 'field list'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:41:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'assigned_stage' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:41:49 --> [Caused by] mysqli_sql_exception: Unknown column 'assigned_stage' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:44:12 --> ErrorException: Undefined variable $nextAvailableTime
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 604.
+ 1 APPPATH\Views\MyAdminDashboard.php(604): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $nextAvailableTime', 'C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php', 604)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 14:46:56 --> mysqli_sql_exception: Unknown column 'duty_status' in 'field list' in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT \r\n...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT \r\n...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT \r\n...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT \r\n...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-06-24 14:46:56 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'duty_status' in 'field list'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:46:56 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'duty_status' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 14:46:56 --> [Caused by] mysqli_sql_exception: Unknown column 'duty_status' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 4 APPPATH\Views\MyAdminDashboard.php(261): CodeIgniter\Database\BaseConnection->query('
+    SELECT 
+        full_name as name,
+        badge_number as badge,
+        duty_status as status,
+        assigned_stage as location
+    FROM tbl_range_assistants
+    ORDER BY status DESC, full_name ASC
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\qsrms\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-06-24 14:56:29 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 14:57:02 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 14:57:29 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 14:59:02 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:00:30 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:00:33 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:00:53 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:02:01 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:04:04 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 15:04:06 --> mysqli_sql_exception: Table 'qsrms.tbl_member_qualifications' doesn't exist in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\qsrms\app\Views\MyAdminDashboard.php(345): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\qsrms\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\qsrms\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\qsrms\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\qsrms\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+ERROR - 2026-06-24 16:23:57 --> mysqli_sql_exception: Unknown column 'created_by' in 'field list' in C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\qsrms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\qsrms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\qsrms\app\Models\RangeAssistantsModel.php(46): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\qsrms\app\Controllers\RangeAssistantsController.php(28): App\Models\RangeAssistantsModel->saveAssistant()
+#5 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+#6 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+#7 C:\xampp\htdocs\qsrms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\qsrms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\qsrms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\qsrms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-06-24 16:23:57 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_by' in 'field list'
+[Method: POST, Route: rangeassistants]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\RangeAssistantsModel.php(46): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\RangeAssistantsController.php(28): App\Models\RangeAssistantsModel->saveAssistant()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 16:23:57 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'created_by' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (\'TEST SAVE\', \'#251231\', \'Range Assistant\', \'ACTIVE\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (\'TEST SAVE\', \'#251231\', \'Range Assistant\', \'ACTIVE\', \'admin\')')
+ 3 APPPATH\Models\RangeAssistantsModel.php(46): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\RangeAssistantsController.php(28): App\Models\RangeAssistantsModel->saveAssistant()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-06-24 16:23:57 --> [Caused by] mysqli_sql_exception: Unknown column 'created_by' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (\'TEST SAVE\', \'#251231\', \'Range Assistant\', \'ACTIVE\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (\'TEST SAVE\', \'#251231\', \'Range Assistant\', \'ACTIVE\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (\'TEST SAVE\', \'#251231\', \'Range Assistant\', \'ACTIVE\', \'admin\')')
+ 4 APPPATH\Models\RangeAssistantsModel.php(46): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_range_assistants`(
+                `full_name`,
+                `badge_number`,
+                `position`,
+                `status`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\RangeAssistantsController.php(28): App\Models\RangeAssistantsModel->saveAssistant()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\RangeAssistantsController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\RangeAssistantsController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

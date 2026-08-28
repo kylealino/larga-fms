@@ -1,0 +1,2338 @@
+ERROR - 2026-04-25 00:24:28 --> mysqli_sql_exception: Table 'mjeshter.tbl_checkin_history' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 00:24:28 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_checkin_history' doesn't exist
+[Method: GET, Route: memberslist]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 2 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:24:28 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 3 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:24:28 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 5 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 00:26:49 --> mysqli_sql_exception: Unknown column 'm.deleted_at' in 'where clause' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 00:26:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'm.deleted_at' in 'where clause'
+[Method: GET, Route: memberslist]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 2 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:26:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'm.deleted_at' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 3 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:26:49 --> [Caused by] mysqli_sql_exception: Unknown column 'm.deleted_at' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(20): CodeIgniter\Database\BaseConnection->query('
+            SELECT
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at,
+                COUNT(c.checkin_id) AS total_checkins,
+                MAX(c.checkin_time) AS last_checkin
+            FROM tbl_members m
+            LEFT JOIN tbl_checkin_history c ON c.member_id = m.member_id
+            WHERE m.deleted_at IS NULL
+            GROUP BY 
+                m.member_id,
+                m.member_no,
+                m.first_name,
+                m.last_name,
+                m.middle_name,
+                m.contact_number,
+                m.email,
+                m.membership_plan,
+                m.membership_status,
+                m.created_at
+            ORDER BY m.member_id DESC
+        ')
+ 5 APPPATH\Controllers\MembersManagementController.php(133): App\Controllers\MembersManagementController->loadMembersListView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:28:41 --> Error: Call to undefined method App\Controllers\MembersManagementController::loadMembersListView()
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 131.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:29:36 --> ParseError: syntax error, unexpected token "private"
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 48.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MembersManagementController.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MembersManagementController')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MembersManagementController')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MembersManagementController', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:30:21 --> ParseError: syntax error, unexpected token "public"
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 48.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MembersManagementController.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MembersManagementController')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MembersManagementController')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MembersManagementController', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:31:06 --> Error: Call to undefined method App\Controllers\MembersManagementController::loadMembersListView()
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 131.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:31:47 --> Error: Call to undefined method App\Controllers\MembersManagementController::loadMembersListView()
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 131.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 00:32:39 --> mysqli_sql_exception: Table 'mjeshter.tbl_loans' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n        SELEC...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n        SELEC...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n        SELEC...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(23): CodeIgniter\Database\BaseConnection->query('\r\n        SELEC...')
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(131): App\Controllers\MembersManagementController->loadMembersView()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 00:32:39 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_loans' doesn't exist
+[Method: GET, Route: memberslist]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MembersManagementController.php(23): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 2 APPPATH\Controllers\MembersManagementController.php(131): App\Controllers\MembersManagementController->loadMembersView()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:32:39 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_loans' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 3 APPPATH\Controllers\MembersManagementController.php(23): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(131): App\Controllers\MembersManagementController->loadMembersView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:32:39 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_loans' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 4 APPPATH\Controllers\MembersManagementController.php(23): CodeIgniter\Database\BaseConnection->query('
+        SELECT
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email,
+            COUNT(l.loan_id) AS loan_count,
+            COALESCE(SUM(l.loan_amount), 0) AS loan_amount
+        FROM tbl_members a
+        LEFT JOIN tbl_loans l ON l.member_id = a.member_id
+        GROUP BY 
+            a.member_id,
+            a.member_no,
+            a.first_name,
+            a.last_name,
+            a.middle_name,
+            a.address,
+            a.contact_number,
+            a.email
+        ORDER BY a.member_id DESC;
+        ')
+ 5 APPPATH\Controllers\MembersManagementController.php(131): App\Controllers\MembersManagementController->loadMembersView()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:36:22 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "members-management/members-list.php"
+[Method: GET, Route: memberslist]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('members-management/members-list.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-list', [], true)
+ 3 APPPATH\Controllers\MembersManagementController.php(34): view('members-management/members-list', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(59): App\Controllers\MembersManagementController->loadMembersListView()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:49:43 --> ErrorException: Undefined variable $token
+[Method: GET, Route: memberslist]
+in APPPATH\Views\registration\members-list.php on line 103.
+ 1 APPPATH\Views\registration\members-list.php(103): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $token', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\registration\\members-list.php', 103)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\registration\\members-list.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('registration/members-list', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(34): view('registration/members-list', [...])
+ 6 APPPATH\Controllers\MembersManagementController.php(59): App\Controllers\MembersManagementController->loadMembersListView()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:50:29 --> Error: Call to undefined method App\Controllers\MembersManagementController::loadMembersView()
+[Method: GET, Route: memberslist]
+in APPPATH\Controllers\MembersManagementController.php on line 46.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 00:58:48 --> mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 00:58:48 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+[Method: POST, Route: memberregistration]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:58:48 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asldka;sldkl;\', \'0007534080\', \'cruz\', \'jamie\', \'santiago\', \'Female\', \'1999-04-25\', \'27\', \'asdasd@gmail.com\', \'asdas\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asldka;sldkl;\', \'0007534080\', \'cruz\', \'jamie\', \'santiago\', \'Female\', \'1999-04-25\', \'27\', \'asdasd@gmail.com\', \'asdas\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 00:58:48 --> [Caused by] mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asldka;sldkl;\', \'0007534080\', \'cruz\', \'jamie\', \'santiago\', \'Female\', \'1999-04-25\', \'27\', \'asdasd@gmail.com\', \'asdas\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asldka;sldkl;\', \'0007534080\', \'cruz\', \'jamie\', \'santiago\', \'Female\', \'1999-04-25\', \'27\', \'asdasd@gmail.com\', \'asdas\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asldka;sldkl;\', \'0007534080\', \'cruz\', \'jamie\', \'santiago\', \'Female\', \'1999-04-25\', \'27\', \'asdasd@gmail.com\', \'asdas\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 01:01:44 --> mysqli_sql_exception: Duplicate entry 'kylealino@gmail.com' for key 'email' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 01:01:44 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'kylealino@gmail.com' for key 'email'
+[Method: POST, Route: memberregistration]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:01:44 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'kylealino@gmail.com' for key 'email'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'kylealino@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'kylealino@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:01:44 --> [Caused by] mysqli_sql_exception: Duplicate entry 'kylealino@gmail.com' for key 'email'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'kylealino@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'kylealino@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'kylealino@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 01:02:08 --> mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 01:02:08 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+[Method: POST, Route: memberregistration]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:02:08 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'jamie@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'jamie@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:02:08 --> [Caused by] mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'jamie@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'jamie@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'asdaskdjalsd\', \'0007534080\', \'jamie\', \'cruz\', \'santiano\', \'Female\', \'1999-10-03\', \'26\', \'jamie@gmail.com\', \'0919201230\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:20:29 --> ErrorException: Trying to access array offset on value of type null
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 155.
+ 1 APPPATH\Controllers\MyClientDashboard.php(155): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php', 155)
+ 2 APPPATH\Controllers\MyClientDashboard.php(23): App\Controllers\MyClientDashboard->getMemberData()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:24:45 --> ErrorException: Undefined variable $member
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 171.
+ 1 APPPATH\Views\MyClientDashboard.php(171): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $member', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php', 171)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 5 APPPATH\Controllers\MyClientDashboard.php(29): view('MyClientDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:24:58 --> ErrorException: Undefined variable $member
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 171.
+ 1 APPPATH\Views\MyClientDashboard.php(171): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $member', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php', 171)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 5 APPPATH\Controllers\MyClientDashboard.php(29): view('MyClientDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:26:35 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "clientportal.php"
+[Method: GET, Route: clientportal/0007717262]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('clientportal.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('clientportal', [], true)
+ 3 APPPATH\Controllers\MyClientDashboard.php(67): view('clientportal', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->portal('0007717262')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:27:18 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "clientportal.php"
+[Method: GET, Route: clientportal/0007717262]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('clientportal.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('clientportal', [], true)
+ 3 APPPATH\Controllers\MyClientDashboard.php(67): view('clientportal', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->portal('0007717262')
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:27:28 --> ErrorException: Undefined variable $member
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 171.
+ 1 APPPATH\Views\MyClientDashboard.php(171): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $member', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php', 171)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyClientDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 5 APPPATH\Controllers\MyClientDashboard.php(29): view('MyClientDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 01:43:28 --> mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 01:43:28 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+[Method: POST, Route: memberregistration]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:43:28 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'test 3\', \'0007514936\', \'test 3\', \'test 3\', \'\', \'\', \'\', \'\', \'test@gmail.com\', \'test 3\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'2026-04-25\', \'2026-05-25\', \'Active\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'test 3\', \'0007514936\', \'test 3\', \'test 3\', \'\', \'\', \'\', \'\', \'test@gmail.com\', \'test 3\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'2026-04-25\', \'2026-05-25\', \'Active\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:43:28 --> [Caused by] mysqli_sql_exception: Duplicate entry 'ADMIN-KYLE' for key 'username'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'test 3\', \'0007514936\', \'test 3\', \'test 3\', \'\', \'\', \'\', \'\', \'test@gmail.com\', \'test 3\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'2026-04-25\', \'2026-05-25\', \'Active\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'test 3\', \'0007514936\', \'test 3\', \'test 3\', \'\', \'\', \'\', \'\', \'test@gmail.com\', \'test 3\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'2026-04-25\', \'2026-05-25\', \'Active\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (\'test 3\', \'0007514936\', \'test 3\', \'test 3\', \'\', \'\', \'\', \'\', \'test@gmail.com\', \'test 3\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'2026-04-25\', \'2026-05-25\', \'Active\', \'ADMIN-KYLE\', \'123456\', \'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413\', \'\', \'\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MemberRegistrationModel.php(101): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status, username, password, hash_password, referred_by,
+                    how_did_you_hear, waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MemberRegistrationController.php(23): App\Models\MemberRegistrationModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MemberRegistrationController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MemberRegistrationController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:57:57 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 1.
+ 1 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 3 APPPATH\Controllers\MyClientDashboard.php(41): view('MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:58:07 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 1.
+ 1 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 3 APPPATH\Controllers\MyClientDashboard.php(41): view('MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 01:58:55 --> mysqli_sql_exception: Unknown column 'rbid_uid' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(56): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(26): App\Controllers\MyClientDashboard->validateRFID()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 01:58:55 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'field list'
+[Method: POST, Route: myclientdashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MyClientDashboard.php(56): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 2 APPPATH\Controllers\MyClientDashboard.php(26): App\Controllers\MyClientDashboard->validateRFID()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:58:55 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = \'0007514936\' AND membership_status = \'Active\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = \'0007514936\' AND membership_status = \'Active\'
+        ')
+ 3 APPPATH\Controllers\MyClientDashboard.php(56): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(26): App\Controllers\MyClientDashboard->validateRFID()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:58:55 --> [Caused by] mysqli_sql_exception: Unknown column 'rbid_uid' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = \'0007514936\' AND membership_status = \'Active\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = \'0007514936\' AND membership_status = \'Active\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = \'0007514936\' AND membership_status = \'Active\'
+        ')
+ 4 APPPATH\Controllers\MyClientDashboard.php(56): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rbid_uid
+            FROM tbl_members
+            WHERE rbid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 5 APPPATH\Controllers\MyClientDashboard.php(26): App\Controllers\MyClientDashboard->validateRFID()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 01:59:43 --> ParseError: syntax error, unexpected token "else", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Views\MyClientDashboard.php on line 1.
+ 1 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyClientDashboard', [], true)
+ 3 APPPATH\Controllers\MyClientDashboard.php(258): view('MyClientDashboard', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(21): App\Controllers\MyClientDashboard->showDashboard('0007514936')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:15:24 --> ErrorException: Declaration of App\Controllers\MyClientDashboard::validate() must be compatible with CodeIgniter\Controller::validate($rules, array $messages = []): bool
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 17.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:15:27 --> ErrorException: Declaration of App\Controllers\MyClientDashboard::validate() must be compatible with CodeIgniter\Controller::validate($rules, array $messages = []): bool
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 17.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:26:11 --> ErrorException: Cannot redeclare App\Controllers\MyClientDashboard::checkStatus()
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 393.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:26:22 --> ErrorException: Cannot redeclare App\Controllers\MyClientDashboard::checkStatus()
+[Method: POST, Route: myclientdashboard/simpleCheckin]
+in APPPATH\Controllers\MyClientDashboard.php on line 393.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:26:26 --> ErrorException: Cannot redeclare App\Controllers\MyClientDashboard::checkStatus()
+[Method: POST, Route: myclientdashboard/simpleCheckin]
+in APPPATH\Controllers\MyClientDashboard.php on line 393.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:26:29 --> ErrorException: Cannot redeclare App\Controllers\MyClientDashboard::checkStatus()
+[Method: POST, Route: myclientdashboard/simpleCheckin]
+in APPPATH\Controllers\MyClientDashboard.php on line 393.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:26:32 --> ErrorException: Cannot redeclare App\Controllers\MyClientDashboard::checkStatus()
+[Method: POST, Route: myclientdashboard/simpleCheckin]
+in APPPATH\Controllers\MyClientDashboard.php on line 393.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-25 02:38:08 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:58:35 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:58:43 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: GET, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:58:56 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:03 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:05 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:09 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:12 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:17 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 02:59:21 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:00:48 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: POST, Route: myclientdashboard]
+in APPPATH\Controllers\MyClientDashboard.php on line 262.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Controllers\\MyClientDashboard.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\MyClientDashboard')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\MyClientDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\MyClientDashboard', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 03:02:11 --> mysqli_sql_exception: Unknown column 'rbid_uid' in 'where clause' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 03:02:11 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'where clause'
+[Method: POST, Route: myclientdashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 2 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:02:11 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 3 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:02:11 --> [Caused by] mysqli_sql_exception: Unknown column 'rbid_uid' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 4 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 5 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 03:02:16 --> mysqli_sql_exception: Unknown column 'rbid_uid' in 'where clause' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 03:02:16 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'where clause'
+[Method: POST, Route: myclientdashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 2 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:02:16 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'rbid_uid' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 3 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:02:16 --> [Caused by] mysqli_sql_exception: Unknown column 'rbid_uid' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = \'0007519496\' OR rbid_uid = \'0007519496\') AND membership_status = \'Active\'
+        ')
+ 4 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE (rfid_uid = ? OR rbid_uid = ?) AND membership_status = \'Active\'
+        ', [...])
+ 5 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 03:04:20 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 03:04:20 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+[Method: POST, Route: myclientdashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 2 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:04:20 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 3 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:04:20 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 4 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 5 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-04-25 03:04:27 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-25 03:04:27 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+[Method: POST, Route: myclientdashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 2 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:04:27 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 3 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 4 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-25 03:04:27 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '? AND membership_status = 'Active'' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ')
+ 4 APPPATH\Controllers\MyClientDashboard.php(102): CodeIgniter\Database\BaseConnection->query('
+            SELECT 
+                member_id,
+                member_no,
+                CONCAT(first_name, \' \', last_name) as member_name,
+                membership_status,
+                membership_end_date,
+                rfid_uid
+            FROM tbl_members
+            WHERE rfid_uid = ? AND membership_status = \'Active\'
+        ', [...])
+ 5 APPPATH\Controllers\MyClientDashboard.php(25): App\Controllers\MyClientDashboard->validateRFID()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyClientDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyClientDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

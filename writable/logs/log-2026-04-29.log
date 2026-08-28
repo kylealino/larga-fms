@@ -1,0 +1,126 @@
+ERROR - 2026-04-29 13:32:26 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'waiver_signed, terms_accepted, created_by
+                ) VALUES ('1092301...' at line 7 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\MembersManagementModel.php(109): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MembersManagementController.php(50): App\Models\MembersManagementModel->saveMember()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-04-29 13:32:26 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'waiver_signed, terms_accepted, created_by
+                ) VALUES ('1092301...' at line 7
+[Method: POST, Route: membersmanagement]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\MembersManagementModel.php(109): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 2 APPPATH\Controllers\MembersManagementController.php(50): App\Models\MembersManagementModel->saveMember()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 13:32:26 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'waiver_signed, terms_accepted, created_by
+                ) VALUES ('1092301...' at line 7
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1092301923\', \'010211230122\', \'RYE\', \'RYE\', \'[ASPDASD\', \'Male\', \'2001-01-01\', \'25\', \'asdal@gmail.com\', \'0916523112\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1092301923\', \'010211230122\', \'RYE\', \'RYE\', \'[ASPDASD\', \'Male\', \'2001-01-01\', \'25\', \'asdal@gmail.com\', \'0916523112\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 APPPATH\Models\MembersManagementModel.php(109): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 4 APPPATH\Controllers\MembersManagementController.php(50): App\Models\MembersManagementModel->saveMember()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-29 13:32:26 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'waiver_signed, terms_accepted, created_by
+                ) VALUES ('1092301...' at line 7
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1092301923\', \'010211230122\', \'RYE\', \'RYE\', \'[ASPDASD\', \'Male\', \'2001-01-01\', \'25\', \'asdal@gmail.com\', \'0916523112\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1092301923\', \'010211230122\', \'RYE\', \'RYE\', \'[ASPDASD\', \'Male\', \'2001-01-01\', \'25\', \'asdal@gmail.com\', \'0916523112\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (\'1092301923\', \'010211230122\', \'RYE\', \'RYE\', \'[ASPDASD\', \'Male\', \'2001-01-01\', \'25\', \'asdal@gmail.com\', \'0916523112\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'Beginner\', \'Basic\', \'\', \'\', \'Pending\', 1, 1, \'ADMIN-KYLE\')
+            ')
+ 4 APPPATH\Models\MembersManagementModel.php(109): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO tbl_members (
+                    member_no, rfid_uid, last_name, first_name, middle_name,
+                    gender, date_of_birth, age, email, mobile_number,
+                    emergency_contact_name, emergency_contact_number, emergency_contact_relationship,
+                    address, city, health_conditions, allergies, fitness_goals,
+                    experience_level, membership_plan, membership_start_date, membership_end_date,
+                    membership_status waiver_signed, terms_accepted, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ', [...])
+ 5 APPPATH\Controllers\MembersManagementController.php(50): App\Models\MembersManagementModel->saveMember()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

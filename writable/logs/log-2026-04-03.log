@@ -1,0 +1,218 @@
+ERROR - 2026-04-03 05:55:18 --> mysqli_sql_exception: Unknown column 'role' in 'field list' in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT\r\n ...', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT\r\n ...')
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT\r\n ...')
+#3 C:\xampp\htdocs\sslais\app\Views\members-management\members-main.php(19): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT\r\n ...')
+#4 C:\xampp\htdocs\sslais\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\sslais\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\sslais\system\Common.php(1173): CodeIgniter\View\View->render('members-managem...', Array, true)
+#7 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(56): view('members-managem...', Array)
+#8 C:\xampp\htdocs\sslais\app\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+#9 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+#10 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+#11 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+CRITICAL - 2026-04-03 05:55:18 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'role' in 'field list'
+[Method: GET, Route: mymembers]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\members-management\members-main.php(19): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 5 APPPATH\Controllers\MembersManagementController.php(56): view('members-management/members-main', [...])
+ 6 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-03 05:55:18 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'role' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 3 APPPATH\Views\members-management\members-main.php(19): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 7 APPPATH\Controllers\MembersManagementController.php(56): view('members-management/members-main', [...])
+ 8 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-03 05:55:18 --> [Caused by] mysqli_sql_exception: Unknown column 'role' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 4 APPPATH\Views\members-management\members-main.php(19): CodeIgniter\Database\BaseConnection->query('
+    SELECT
+        `member_id`,
+        `member_no`,
+        `first_name`,
+        `last_name`,
+        `middle_name`,
+        `address`,
+        `contact_number`,
+        `email`,
+        `username`,
+        `password`,
+        `role`,
+        `created_by`,
+        `created_at`
+    FROM
+        `tbl_members`
+    WHERE
+        `member_id` = \'10\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\members-management\\members-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('members-management/members-main', [], true)
+ 8 APPPATH\Controllers\MembersManagementController.php(56): view('members-management/members-main', [...])
+ 9 APPPATH\Controllers\MembersManagementController.php(25): App\Controllers\MembersManagementController->loadMembersView()
+10 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MembersManagementController->index()
+11 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MembersManagementController))
+12 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+15 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-04-03 20:26:33 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: POST, Route: mymembers]
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 328.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-03 20:26:33 --> ErrorException: Maximum execution time of 120 seconds exceeded
+[Method: POST, Route: mymembers]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 136.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()

@@ -1,0 +1,461 @@
+ERROR - 2026-03-30 11:38:13 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'sslais' in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:202
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(202): mysqli->real_connect('localhost', 'root', '', 'sslais', 3306, '', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\sslais\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#4 C:\xampp\htdocs\sslais\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN-KYLE')
+#5 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#6 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#7 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'sslais' in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\sslais\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#3 C:\xampp\htdocs\sslais\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN-KYLE')
+#4 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#5 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#6 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-03-30 11:38:13 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Unknown database 'sslais'
+[Method: POST, Route: mylogin-auth]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `username`,`hash_password` FROM myua_user where username = \'ADMIN-KYLE\' limit 1 ')
+ 3 APPPATH\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN-KYLE')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 16:53:16 --> ErrorException: Undefined variable $color
+[Method: POST, Route: mycoa]
+in APPPATH\Models\COAModel.php on line 50.
+ 1 APPPATH\Models\COAModel.php(50): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $color', 'C:\\xampp\\htdocs\\sslais\\app\\Models\\COAModel.php', 50)
+ 2 APPPATH\Controllers\COAController.php(28): App\Models\COAModel->coa_save()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\COAController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\COAController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 17:08:05 --> ErrorException: Undefined array key "normal_balance"
+[Method: GET, Route: mycoa]
+in APPPATH\Views\accounting\coa-main.php on line 537.
+ 1 APPPATH\Views\accounting\coa-main.php(537): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "normal_balance"', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\coa-main.php', 537)
+ 2 APPPATH\Views\accounting\coa-main.php(565): renderTree(null, [...], 0, 'all')
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\coa-main.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/coa-main', [], true)
+ 6 APPPATH\Controllers\COAController.php(24): view('accounting/coa-main')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\COAController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\COAController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:23:07 --> ErrorException: require(fpdf.php): Failed to open stream: No such file or directory
+[Method: GET, Route: myaccountingreport]
+in APPPATH\Views\accounting\cash-receipts-pdf.php on line 2.
+ 1 APPPATH\Views\accounting\cash-receipts-pdf.php(2): CodeIgniter\Debug\Exceptions->errorHandler(2, 'require(fpdf.php): Failed to open stream: No such file or directory', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php', 2)
+ 2 APPPATH\Views\accounting\cash-receipts-pdf.php(2): require()
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 6 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:23:57 --> ErrorException: require(fpdf.php): Failed to open stream: No such file or directory
+[Method: GET, Route: myaccountingreport]
+in APPPATH\Views\accounting\cash-receipts-pdf.php on line 2.
+ 1 APPPATH\Views\accounting\cash-receipts-pdf.php(2): CodeIgniter\Debug\Exceptions->errorHandler(2, 'require(fpdf.php): Failed to open stream: No such file or directory', 'C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php', 2)
+ 2 APPPATH\Views\accounting\cash-receipts-pdf.php(2): require()
+ 3 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 4 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 5 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 6 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-30 18:26:52 --> mysqli_sql_exception: Table 'sslais.tbl_ppmp_hd' doesn't exist in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\nSELECT\r\n    `...', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\nSELECT\r\n    `...')
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\nSELECT\r\n    `...')
+#3 C:\xampp\htdocs\sslais\app\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('\r\nSELECT\r\n    `...')
+#4 C:\xampp\htdocs\sslais\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\sslais\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\sslais\system\Common.php(1173): CodeIgniter\View\View->render('accounting/cash...', Array, true)
+#7 C:\xampp\htdocs\sslais\app\Controllers\AccountingReportController.php(32): view('accounting/cash...')
+#8 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+#9 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+#10 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-03-30 18:26:52 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'sslais.tbl_ppmp_hd' doesn't exist
+[Method: GET, Route: myaccountingreport]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 5 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:26:52 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'sslais.tbl_ppmp_hd' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 3 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 7 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:26:52 --> [Caused by] mysqli_sql_exception: Table 'sslais.tbl_ppmp_hd' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 4 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'3\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 8 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-30 18:26:58 --> mysqli_sql_exception: Table 'sslais.tbl_ppmp_hd' doesn't exist in C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\sslais\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\nSELECT\r\n    `...', 0)
+#1 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\nSELECT\r\n    `...')
+#2 C:\xampp\htdocs\sslais\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\nSELECT\r\n    `...')
+#3 C:\xampp\htdocs\sslais\app\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('\r\nSELECT\r\n    `...')
+#4 C:\xampp\htdocs\sslais\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\sslais\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\sslais\system\Common.php(1173): CodeIgniter\View\View->render('accounting/cash...', Array, true)
+#7 C:\xampp\htdocs\sslais\app\Controllers\AccountingReportController.php(32): view('accounting/cash...')
+#8 C:\xampp\htdocs\sslais\system\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+#9 C:\xampp\htdocs\sslais\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+#10 C:\xampp\htdocs\sslais\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\sslais\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\sslais\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\sslais\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-03-30 18:26:58 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'sslais.tbl_ppmp_hd' doesn't exist
+[Method: GET, Route: myaccountingreport]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 5 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:26:58 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'sslais.tbl_ppmp_hd' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 3 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 7 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-03-30 18:26:58 --> [Caused by] mysqli_sql_exception: Table 'sslais.tbl_ppmp_hd' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 4 APPPATH\Views\accounting\cash-receipts-pdf.php(28): CodeIgniter\Database\BaseConnection->query('
+SELECT
+    `recid`,
+    `ppmpno`,
+    `end_user`,
+    `fiscal_year`,
+    `project_title`,
+    `responsibility_code`,
+    `is_indicative`,
+    `is_final`,
+    `prepared_by`,
+    `submitted_by`
+FROM
+    `tbl_ppmp_hd`
+WHERE 
+    `recid` = \'10\'')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\sslais\\app\\Views\\accounting\\cash-receipts-pdf.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('accounting/cash-receipts-pdf', [], true)
+ 8 APPPATH\Controllers\AccountingReportController.php(32): view('accounting/cash-receipts-pdf')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AccountingReportController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountingReportController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

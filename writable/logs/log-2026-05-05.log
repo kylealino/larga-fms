@@ -1,0 +1,664 @@
+ERROR - 2026-05-05 13:39:08 --> mysqli_sql_exception: Unknown column 'reorder_level' in 'where clause' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT CO...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT CO...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT CO...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\inventory\inventory-main.php(22): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT CO...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('inventory/inven...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\InventoryController.php(25): view('inventory/inven...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-05 13:39:08 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'reorder_level' in 'where clause'
+[Method: GET, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\inventory\inventory-main.php(22): CodeIgniter\Database\BaseConnection->query('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('inventory/inventory-main', [], true)
+ 5 APPPATH\Controllers\InventoryController.php(25): view('inventory/inventory-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 13:39:08 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'reorder_level' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 3 APPPATH\Views\inventory\inventory-main.php(22): CodeIgniter\Database\BaseConnection->query('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('inventory/inventory-main', [], true)
+ 7 APPPATH\Controllers\InventoryController.php(25): view('inventory/inventory-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 13:39:08 --> [Caused by] mysqli_sql_exception: Unknown column 'reorder_level' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 4 APPPATH\Views\inventory\inventory-main.php(22): CodeIgniter\Database\BaseConnection->query('
+    SELECT COUNT(*) as total 
+    FROM tbl_products 
+    WHERE stock_qty <= reorder_level
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\inventory\\inventory-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('inventory/inventory-main', [], true)
+ 8 APPPATH\Controllers\InventoryController.php(25): view('inventory/inventory-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:07:51 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Models\InventoryModel.php(35): CodeIgniter\Model->__call('get_ctr_pos', [...])
+ 4 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-05 14:08:27 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'VALUES (NULL, 'Shirt', 'Merchandise', '200', '400', '10', 'ADMIN-KYLE')' at line 9 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\InventoryModel.php(54): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-05 14:08:27 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'VALUES (NULL, 'Shirt', 'Merchandise', '200', '400', '10', 'ADMIN-KYLE')' at line 9
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\InventoryModel.php(54): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:08:27 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'VALUES (NULL, 'Shirt', 'Merchandise', '200', '400', '10', 'ADMIN-KYLE')' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 3 APPPATH\Models\InventoryModel.php(54): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:08:27 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'VALUES (NULL, 'Shirt', 'Merchandise', '200', '400', '10', 'ADMIN-KYLE')' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 4 APPPATH\Models\InventoryModel.php(54): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-05 14:09:30 --> mysqli_sql_exception: Column 'supplier' cannot be null in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\InventoryModel.php(55): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-05 14:09:30 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'supplier' cannot be null
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\InventoryModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:09:30 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'supplier' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 3 APPPATH\Models\InventoryModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:09:30 --> [Caused by] mysqli_sql_exception: Column 'supplier' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (NULL, \'Shirt\', \'Merchandise\', \'200\', \'400\', \'10\', \'ADMIN-KYLE\')')
+ 4 APPPATH\Models\InventoryModel.php(55): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `supplier`,
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-05 14:18:22 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 9 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\InventoryModel.php(53): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-05 14:18:23 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 9
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\InventoryModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:18:23 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 3 APPPATH\Models\InventoryModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 14:18:23 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 9
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 4 APPPATH\Models\InventoryModel.php(53): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_products`(
+                `product_name`,
+                `category`,
+                `purchase_price`,
+                `selling_price`,
+                `stock_qty`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\InventoryController.php(29): App\Models\InventoryModel->saveInventory()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:23:36 --> CodeIgniter\Database\Exceptions\DatabaseException: You must set the database table to be used with your query.
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 941.
+ 1 SYSTEMPATH\Model.php(714): CodeIgniter\Database\BaseConnection->table(null)
+ 2 SYSTEMPATH\Model.php(920): CodeIgniter\Model->builder()
+ 3 APPPATH\Models\InventoryModel.php(109): CodeIgniter\Model->__call('get_ctr_adjustment', [...])
+ 4 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:24:18 --> Error: Call to undefined function App\Models\NOW()
+[Method: POST, Route: inventory]
+in APPPATH\Models\InventoryModel.php on line 125.
+ 1 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 3 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 4 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:25:07 --> ErrorException: Undefined variable $product_name
+[Method: POST, Route: inventory]
+in APPPATH\Models\InventoryModel.php on line 148.
+ 1 APPPATH\Models\InventoryModel.php(148): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $product_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\InventoryModel.php', 148)
+ 2 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-05 16:25:49 --> mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 11 in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Models\InventoryModel.php(154): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+#5 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-05-05 16:25:49 --> CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 11
+[Method: POST, Route: inventory]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\InventoryModel.php(154): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:25:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 11
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 3 APPPATH\Models\InventoryModel.php(154): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:25:49 --> [Caused by] mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '?, ?, ?, ?, ?, ?, ?)' at line 11
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)')
+ 4 APPPATH\Models\InventoryModel.php(154): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_inventory_movements`(
+                `product_id`,
+                `product_name`,
+                `movement_type`,
+                `quantity`,
+                `reference_type`,
+                `reference_no`,
+                `remarks`,
+                `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-05 16:26:26 --> ErrorException: Undefined variable $product_name
+[Method: POST, Route: inventory]
+in APPPATH\Models\InventoryModel.php on line 162.
+ 1 APPPATH\Models\InventoryModel.php(162): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $product_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\InventoryModel.php', 162)
+ 2 APPPATH\Controllers\InventoryController.php(33): App\Models\InventoryModel->saveAdjustment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\InventoryController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\InventoryController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

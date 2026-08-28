@@ -1,0 +1,769 @@
+ERROR - 2026-05-08 08:08:38 --> mysqli_sql_exception: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT *\r...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT *\r...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT *\r...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT *\r...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('attendance/atte...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\AttendanceController.php(25): view('attendance/atte...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-08 08:08:38 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+[Method: GET, Route: attendance]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 5 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 08:08:38 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 3 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 7 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 08:08:38 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 4 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 8 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-08 08:08:43 --> mysqli_sql_exception: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT *\r...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT *\r...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT *\r...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT *\r...', Array)
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('attendance/atte...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\AttendanceController.php(25): view('attendance/atte...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-08 08:08:43 --> CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+[Method: GET, Route: attendance]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 5 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 08:08:43 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 3 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 7 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 08:08:43 --> [Caused by] mysqli_sql_exception: Table 'mjeshter.tbl_zumba_checkin_history' doesn't exist
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = \'2026-05-08\'
+    ORDER BY checkin_time DESC
+')
+ 4 APPPATH\Views\attendance\attendance-main.php(55): CodeIgniter\Database\BaseConnection->query('
+    SELECT *
+    FROM tbl_zumba_checkin_history
+    WHERE DATE(checkin_time) = ?
+    ORDER BY checkin_time DESC
+', [...])
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\attendance\\attendance-main.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('attendance/attendance-main', [], true)
+ 8 APPPATH\Controllers\AttendanceController.php(25): view('attendance/attendance-main')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\AttendanceController->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AttendanceController))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-08 11:44:25 --> mysqli_sql_exception: Unknown column 'amount' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT CO...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT CO...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT CO...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\MyAdminDashboard.php(83): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT CO...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-08 11:44:25 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'amount' in 'field list'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(83): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 11:44:25 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'amount' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 3 APPPATH\Views\MyAdminDashboard.php(83): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 11:44:25 --> [Caused by] mysqli_sql_exception: Unknown column 'amount' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 4 APPPATH\Views\MyAdminDashboard.php(83): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(amount), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_members m ON m.member_id = pp.member_id
+    WHERE m.membership_status = \'Expired\'
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-08 11:48:50 --> mysqli_sql_exception: Unknown column 'pd.member_id' in 'on clause' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n    SELECT CO...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n    SELECT CO...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n    SELECT CO...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\MyAdminDashboard.php(82): CodeIgniter\Database\BaseConnection->query('\r\n    SELECT CO...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-08 11:48:50 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'pd.member_id' in 'on clause'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(82): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 11:48:50 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'pd.member_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 3 APPPATH\Views\MyAdminDashboard.php(82): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 11:48:50 --> [Caused by] mysqli_sql_exception: Unknown column 'pd.member_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 4 APPPATH\Views\MyAdminDashboard.php(82): CodeIgniter\Database\BaseConnection->query('
+    SELECT COALESCE(SUM(pp.grand_total), 0) as total 
+    FROM tbl_pos_payment pp
+    JOIN tbl_pos_dt pd ON pd.postrxno = pp.postrxno
+    JOIN tbl_members m ON m.member_id = pd.member_id
+    WHERE m.membership_status = \'Expired\'
+    AND pd.item_type = \'MEMBERSHIP\'
+')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 13:42:00 --> ErrorException: Undefined variable $recentPayments
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 790.
+ 1 APPPATH\Views\MyAdminDashboard.php(790): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $recentPayments', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php', 790)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 13:42:06 --> ErrorException: Undefined variable $full_name
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 89.
+ 1 APPPATH\Views\MyAdminDashboard.php(89): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $full_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php', 89)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-08 13:46:21 --> mysqli_sql_exception: Unknown column 'item_name' in 'field list' in C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\mjeshter-fgym\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n\r\n           ...', 0)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n\r\n           ...')
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n\r\n           ...')
+#3 C:\xampp\htdocs\mjeshter-fgym\app\Views\MyAdminDashboard.php(1110): CodeIgniter\Database\BaseConnection->query('\r\n\r\n           ...')
+#4 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(224): include('C:\\xampp\\htdocs...')
+#5 C:\xampp\htdocs\mjeshter-fgym\system\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboar...', Array, true)
+#7 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboar...')
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+#9 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+#10 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#11 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#12 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#13 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#14 {main}
+CRITICAL - 2026-05-08 13:46:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'item_name' in 'field list'
+[Method: GET, Route: myadmindashboard]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Views\MyAdminDashboard.php(1110): CodeIgniter\Database\BaseConnection->query('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 5 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 13:46:21 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'item_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 3 APPPATH\Views\MyAdminDashboard.php(1110): CodeIgniter\Database\BaseConnection->query('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 4 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 5 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 6 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 7 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 8 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 9 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+10 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 13:46:21 --> [Caused by] mysqli_sql_exception: Unknown column 'item_name' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 4 APPPATH\Views\MyAdminDashboard.php(1110): CodeIgniter\Database\BaseConnection->query('
+
+                SELECT
+                    item_name,
+                    movement_type,
+                    quantity,
+                    DATE_FORMAT(created_at, \'%M %d, %Y %h:%i %p\') as movement_date,
+                    created_by
+                FROM tbl_inventory_movements
+                ORDER BY created_at DESC
+                LIMIT 5
+
+            ')
+ 5 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Views\\MyAdminDashboard.php')
+ 6 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 7 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 8 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 9 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+10 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+11 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 13:57:31 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: GET, Route: myadmindashboard]
+in APPPATH\Views\MyAdminDashboard.php on line 643.
+ 1 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('MyAdminDashboard', [], true)
+ 3 APPPATH\Controllers\MyAdminDashboard.php(18): view('MyAdminDashboard')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyAdminDashboard->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyAdminDashboard))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-05-08 17:58:59 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-05-08 17:58:59 --> 220-6011631.largaphilippines.com ESMTP Exim 4.99.1 #2 Fri, 08 May 2026 04:58:54 -0500 
+220-We do not authorize the use of this system to transport unsolicited, 
+220 and/or bulk e-mail.
+
+hello: 250-6011631.largaphilippines.com Hello localhost [49.144.83.201]
+250-SIZE 52428800
+250-LIMITS MAILMAX=1000 RCPTMAX=50000
+250-8BITMIME
+250-PIPELINING
+250-PIPECONNECT
+250-AUTH PLAIN LOGIN
+250-STARTTLS
+250 HELP
+
+starttls: 220 TLS go ahead
+
+hello: 250-6011631.largaphilippines.com Hello localhost [49.144.83.201]
+250-SIZE 52428800
+250-LIMITS MAILMAX=1000 RCPTMAX=50000
+250-8BITMIME
+250-PIPELINING
+250-PIPECONNECT
+250-AUTH PLAIN LOGIN
+250 HELP
+
+Failed to authenticate password. Error: 535 Incorrect authentication data
+
+ERROR - 2026-05-08 17:59:25 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-05-08 17:59:25 --> 220-6011631.largaphilippines.com ESMTP Exim 4.99.1 #2 Fri, 08 May 2026 04:59:20 -0500 
+220-We do not authorize the use of this system to transport unsolicited, 
+220 and/or bulk e-mail.
+
+hello: 250-6011631.largaphilippines.com Hello localhost [49.144.83.201]
+250-SIZE 52428800
+250-LIMITS MAILMAX=1000 RCPTMAX=50000
+250-8BITMIME
+250-PIPELINING
+250-PIPECONNECT
+250-AUTH PLAIN LOGIN
+250-STARTTLS
+250 HELP
+
+starttls: 220 TLS go ahead
+
+hello: 250-6011631.largaphilippines.com Hello localhost [49.144.83.201]
+250-SIZE 52428800
+250-LIMITS MAILMAX=1000 RCPTMAX=50000
+250-8BITMIME
+250-PIPELINING
+250-PIPECONNECT
+250-AUTH PLAIN LOGIN
+250 HELP
+
+Failed to authenticate password. Error: 535 Incorrect authentication data
+
+ERROR - 2026-05-08 18:00:27 --> Email: sendWithSmtp throwed ErrorException: fsockopen(): php_network_getaddresses: getaddrinfo for kylealino@gmail.com failed: A non-recoverable error occurred during a database lookup.  in C:\xampp\htdocs\mjeshter-fgym\system\Email\Email.php:1898
+Stack trace:
+#0 [internal function]: CodeIgniter\Debug\Exceptions->errorHandler(2, 'fsockopen(): ph...', 'C:\\xampp\\htdocs...', 1898)
+#1 C:\xampp\htdocs\mjeshter-fgym\system\Email\Email.php(1898): fsockopen('kylealino@gmail...', 587, NULL, NULL, 5)
+#2 C:\xampp\htdocs\mjeshter-fgym\system\Email\Email.php(1811): CodeIgniter\Email\Email->SMTPConnect()
+#3 C:\xampp\htdocs\mjeshter-fgym\system\Email\Email.php(1696): CodeIgniter\Email\Email->sendWithSmtp()
+#4 C:\xampp\htdocs\mjeshter-fgym\system\Email\Email.php(1591): CodeIgniter\Email\Email->spoolEmail()
+#5 C:\xampp\htdocs\mjeshter-fgym\app\Controllers\TestEmail.php(23): CodeIgniter\Email\Email->send()
+#6 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(933): App\Controllers\TestEmail->index()
+#7 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\TestEmail))
+#8 C:\xampp\htdocs\mjeshter-fgym\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\mjeshter-fgym\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\mjeshter-fgym\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+ERROR - 2026-05-08 18:00:27 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-05-08 18:00:27 --> 
+ERROR - 2026-05-08 18:01:21 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-05-08 18:01:21 --> 220 smtp.gmail.com ESMTP d9443c01a7336-2baf1d27083sm17769165ad.13 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [49.144.83.201]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+starttls: 220 2.0.0 Ready to start TLS
+
+hello: 250-smtp.gmail.com at your service, [49.144.83.201]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+Failed to authenticate password. Error: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2baf1d27083sm17769165ad.13 - gsmtp
+
+ERROR - 2026-05-08 18:02:27 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-05-08 18:02:27 --> 220 smtp.gmail.com ESMTP d2e1a72fcca58-839656464fasm12029364b3a.11 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [49.144.83.201]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+starttls: 220 2.0.0 Ready to start TLS
+
+hello: 250-smtp.gmail.com at your service, [49.144.83.201]
+250-SIZE 35882577
+250-8BITMIME
+250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+Failed to authenticate password. Error: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials d2e1a72fcca58-839656464fasm12029364b3a.11 - gsmtp
+
+CRITICAL - 2026-05-08 22:19:03 --> ErrorException: Undefined variable $email
+[Method: POST, Route: pos]
+in APPPATH\Models\POSModel.php on line 101.
+ 1 APPPATH\Models\POSModel.php(101): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $email', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\POSModel.php', 101)
+ 2 APPPATH\Controllers\POSController.php(29): App\Models\POSModel->savePOS()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\POSController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\POSController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-08 22:33:55 --> ErrorException: Undefined variable $member_name
+[Method: POST, Route: pos]
+in APPPATH\Models\POSModel.php on line 163.
+ 1 APPPATH\Models\POSModel.php(163): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $member_name', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\POSModel.php', 163)
+ 2 APPPATH\Controllers\POSController.php(29): App\Models\POSModel->savePOS()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\POSController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\POSController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

@@ -1,0 +1,22 @@
+CRITICAL - 2026-05-07 12:05:43 --> ErrorException: Undefined array key 2
+[Method: POST, Route: pos]
+in APPPATH\Models\POSModel.php on line 113.
+ 1 APPPATH\Models\POSModel.php(113): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key 2', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\POSModel.php', 113)
+ 2 APPPATH\Controllers\POSController.php(29): App\Models\POSModel->savePOS()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\POSController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\POSController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-05-07 12:09:42 --> ErrorException: Undefined array key 2
+[Method: POST, Route: pos]
+in APPPATH\Models\POSModel.php on line 126.
+ 1 APPPATH\Models\POSModel.php(126): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key 2', 'C:\\xampp\\htdocs\\mjeshter-fgym\\app\\Models\\POSModel.php', 126)
+ 2 APPPATH\Controllers\POSController.php(29): App\Models\POSModel->savePOS()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\POSController->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\POSController))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
