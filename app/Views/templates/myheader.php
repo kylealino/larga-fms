@@ -36,7 +36,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <link rel="shortcut icon" type="image/png" href="<?=base_url('assets/images/logos/gym-logo.png')?>" />
-  <title>QCPD Shooting Range | Management System</title>
+  <title>Larga Fleet | Management System</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
@@ -45,25 +45,28 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
   
   <style>
     /* ============================================ */
-    /* QCPD SHOOTING RANGE - TACTICAL DARK/BLUE THEME */
-    /* MATCHES LOGIN PAGE EXACTLY */
+    /* LARGA FLEET - LIGHT BLUE / WHITE THEME */
     /* ============================================ */
     :root {
-      --qcpd-bg-dark: #0b0d10;
-      --qcpd-bg-card: #0f1217;
-      --qcpd-blue: #4fc3ff;
-      --qcpd-blue-dark: #0091ea;
-      --qcpd-blue-deep: #0a2a44;
-      --qcpd-blue-mid: #0b2a44;
-      --qcpd-text-white: #f0f4fa;
-      --qcpd-text-light: #a0b8cc;
-      --qcpd-text-muted: #7a93aa;
-      --qcpd-border: rgba(255, 255, 255, 0.06);
-      --qcpd-border-light: rgba(0, 150, 255, 0.15);
-      --qcpd-hover: rgba(79, 195, 255, 0.08);
-      --qcpd-active: rgba(79, 195, 255, 0.12);
-      --qcpd-white: #f5f9ff;
-      --qcpd-gray: #9ca3af;
+      --lrg-bg: #f0f7fe;
+      --lrg-bg-dark: #e3effa;
+      --lrg-sidebar: #ffffff;
+      --lrg-sidebar-border: rgba(0, 80, 200, 0.06);
+      --lrg-blue: #1a6bb0;
+      --lrg-blue-light: #3c9eff;
+      --lrg-blue-dark: #0f5a99;
+      --lrg-blue-pale: #e8f2fa;
+      --lrg-text-dark: #0b2a47;
+      --lrg-text-mid: #1e4a6e;
+      --lrg-text-light: #3f6b8f;
+      --lrg-text-muted: #4b6f92;
+      --lrg-white: #ffffff;
+      --lrg-border: #dde8f2;
+      --lrg-border-light: rgba(0, 80, 200, 0.04);
+      --lrg-hover: rgba(26, 107, 176, 0.04);
+      --lrg-active: rgba(26, 107, 176, 0.06);
+      --lrg-shadow: rgba(0, 50, 100, 0.04);
+      --lrg-shadow-hover: rgba(0, 70, 150, 0.06);
     }
 
     * {
@@ -74,17 +77,17 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #f0f4f8;
+      background: var(--lrg-bg);
       overflow-x: hidden;
     }
 
     /* ============================================ */
-    /* SIDEBAR - Dark tactical (matches login left side) */
+    /* SIDEBAR - Clean white with light blue accents */
     /* ============================================ */
     .left-sidebar {
-      background: var(--qcpd-bg-dark);
-      box-shadow: 4px 0 30px rgba(0,0,0,0.4);
-      border-right: 1px solid rgba(79, 195, 255, 0.06);
+      background: var(--lrg-sidebar);
+      box-shadow: 4px 0 30px var(--lrg-shadow);
+      border-right: 1px solid var(--lrg-sidebar-border);
       position: fixed;
       top: 0;
       left: 0;
@@ -115,7 +118,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .left-sidebar.collapsed .sidebar-link i,
-    .left-sidebar.collapsed .sidebar-link .ti {
+    .left-sidebar.collapsed .sidebar-link .bi {
       margin: 0;
     }
 
@@ -130,7 +133,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       background: transparent;
     }
     .left-sidebar::-webkit-scrollbar-thumb {
-      background: var(--qcpd-blue);
+      background: var(--lrg-blue);
       border-radius: 3px;
     }
 
@@ -155,12 +158,12 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     .brand-logo {
       padding: 20px 24px;
-      border-bottom: 1px solid rgba(79, 195, 255, 0.06);
-      background: var(--qcpd-bg-dark);
+      border-bottom: 1px solid var(--lrg-sidebar-border);
+      background: var(--lrg-sidebar);
     }
 
     .brand-logo a {
-      color: var(--qcpd-text-white);
+      color: var(--lrg-text-dark);
       font-weight: 700;
       font-size: 1rem;
       display: flex;
@@ -172,36 +175,31 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     .brand-logo .shield-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(145deg, #0f2840, #0a1a2a);
+      background: var(--lrg-blue-pale);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(79, 195, 255, 0.2);
-      box-shadow: 0 6px 16px -4px rgba(0,0,0,0.6);
+      border: 1px solid var(--lrg-border-light);
+      box-shadow: 0 4px 12px var(--lrg-shadow);
       flex-shrink: 0;
     }
 
     .brand-logo .shield-icon i {
       font-size: 20px;
-      color: var(--qcpd-blue);
-      filter: drop-shadow(0 0 6px rgba(0,150,255,0.2));
+      color: var(--lrg-blue);
     }
 
     .brand-text {
       font-size: 0.9rem;
       letter-spacing: 0.5px;
       font-weight: 700;
-      color: var(--qcpd-text-white);
+      color: var(--lrg-text-dark);
     }
 
     .brand-text span {
-      color: var(--qcpd-blue);
+      color: var(--lrg-blue);
       font-weight: 800;
-      background: linear-gradient(135deg, #4fc3ff, #0091ea);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
     /* Sidebar Navigation */
@@ -215,7 +213,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .nav-small-cap span {
-      color: var(--qcpd-text-muted);
+      color: var(--lrg-text-muted);
       font-size: 0.6rem;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -232,7 +230,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       gap: 12px;
       padding: 10px 20px;
       margin: 2px 12px;
-      color: var(--qcpd-text-muted);
+      color: var(--lrg-text-light);
       border-radius: 10px;
       transition: all 0.2s ease;
       text-decoration: none;
@@ -241,25 +239,37 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .sidebar-link:hover {
-      background: var(--qcpd-hover);
-      color: var(--qcpd-text-white);
+      background: var(--lrg-hover);
+      color: var(--lrg-text-dark);
     }
 
     .sidebar-item.active .sidebar-link {
-      background: var(--qcpd-active);
-      color: var(--qcpd-blue);
-      border: 1px solid rgba(79, 195, 255, 0.1);
+      background: var(--lrg-active);
+      color: var(--lrg-blue);
+      border: 1px solid var(--lrg-border-light);
     }
 
-    .sidebar-link i, .sidebar-link .ti {
+    .sidebar-link i, .sidebar-link .bi {
       font-size: 1.2rem;
       width: 24px;
+      color: var(--lrg-blue);
+      opacity: 0.6;
+    }
+
+    .sidebar-item.active .sidebar-link i,
+    .sidebar-item.active .sidebar-link .bi {
+      opacity: 1;
+    }
+
+    .sidebar-link:hover i,
+    .sidebar-link:hover .bi {
+      opacity: 1;
     }
 
     /* Sidebar Footer - Logout */
     .sidebar-footer {
       padding: 20px 20px 30px 20px;
-      border-top: 1px solid rgba(79, 195, 255, 0.06);
+      border-top: 1px solid var(--lrg-sidebar-border);
       margin-top: auto;
     }
 
@@ -268,52 +278,58 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       align-items: center;
       gap: 12px;
       padding: 10px 16px;
-      color: var(--qcpd-text-muted);
+      color: var(--lrg-text-light);
       border-radius: 10px;
       transition: all 0.2s ease;
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 500;
-      background: rgba(79, 195, 255, 0.04);
-      border: 1px solid rgba(79, 195, 255, 0.06);
+      background: var(--lrg-hover);
+      border: 1px solid var(--lrg-border-light);
       cursor: pointer;
       width: 100%;
       text-align: left;
     }
 
     .logout-link:hover {
-      background: rgba(79, 195, 255, 0.12);
-      color: var(--qcpd-blue);
-      border-color: rgba(79, 195, 255, 0.15);
+      background: rgba(26, 107, 176, 0.08);
+      color: var(--lrg-blue);
+      border-color: rgba(26, 107, 176, 0.12);
     }
 
     .logout-link i {
       font-size: 1.2rem;
       width: 24px;
+      color: var(--lrg-blue);
+      opacity: 0.6;
+    }
+
+    .logout-link:hover i {
+      opacity: 1;
     }
 
     /* ============================================ */
     /* LOGOUT CONFIRMATION MODAL */
     /* ============================================ */
     .logout-modal .modal-content {
-      background: var(--qcpd-white);
+      background: var(--lrg-white);
       border-radius: 16px;
-      border: 1px solid #d7e2ec;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      border: 1px solid var(--lrg-border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
     }
 
     .logout-modal .modal-header {
-      border-bottom: 1px solid #d7e2ec;
+      border-bottom: 1px solid var(--lrg-border);
       padding: 18px 24px;
     }
 
     .logout-modal .modal-header .modal-title {
       font-weight: 600;
-      color: #0f1f2e;
+      color: var(--lrg-text-dark);
     }
 
     .logout-modal .modal-header .modal-title i {
-      color: var(--qcpd-blue-dark);
+      color: var(--lrg-blue);
       font-size: 1.2rem;
     }
 
@@ -324,47 +340,47 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     .logout-modal .modal-body .logout-icon {
       font-size: 56px;
-      color: var(--qcpd-blue);
-      opacity: 0.6;
+      color: var(--lrg-blue);
+      opacity: 0.4;
       margin-bottom: 16px;
     }
 
     .logout-modal .modal-body h4 {
       font-weight: 600;
-      color: #0f1f2e;
+      color: var(--lrg-text-dark);
       margin-bottom: 8px;
     }
 
     .logout-modal .modal-body p {
-      color: #5d7b93;
+      color: var(--lrg-text-light);
       font-size: 0.95rem;
       margin-bottom: 0;
     }
 
     .logout-modal .modal-footer {
-      border-top: 1px solid #d7e2ec;
+      border-top: 1px solid var(--lrg-border);
       padding: 16px 24px;
       gap: 10px;
     }
 
     .logout-modal .btn-cancel {
-      background: #f1f5f9;
-      border: 1px solid #d7e2ec;
+      background: var(--lrg-bg);
+      border: 1px solid var(--lrg-border);
       border-radius: 8px;
       padding: 8px 24px;
       font-weight: 600;
       font-size: 0.85rem;
-      color: #5d7b93;
+      color: var(--lrg-text-light);
       transition: 0.2s;
     }
 
     .logout-modal .btn-cancel:hover {
-      background: #e5edf5;
+      background: #dde8f2;
       border-color: #bccfdf;
     }
 
     .logout-modal .btn-logout-confirm {
-      background: var(--qcpd-blue-dark);
+      background: var(--lrg-blue);
       border: none;
       border-radius: 8px;
       padding: 8px 24px;
@@ -375,9 +391,9 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .logout-modal .btn-logout-confirm:hover {
-      background: #0073c4;
+      background: var(--lrg-blue-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 150, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(26, 107, 176, 0.2);
     }
 
     /* ============================================ */
@@ -405,12 +421,12 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     /* ============================================ */
-    /* TOPBAR - Clean white (matches login right side) */
+    /* TOPBAR - Clean white */
     /* ============================================ */
     .topbar {
-      background: var(--qcpd-white);
-      border-bottom: 1px solid #d7e2ec;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      background: var(--lrg-white);
+      border-bottom: 1px solid var(--lrg-border);
+      box-shadow: 0 1px 3px var(--lrg-shadow);
       position: sticky;
       top: 0;
       z-index: 999;
@@ -445,15 +461,15 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     #headerCollapse i, .mobile-menu-toggle i {
       font-size: 1.4rem;
-      color: #0f1f2e;
+      color: var(--lrg-text-dark);
     }
 
     #headerCollapse:hover, .mobile-menu-toggle:hover {
-      background: rgba(79, 195, 255, 0.08);
+      background: var(--lrg-hover);
     }
 
     #headerCollapse:hover i, .mobile-menu-toggle:hover i {
-      color: var(--qcpd-blue-dark);
+      color: var(--lrg-blue);
     }
 
     .mobile-menu-toggle {
@@ -468,7 +484,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     /* User Profile */
     .user-profile-img img {
-      border: 2px solid #d7e2ec;
+      border: 2px solid var(--lrg-border);
       transition: 0.2s;
       border-radius: 50%;
       width: 38px;
@@ -477,28 +493,29 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .user-profile-img img:hover {
-      border-color: var(--qcpd-blue);
+      border-color: var(--lrg-blue);
       transform: scale(1.05);
     }
 
     .dropdown-menu {
       border-radius: 12px;
-      border: 1px solid #d7e2ec;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border: 1px solid var(--lrg-border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
       min-width: 260px;
       padding: 0;
     }
 
     .profile-dropdown {
-      background: var(--qcpd-white);
+      background: var(--lrg-white);
       border-radius: 12px;
       overflow: hidden;
     }
 
     .profile-dropdown .dropdown-header {
-      background: linear-gradient(145deg, #0f2840, #0a1a2a);
-      color: var(--qcpd-white);
+      background: var(--lrg-blue-pale);
+      color: var(--lrg-text-dark);
       padding: 14px 18px;
+      border-bottom: 1px solid var(--lrg-border-light);
     }
 
     .profile-dropdown .dropdown-header h5 {
@@ -512,25 +529,25 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       align-items: center;
       gap: 12px;
       padding: 14px 18px;
-      border-bottom: 1px solid #d7e2ec;
+      border-bottom: 1px solid var(--lrg-border);
     }
 
     .profile-info h6 {
       margin: 0;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #0f1f2e;
+      color: var(--lrg-text-dark);
     }
 
     .profile-info span {
       font-size: 0.65rem;
-      color: #3b5b77;
+      color: var(--lrg-text-light);
     }
 
     .btn-outline-primary {
       border-radius: 8px;
-      border: 1px solid var(--qcpd-blue-dark);
-      color: var(--qcpd-blue-dark);
+      border: 1px solid var(--lrg-blue);
+      color: var(--lrg-blue);
       background: transparent;
       padding: 8px 16px;
       font-weight: 600;
@@ -540,8 +557,8 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
     }
 
     .btn-outline-primary:hover {
-      background: var(--qcpd-blue-dark);
-      color: var(--qcpd-white);
+      background: var(--lrg-blue);
+      color: var(--lrg-white);
     }
 
     /* Sidebar Overlay */
@@ -551,7 +568,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.3);
       z-index: 998;
       display: none;
     }
@@ -562,7 +579,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     /* Body Wrapper */
     .body-wrapper {
-      background: #f0f4f8;
+      background: var(--lrg-bg);
       flex: 1;
       padding: 24px;
     }
@@ -575,9 +592,9 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
 
     /* Footer */
     .footer {
-      background: var(--qcpd-white);
-      border-top: 1px solid #d7e2ec;
-      color: #5d7b93;
+      background: var(--lrg-white);
+      border-top: 1px solid var(--lrg-border);
+      color: var(--lrg-text-muted);
       font-size: 0.7rem;
       padding: 12px 24px;
       text-align: center;
@@ -595,91 +612,258 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
         <a href="<?=site_url();?>myadmindashboard" class="text-nowrap logo-img">
           <div class="d-flex align-items-center gap-2">
             <div class="shield-icon">
-              <i class="ti ti-shield-check"></i>
+              <i class="bi bi-truck-front"></i>
             </div>
-            <span class="brand-text">QCPD <span>RANGE</span></span>
+            <span class="brand-text">Larga <span>Fleet</span></span>
           </div>
         </a> 
         <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none d-block d-xl-none" id="closeSidebar">
-          <i class="ti ti-x" style="color: var(--qcpd-text-muted); font-size: 1.2rem;"></i>
+          <i class="bi bi-x" style="color: var(--lrg-text-muted); font-size: 1.2rem;"></i>
         </a>
       </div>
 
       <nav class="sidebar-nav">
         <ul id="sidebarnav" style="list-style: none; padding-left: 0;">
+          
           <!-- DASHBOARD -->
           <li class="sidebar-item <?= strpos($current_url, 'myadmindashboard') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>myadmindashboard">
-              <i class="ti ti-dashboard"></i>
+              <i class="bi bi-speedometer2"></i>
               <span>Dashboard</span>
             </a>
           </li>
 
-          <!-- RANGE OPERATIONS -->
+          <!-- ============================================ -->
+          <!-- OPERATIONS MANAGEMENT -->
+          <!-- ============================================ -->
           <li class="nav-small-cap">
-            <span>RANGE OPERATIONS</span>
+            <span>Operations</span>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'transactions') !== false ? 'active' : ''; ?>">
-              <a class="sidebar-link" href="<?=site_url();?>transactions">
-                  <i class="ti ti-receipt"></i>
-                  <span>Transactions</span>
-              </a>
-          </li>
-
-          <!-- PERSONNEL -->
-          <li class="nav-small-cap">
-            <span>PERSONNEL</span>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'rangeassistants') !== false ? 'active' : ''; ?>">
-              <a class="sidebar-link" href="<?=site_url();?>rangeassistants">
-                  <i class="ti ti-users"></i>
-                  <span>Range Assistants</span>
-              </a>
-          </li>
-
-          <!-- FACILITY -->
-        <li class="nav-small-cap">
-            <span>FACILITY</span>
-        </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'baystatus') !== false ? 'active' : ''; ?>">
-              <a class="sidebar-link" href="<?=site_url();?>baystatus">
-                  <i class="ti ti-layout-grid"></i>
-                  <span>Bay Status</span>
-              </a>
-          </li>
-
-                    <!-- INVENTORY -->
-          <li class="nav-small-cap">
-            <span>INVENTORY</span>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'firearmsinventory') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>firearmsinventory?meaction=MAIN">
-              <i class="ti ti-package"></i>
-              <span>Firearms &amp; Ammo</span>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-customers') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-customers">
+              <i class="bi bi-people"></i>
+              <span>Customer Management</span>
             </a>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'equipmentinventory') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>equipmentinventory?meaction=MAIN">
-              <i class="ti ti-box"></i>
-              <span>Equipment</span>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-vendors') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-vendors">
+              <i class="bi bi-building"></i>
+              <span>Vendor Management</span>
             </a>
           </li>
 
+          <li class="sidebar-item <?= strpos($current_url, 'fms-trucks') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-trucks">
+              <i class="bi bi-truck"></i>
+              <span>Truck Management</span>
+            </a>
+          </li>
+
+          <!-- <li class="sidebar-item <?= strpos($current_url, 'chassis') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>chassis">
+              <i class="bi bi-layers"></i>
+              <span>Chassis Management</span>
+            </a>
+          </li> -->
+
+          <li class="sidebar-item <?= strpos($current_url, 'fms-drivers') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-drivers">
+              <i class="bi bi-person-badge"></i>
+              <span>Driver Management</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'fms-helpers') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-helpers">
+              <i class="bi bi-person-plus"></i>
+              <span>Helper Management</span>
+            </a>
+          </li>
+
+          <!-- ============================================ -->
+          <!-- TRIP & DISPATCH -->
+          <!-- ============================================ -->
+          <li class="nav-small-cap">
+            <span>Trip & Dispatch</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'fms-trips') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-trips">
+              <i class="bi bi-calendar-event"></i>
+              <span>Trip Scheduling</span>
+            </a>
+          </li>
+
+
+          <li class="sidebar-item <?= strpos($current_url, 'fms-dispatch') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-dispatch">
+              <i class="bi bi-send"></i>
+              <span>Dispatch Monitoring</span>
+            </a>
+          </li>
+
+
+          <!-- ============================================ -->
+          <!-- DELIVERY RECEIPT -->
+          <!-- ============================================ -->
+          <li class="nav-small-cap">
+            <span>Delivery</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'deliveryreceipt') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>deliveryreceipt">
+              <i class="bi bi-file-text"></i>
+              <span>Delivery Receipt</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'proofofdelivery') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>proofofdelivery">
+              <i class="bi bi-file-check"></i>
+              <span>Proof of Delivery</span>
+            </a>
+          </li>
+
+          <!-- ============================================ -->
+          <!-- BILLING & ACCOUNTS RECEIVABLE -->
+          <!-- ============================================ -->
+          <li class="nav-small-cap">
+            <span>Billing & AR</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'billing') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>billing">
+              <i class="bi bi-receipt"></i>
+              <span>Billing Generation</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'invoice') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>invoice">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Invoice</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'payment') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>payment">
+              <i class="bi bi-credit-card"></i>
+              <span>Payment Recording</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'accountsreceivable') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>accountsreceivable">
+              <i class="bi bi-pie-chart"></i>
+              <span>Accounts Receivable</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'statementofaccount') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>statementofaccount">
+              <i class="bi bi-file-earmark-bar-graph"></i>
+              <span>Statement of Account</span>
+            </a>
+          </li>
+
+          <!-- ============================================ -->
+          <!-- MAINTENANCE MANAGEMENT -->
+          <!-- ============================================ -->
+          <li class="nav-small-cap">
+            <span>Maintenance</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'preventivemaintenance') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>preventivemaintenance">
+              <i class="bi bi-tools"></i>
+              <span>Preventive Maintenance</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'maintenancerecords') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>maintenancerecords">
+              <i class="bi bi-clipboard2-list"></i>
+              <span>Maintenance Records</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'partsmanagement') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>partsmanagement">
+              <i class="bi bi-box"></i>
+              <span>Parts Management</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'tiremanagement') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>tiremanagement">
+              <i class="bi bi-circle"></i>
+              <span>Tire Management</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'toolmanagement') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>toolmanagement">
+              <i class="bi bi-wrench"></i>
+              <span>Tools Management</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'suppliesmanagement') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>suppliesmanagement">
+              <i class="bi bi-box-seam"></i>
+              <span>Supplies Management</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'truckdocuments') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>truckdocuments">
+              <i class="bi bi-file-earmark"></i>
+              <span>Truck Documents</span>
+            </a>
+          </li>
+
+          <!-- ============================================ -->
           <!-- REPORTS -->
+          <!-- ============================================ -->
           <li class="nav-small-cap">
-              <span>REPORTS</span>
+            <span>Reports</span>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'rangereports') !== false ? 'active' : ''; ?>">
-              <a class="sidebar-link" href="<?=site_url();?>rangereports">
-                  <i class="ti ti-file-report"></i>
-                  <span>Range Reports</span>
-              </a>
+          <li class="sidebar-item <?= strpos($current_url, 'operationsreports') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>operationsreports">
+              <i class="bi bi-file-earmark-ruled"></i>
+              <span>Operations Reports</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'deliveryreports') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>deliveryreports">
+              <i class="bi bi-file-earmark-check"></i>
+              <span>Delivery Reports</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'billingreports') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>billingreports">
+              <i class="bi bi-bar-chart"></i>
+              <span>Billing Reports</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'maintenancereports') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>maintenancereports">
+              <i class="bi bi-graph-up"></i>
+              <span>Maintenance Reports</span>
+            </a>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'fleetanalysis') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fleetanalysis">
+              <i class="bi bi-bar-chart-fill"></i>
+              <span>Fleet Analysis</span>
+            </a>
           </li>
           
         </ul>
@@ -688,7 +872,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
       <!-- Logout Section at Bottom -->
       <div class="sidebar-footer">
         <button class="logout-link" id="logoutBtn">
-          <i class="ti ti-logout"></i>
+          <i class="bi bi-box-arrow-right"></i>
           <span>Logout</span>
         </button>
       </div>
@@ -703,12 +887,12 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <ul class="navbar-nav">
               <li class="nav-item d-block d-xl-none">
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                  <i class="ti ti-menu-2"></i>
+                  <i class="bi bi-list"></i>
                 </button>
               </li>
               <li class="nav-item d-none d-xl-block">
                 <button class="nav-link sidebartoggler" id="sidebarToggle">
-                  <i class="ti ti-menu-2"></i>
+                  <i class="bi bi-list"></i>
                 </button>
               </li>
             </ul>

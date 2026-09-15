@@ -14,25 +14,43 @@ $routes->get('myadmindashboard', 'MyAdminDashboard::index',['filter' => 'myauthu
 $routes->add('myclientlogout', 'MyClientDashboard::logout');
 
 // =============================================
-// TRANSACTIONS ROUTES
+// CUSTOMERS ROUTES
 // =============================================
-$routes->get('transactions', 'TransactionsController::index', ['filter' => 'myauthuser']);
-$routes->post('transactions', 'TransactionsController::index', ['filter' => 'myauthuser']);
+$routes->get('fms-customers', 'FMS_Customer::index', ['filter' => 'myauthuser']);
+$routes->post('fms-customers', 'FMS_Customer::index', ['filter' => 'myauthuser']);
 
 // =============================================
-// RANGE ASSISTANTS ROUTES
+// DRIVERS ROUTES
 // =============================================
-$routes->get('rangeassistants', 'RangeAssistantsController::index', ['filter' => 'myauthuser']);
-$routes->post('rangeassistants', 'RangeAssistantsController::index', ['filter' => 'myauthuser']);
+$routes->get('fms-drivers', 'FMS_Driver::index', ['filter' => 'myauthuser']);
+$routes->post('fms-drivers', 'FMS_Driver::index', ['filter' => 'myauthuser']);
 
 // =============================================
-// BAY STATUS ROUTES
+// HELPERS ROUTES
 // =============================================
-$routes->get('baystatus', 'BayStatusController::index', ['filter' => 'myauthuser']);
-$routes->post('baystatus', 'BayStatusController::index', ['filter' => 'myauthuser']);
+$routes->get('fms-helpers', 'FMS_Helper::index', ['filter' => 'myauthuser']);
+$routes->post('fms-helpers', 'FMS_Helper::index', ['filter' => 'myauthuser']);
 
 // =============================================
-// RANGE REPORTS ROUTES
+// TRUCK ROUTES
 // =============================================
-$routes->get('rangereports', 'RangeReportsController::index', ['filter' => 'myauthuser']);
-$routes->post('rangereports', 'RangeReportsController::index', ['filter' => 'myauthuser']);
+$routes->get('fms-trucks', 'FMS_Truck::index', ['filter' => 'myauthuser']);
+$routes->post('fms-trucks', 'FMS_Truck::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// VENDOR ROUTES
+// =============================================
+$routes->get('fms-vendors', 'FMS_Vendor::index', ['filter' => 'myauthuser']);
+$routes->post('fms-vendors', 'FMS_Vendor::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// TRIPS ROUTES
+// =============================================
+$routes->get('fms-trips', 'FMS_Trip::index', ['filter' => 'myauthuser']);
+$routes->post('fms-trips', 'FMS_Trip::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// DISPATCH ROUTES
+// =============================================
+$routes->get('fms-dispatch', 'FMS_Dispatch::index', ['filter' => 'myauthuser']);
+$routes->post('fms-dispatch', 'FMS_Dispatch::index', ['filter' => 'myauthuser']);

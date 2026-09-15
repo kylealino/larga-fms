@@ -1,0 +1,92 @@
+CRITICAL - 2026-08-28 10:39:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "tms/customer/customer-main.php"
+[Method: GET, Route: fms-customers]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('tms/customer/customer-main.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('tms/customer/customer-main', [], true)
+ 3 APPPATH\Controllers\FMS_Customer.php(70): view('tms/customer/customer-main')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Customer->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Customer))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 10:39:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "tms/customer/customer-main.php"
+[Method: GET, Route: fms-customers]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('tms/customer/customer-main.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('tms/customer/customer-main', [], true)
+ 3 APPPATH\Controllers\FMS_Customer.php(70): view('tms/customer/customer-main')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Customer->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Customer))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 10:39:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "tms/customer/customer-main.php"
+[Method: GET, Route: fms-customers]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('tms/customer/customer-main.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('tms/customer/customer-main', [], true)
+ 3 APPPATH\Controllers\FMS_Customer.php(70): view('tms/customer/customer-main')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Customer->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Customer))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 10:39:16 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "tms/customer/customer-main.php"
+[Method: GET, Route: fms-customers]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('tms/customer/customer-main.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('tms/customer/customer-main', [], true)
+ 3 APPPATH\Controllers\FMS_Customer.php(70): view('tms/customer/customer-main')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Customer->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Customer))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 13:39:20 --> CodeIgniter\View\Exceptions\ViewException: Invalid file: "drivers/drivers-main.php"
+[Method: GET, Route: fms-drivers]
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(212): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('drivers/drivers-main.php')
+ 2 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('drivers/drivers-main', [], true)
+ 3 APPPATH\Controllers\FMS_Driver.php(97): view('drivers/drivers-main')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Driver->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Driver))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 13:54:05 --> Error: Call to a member function saveDriver() on null
+[Method: POST, Route: fms-drivers]
+in APPPATH\Controllers\FMS_Driver.php on line 28.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Driver->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Driver))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 13:54:25 --> Error: Call to a member function saveDriver() on null
+[Method: POST, Route: fms-drivers]
+in APPPATH\Controllers\FMS_Driver.php on line 28.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Driver->index()
+ 2 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Driver))
+ 3 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-28 15:50:17 --> ErrorException: Undefined array key "has_license"
+[Method: GET, Route: fms-drivers]
+in APPPATH\Views\fms\driver\driver-main.php on line 1156.
+ 1 APPPATH\Views\fms\driver\driver-main.php(1156): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "has_license"', 'C:\\xampp\\htdocs\\larga-fms\\app\\Views\\fms\\driver\\driver-main.php', 1156)
+ 2 SYSTEMPATH\View\View.php(224): include('C:\\xampp\\htdocs\\larga-fms\\app\\Views\\fms\\driver\\driver-main.php')
+ 3 SYSTEMPATH\View\View.php(227): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1173): CodeIgniter\View\View->render('fms/driver/driver-main', [], true)
+ 5 APPPATH\Controllers\FMS_Driver.php(76): view('fms/driver/driver-main')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Driver->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Driver))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

@@ -1,0 +1,799 @@
+ERROR - 2026-08-29 12:07:36 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'largafms', 3306, '', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#3 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+#4 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-08-29 12:07:36 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: POST, Route: mylogin-auth]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `username`,`hash_password` FROM myua_user where username = \'ADMIN\' limit 1 ')
+ 3 APPPATH\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 12:07:40 --> Error connecting to the database: mysqli_sql_exception: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', 'root', Object(SensitiveParameterValue), 'largafms', 3306, '', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: No connection could be made because the target machine actively refused it in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:246
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `usernam...')
+#3 C:\xampp\htdocs\larga-fms\app\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+#4 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-08-29 12:07:40 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: No connection could be made because the target machine actively refused it
+[Method: POST, Route: mylogin-auth]
+in SYSTEMPATH\Database\BaseConnection.php on line 467.
+ 1 SYSTEMPATH\Database\BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\MyLogIn.php(56): CodeIgniter\Database\BaseConnection->query('select `username`,`hash_password` FROM myua_user where username = \'ADMIN\' limit 1 ')
+ 3 APPPATH\Controllers\MyLogIn.php(24): App\Controllers\MyLogIn->Verify_User('ADMIN')
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\MyLogIn->auth()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\MyLogIn))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:28:16 --> TypeError: explode(): Argument #2 ($string) must be of type string, array given
+[Method: POST, Route: fms-trips]
+in APPPATH\Models\FMS_Trip_Model.php on line 232.
+ 1 APPPATH\Models\FMS_Trip_Model.php(232): explode(',', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:29:12 --> TypeError: explode(): Argument #2 ($string) must be of type string, array given
+[Method: POST, Route: fms-trips]
+in APPPATH\Models\FMS_Trip_Model.php on line 232.
+ 1 APPPATH\Models\FMS_Trip_Model.php(232): explode(',', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:29:26 --> TypeError: explode(): Argument #2 ($string) must be of type string, array given
+[Method: POST, Route: fms-trips]
+in APPPATH\Models\FMS_Trip_Model.php on line 232.
+ 1 APPPATH\Models\FMS_Trip_Model.php(232): explode(',', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 18:32:45 --> mysqli_sql_exception: Unknown column 'a.helper_id' in 'where clause' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Trip_Model.php(454): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Models\FMS_Trip_Model.php(241): App\Models\FMS_Trip_Model->isResourceAvailable('helper', '1', '1', '2026-08-29', '2026-09-04')
+#5 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+#8 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-08-29 18:32:45 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.helper_id' in 'where clause'
+[Method: POST, Route: fms-trips]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Trip_Model.php(454): CodeIgniter\Database\BaseConnection->query('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = ?
+            AND a.trip_id != ?
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= ? AND t.expected_delivery_date >= ?) OR
+                (t.scheduled_date >= ? AND t.scheduled_date <= ?)
+            )
+        ', [...])
+ 2 APPPATH\Models\FMS_Trip_Model.php(241): App\Models\FMS_Trip_Model->isResourceAvailable('helper', '1', '1', '2026-08-29', '2026-09-04')
+ 3 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:32:45 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.helper_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = \'1\'
+            AND a.trip_id != \'1\'
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= \'2026-09-04\' AND t.expected_delivery_date >= \'2026-08-29\') OR
+                (t.scheduled_date >= \'2026-08-29\' AND t.scheduled_date <= \'2026-09-04\')
+            )
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = \'1\'
+            AND a.trip_id != \'1\'
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= \'2026-09-04\' AND t.expected_delivery_date >= \'2026-08-29\') OR
+                (t.scheduled_date >= \'2026-08-29\' AND t.scheduled_date <= \'2026-09-04\')
+            )
+        ')
+ 3 APPPATH\Models\FMS_Trip_Model.php(454): CodeIgniter\Database\BaseConnection->query('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = ?
+            AND a.trip_id != ?
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= ? AND t.expected_delivery_date >= ?) OR
+                (t.scheduled_date >= ? AND t.scheduled_date <= ?)
+            )
+        ', [...])
+ 4 APPPATH\Models\FMS_Trip_Model.php(241): App\Models\FMS_Trip_Model->isResourceAvailable('helper', '1', '1', '2026-08-29', '2026-09-04')
+ 5 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:32:45 --> [Caused by] mysqli_sql_exception: Unknown column 'a.helper_id' in 'where clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = \'1\'
+            AND a.trip_id != \'1\'
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= \'2026-09-04\' AND t.expected_delivery_date >= \'2026-08-29\') OR
+                (t.scheduled_date >= \'2026-08-29\' AND t.scheduled_date <= \'2026-09-04\')
+            )
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = \'1\'
+            AND a.trip_id != \'1\'
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= \'2026-09-04\' AND t.expected_delivery_date >= \'2026-08-29\') OR
+                (t.scheduled_date >= \'2026-08-29\' AND t.scheduled_date <= \'2026-09-04\')
+            )
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = \'1\'
+            AND a.trip_id != \'1\'
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= \'2026-09-04\' AND t.expected_delivery_date >= \'2026-08-29\') OR
+                (t.scheduled_date >= \'2026-08-29\' AND t.scheduled_date <= \'2026-09-04\')
+            )
+        ')
+ 4 APPPATH\Models\FMS_Trip_Model.php(454): CodeIgniter\Database\BaseConnection->query('
+            SELECT COUNT(*) as count 
+            FROM tbl_trip_assignments a
+            INNER JOIN tbl_trips t ON a.trip_id = t.trip_id
+            WHERE a.helper_id = ?
+            AND a.trip_id != ?
+            AND t.trip_status NOT IN (\'COMPLETED\', \'CANCELLED\')
+            AND (
+                (t.scheduled_date <= ? AND t.expected_delivery_date >= ?) OR
+                (t.scheduled_date >= ? AND t.scheduled_date <= ?)
+            )
+        ', [...])
+ 5 APPPATH\Models\FMS_Trip_Model.php(241): App\Models\FMS_Trip_Model->isResourceAvailable('helper', '1', '1', '2026-08-29', '2026-09-04')
+ 6 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 18:41:33 --> mysqli_sql_exception: Unknown column 'a.helper_id' in 'on clause' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Trip_Model.php(365): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-08-29 18:41:34 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.helper_id' in 'on clause'
+[Method: POST, Route: fms-trips]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Trip_Model.php(365): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:41:34 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.helper_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 3 APPPATH\Models\FMS_Trip_Model.php(365): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 4 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:41:34 --> [Caused by] mysqli_sql_exception: Unknown column 'a.helper_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 4 APPPATH\Models\FMS_Trip_Model.php(365): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 5 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 18:42:49 --> mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`largafms`.`tbl_trip_assignments`, CONSTRAINT `tbl_trip_assignments_ibfk_2` FOREIGN KEY (`truck_id`) REFERENCES `tbl_trucks` (`truck_id`) ON DELETE SET NULL) in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Trip_Model.php(235): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-08-29 18:42:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Cannot add or update a child row: a foreign key constraint fails (`largafms`.`tbl_trip_assignments`, CONSTRAINT `tbl_trip_assignments_ibfk_2` FOREIGN KEY (`truck_id`) REFERENCES `tbl_trucks` (`truck_id`) ON DELETE SET NULL)
+[Method: POST, Route: fms-trips]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Trip_Model.php(235): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:42:49 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Cannot add or update a child row: a foreign key constraint fails (`largafms`.`tbl_trip_assignments`, CONSTRAINT `tbl_trip_assignments_ibfk_2` FOREIGN KEY (`truck_id`) REFERENCES `tbl_trucks` (`truck_id`) ON DELETE SET NULL)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (\'1\', \'RIGID\', \'\', NULL, \'\', \'OWNED\', \'\', 0, \'\', \'\', \'\', \'\', \'\', \'1\', \'1\', \'2026-08-29\', \'18:42\', \'\', 0, 0, \'ADMIN\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (\'1\', \'RIGID\', \'\', NULL, \'\', \'OWNED\', \'\', 0, \'\', \'\', \'\', \'\', \'\', \'1\', \'1\', \'2026-08-29\', \'18:42\', \'\', 0, 0, \'ADMIN\')')
+ 3 APPPATH\Models\FMS_Trip_Model.php(235): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 18:42:49 --> [Caused by] mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`largafms`.`tbl_trip_assignments`, CONSTRAINT `tbl_trip_assignments_ibfk_2` FOREIGN KEY (`truck_id`) REFERENCES `tbl_trucks` (`truck_id`) ON DELETE SET NULL)
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (\'1\', \'RIGID\', \'\', NULL, \'\', \'OWNED\', \'\', 0, \'\', \'\', \'\', \'\', \'\', \'1\', \'1\', \'2026-08-29\', \'18:42\', \'\', 0, 0, \'ADMIN\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (\'1\', \'RIGID\', \'\', NULL, \'\', \'OWNED\', \'\', 0, \'\', \'\', \'\', \'\', \'\', \'1\', \'1\', \'2026-08-29\', \'18:42\', \'\', 0, 0, \'ADMIN\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (\'1\', \'RIGID\', \'\', NULL, \'\', \'OWNED\', \'\', 0, \'\', \'\', \'\', \'\', \'\', \'1\', \'1\', \'2026-08-29\', \'18:42\', \'\', 0, 0, \'ADMIN\')')
+ 4 APPPATH\Models\FMS_Trip_Model.php(235): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_trip_assignments`(
+                `trip_id`, `vehicle_type`, `truck_id`, `tractor_id`,
+                `chassis_id`, `chassis_type`, `vendor_id`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`,
+                `vendor_contact_person`, `vendor_contact_number`,
+                `driver_id`, `helper_id`, `assignment_date`,
+                `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
+                `fuel_level`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Trip.php(49): App\Models\FMS_Trip_Model->saveAssignment()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 18:56:49 --> mysqli_sql_exception: Duplicate entry 'TRC-2026-0001' for key 'truck_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Truck_Model.php(127): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Truck.php(28): App\Models\FMS_Truck_Model->saveTruck()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Truck->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Truck))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-08-29 19:03:11 --> ParseError: syntax error, unexpected token "<", expecting end of file
+[Method: GET, Route: fms-trips]
+in APPPATH\Controllers\FMS_Trip.php on line 90.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(295): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\xampp\\htdocs\\larga-fms\\app\\Controllers\\FMS_Trip.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(271): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\FMS_Trip')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\FMS_Trip')
+ 4 SYSTEMPATH\CodeIgniter.php(885): class_exists('\\App\\Controllers\\FMS_Trip', true)
+ 5 SYSTEMPATH\CodeIgniter.php(494): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-08-29 19:21:10 --> mysqli_sql_exception: Duplicate entry '' for key 'chassis_number' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Truck_Model.php(127): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Truck.php(28): App\Models\FMS_Truck_Model->saveTruck()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Truck->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Truck))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+ERROR - 2026-08-29 19:23:51 --> mysqli_sql_exception: Unknown column 'a.tractor_id' in 'on clause' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            S...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            S...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            S...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Trip_Model.php(391): CodeIgniter\Database\BaseConnection->query('\r\n            S...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-08-29 19:23:51 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.tractor_id' in 'on clause'
+[Method: POST, Route: fms-trips]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Trip_Model.php(391): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 2 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 19:23:51 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'a.tractor_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 3 APPPATH\Models\FMS_Trip_Model.php(391): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 4 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-08-29 19:23:51 --> [Caused by] mysqli_sql_exception: Unknown column 'a.tractor_id' in 'on clause'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = \'1\'
+            ORDER BY a.assignment_id DESC
+        ')
+ 4 APPPATH\Models\FMS_Trip_Model.php(391): CodeIgniter\Database\BaseConnection->query('
+            SELECT a.*, 
+                   t.plate_number as truck_plate,
+                   tr.plate_number as tractor_plate,
+                   c.plate_number as chassis_plate,
+                   d.driver_name,
+                   h.helper_name,
+                   v.vendor_name
+            FROM tbl_trip_assignments a
+            LEFT JOIN tbl_trucks t ON a.truck_id = t.truck_id
+            LEFT JOIN tbl_trucks tr ON a.tractor_id = tr.truck_id
+            LEFT JOIN tbl_trucks c ON a.chassis_id = c.truck_id
+            LEFT JOIN tbl_drivers d ON a.driver_id = d.driver_id
+            LEFT JOIN tbl_helpers h ON a.helper_id = h.helper_id
+            LEFT JOIN tbl_vendors v ON a.vendor_id = v.vendor_id
+            WHERE a.trip_id = ?
+            ORDER BY a.assignment_id DESC
+        ', [...])
+ 5 APPPATH\Controllers\FMS_Trip.php(65): App\Models\FMS_Trip_Model->getAssignmentsByTrip('1')
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Trip->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Trip))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
