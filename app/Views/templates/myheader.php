@@ -712,9 +712,9 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Delivery</span>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'deliveryreceipt') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>deliveryreceipt">
-              <i class="bi bi-file-text"></i>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-delivery-receipt') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-delivery-receipt">
+              <i class="bi bi-receipt"></i>
               <span>Delivery Receipt</span>
             </a>
           </li>

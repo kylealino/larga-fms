@@ -54,3 +54,9 @@ $routes->post('fms-trips', 'FMS_Trip::index', ['filter' => 'myauthuser']);
 // =============================================
 $routes->get('fms-dispatch', 'FMS_Dispatch::index', ['filter' => 'myauthuser']);
 $routes->post('fms-dispatch', 'FMS_Dispatch::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// DELIVERY RECEIPT ROUTES
+// =============================================
+$routes->get('fms-delivery-receipt', 'FMS_DeliveryReceipt::index', ['filter' => 'myauthuser']);
+$routes->post('fms-delivery-receipt', 'FMS_DeliveryReceipt::index', ['filter' => 'myauthuser']);

@@ -20,16 +20,17 @@ $trips = $this->db->query("
     LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
     LEFT JOIN tbl_trip_assignments a ON t.trip_id = a.trip_id
     LEFT JOIN tbl_dispatch d ON t.trip_id = d.trip_id
-    WHERE t.trip_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT')
+    WHERE t.trip_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT', 'DELIVERED', 'COMPLETED')
     ORDER BY t.scheduled_date DESC
 ")->getResultArray();
 
-$total_assigned = count($trips);
+$total_assigned = 0;
 $total_dispatched = 0;
 $total_in_transit = 0;
 $total_delivered = 0;
 
 foreach($trips as $row) {
+    $total_assigned++; // Count all returned rows for "Total Assigned Trips" card
     if($row['dispatch_status'] == 'DISPATCHED') $total_dispatched++;
     elseif($row['dispatch_status'] == 'IN_TRANSIT') $total_in_transit++;
     elseif($row['dispatch_status'] == 'DELIVERED' || $row['dispatch_status'] == 'COMPLETED') $total_delivered++;
@@ -1186,7 +1187,7 @@ echo view('templates/myheader.php');
                                 <input type="number" class="form-control" id="total_distance" step="0.01" placeholder="0.00" readonly>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label class="form-label">Fuel Consumed (L)</label>
+                                <label class="form-label">Fuel Consumed (%)</label>
                                 <input type="number" class="form-control" id="fuel_consumed" step="0.01" placeholder="0.00" readonly>
                             </div>
                             <div class="col-md-6 mb-2">
@@ -1513,26 +1514,32 @@ $(document).ready(function () {
 });
 
 // =============================================
-// FILTER TABLE BY DISPATCH STATUS
+// FILTER TABLE BY TRIP STATUS
 // =============================================
 function filterTable(status) {
     $('.stat-card').removeClass('active');
     $('.stat-card[data-filter="' + status + '"]').addClass('active');
-    
+
     currentFilter = status;
-    var columnIndex = 7;
-    
-    if(status === 'all') {
-        dispatchTable.column(columnIndex).search('').draw();
+
+    // Column 6 = Status column (Assigned / Dispatched / In Transit / Delivered / Completed)
+    var columnIndex = 6;
+
+    if (status === 'all') {
+        dispatchTable.column(columnIndex).search('', true, false).draw();
         $('#clearFilterBtn').hide();
         $('#recordCount').text('<?=count($trips);?> records');
     } else {
-        var searchTerm = status;
-        if(status === 'DELIVERED') {
-            searchTerm = 'Delivered|Completed';
-        }
+        var labelMap = {
+            'DISPATCHED' : 'Dispatched',
+            'IN_TRANSIT' : 'In Transit',
+            'DELIVERED'  : 'Delivered|Completed'
+        };
+        var searchTerm = labelMap[status] || status;
+
         dispatchTable.column(columnIndex).search(searchTerm, true, false).draw();
         $('#clearFilterBtn').show();
+
         var info = dispatchTable.page.info();
         $('#recordCount').text(info.recordsDisplay + ' records');
     }

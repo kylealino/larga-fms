@@ -114,7 +114,7 @@ function __Dispatch() {
                                                 truckValue = '';
                                         }
                                         
-                                        // UPDATE THE DISPLAY CARD - FIXED
+                                        // UPDATE THE DISPLAY CARD
                                         $('#dispatch_vehicle_type_display').text(vehicleTypeLabel);
                                         $('#dispatch_truck_display').text(vehicleDisplay);
                                         $('#dispatch_driver_display').text(driverValue);
@@ -148,7 +148,7 @@ function __Dispatch() {
                 
                 if(data && data.dispatch_id) {
                     $('#dispatch_id').val(data.dispatch_id);
-                    $('#dispatch_code_display').val(data.dispatch_code);
+                    $('#dispatch_code_display').text(data.dispatch_code);
                     $('#dispatch_date').val(data.dispatch_date);
                     $('#dispatch_time').val(data.dispatch_time);
                     if(data.truck) $('#dispatch_truck').val(data.truck);
@@ -197,7 +197,7 @@ function __Dispatch() {
                     
                 } else {
                     $('#dispatch_id').val('');
-                    $('#dispatch_code_display').val('Auto-generated');
+                    $('#dispatch_code_display').text('Auto-generated');
                     var today = new Date().toISOString().split('T')[0];
                     $('#dispatch_date').val(today);
                     $('#dispatch_time').val('06:00');
@@ -1093,16 +1093,19 @@ function __Dispatch() {
                         };
                         var typeDisplay = typeLabels[row.waypoint_type] || row.waypoint_type || '—';
                         
+                        // Escape single quotes in waypoint name to prevent breaking inline JS
+                        var safeName = (row.waypoint_name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        
                         var arrivalBtn = '';
                         var departureBtn = '';
                         
                         if(row.waypoint_status == 'PENDING' || row.waypoint_status == '') {
-                            arrivalBtn = `<button class="btn btn-sm btn-success me-1" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'arrival', '${row.waypoint_name}')" title="Record Arrival">
+                            arrivalBtn = `<button class="btn btn-sm btn-success me-1" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'arrival', '${safeName}')" title="Record Arrival">
                                 <i class="bi bi-arrow-down-circle"></i> Arrive
                             </button>`;
                         } else if(row.waypoint_status == 'ARRIVED') {
                             arrivalBtn = `<span class="badge badge-success me-1">Arrived</span>`;
-                            departureBtn = `<button class="btn btn-sm btn-warning" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'departure', '${row.waypoint_name}')" title="Record Departure">
+                            departureBtn = `<button class="btn btn-sm btn-warning" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'departure', '${safeName}')" title="Record Departure">
                                 <i class="bi bi-arrow-up-circle"></i> Depart
                             </button>`;
                         } else if(row.waypoint_status == 'DEPARTED' || row.waypoint_status == 'COMPLETED') {

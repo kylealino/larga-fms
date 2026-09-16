@@ -72,7 +72,7 @@ class FMS_Dispatch_Model extends Model
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
             LEFT JOIN tbl_trip_assignments a ON t.trip_id = a.trip_id
             LEFT JOIN tbl_dispatch d ON t.trip_id = d.trip_id
-            WHERE t.trip_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT')
+            WHERE t.trip_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT', 'DELIVERED', 'COMPLETED')
             ORDER BY t.scheduled_date DESC
         ")->getResultArray();
     }
