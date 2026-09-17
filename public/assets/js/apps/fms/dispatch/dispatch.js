@@ -5,6 +5,16 @@ function __Dispatch() {
 
     console.log('Dispatch initialized, URL: ' + mesiteurl);
 
+        // ==============================
+    // SHOW PDF IN MODAL
+    // ==============================
+    this.__showPdfInModal = function(pdfUrl) {
+        var pdfFrame = document.getElementById("pdfFrame");
+        var pdfModal = new bootstrap.Modal(document.getElementById("pdfModal"));
+
+        pdfFrame.src = pdfUrl;
+        pdfModal.show();
+    };
     // ==============================
     // OPEN DISPATCH MODAL
     // ==============================
@@ -1274,6 +1284,10 @@ function formatDateTime(datetime) {
 $(document).ready(function() {
     console.log('Dispatch ready');
     
+        // Clear iframe when PDF modal closes
+    $('#pdfModal').on('hidden.bs.modal', function () {
+        document.getElementById('pdfFrame').src = '';
+    });
     // Container toggle
     $('#container_required').on('change', function() {
         __Dispatch.__toggleContainerFields();

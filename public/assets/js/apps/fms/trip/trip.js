@@ -6,12 +6,11 @@ function __Trips() {
     console.log('Trips initialized, URL: ' + mesiteurl);
 
     // ==============================
-    // TOGGLE VEHICLE FIELDS - UPDATED
+    // TOGGLE VEHICLE FIELDS
     // ==============================
     this.__toggleVehicleFields = function() {
         var type = $('#assignment_vehicle_type').val();
         
-        // Hide all fields first
         $('#assignment_truck_field').hide();
         $('#assignment_tractor_field').hide();
         $('#assignment_chassis_field').hide();
@@ -20,35 +19,26 @@ function __Trips() {
         $('#assignment_rental_fields').hide();
         $('#assignment_rented_section').hide();
         
-        // Show driver and helper always
         $('#assignment_driver_field').show();
         $('#assignment_helper_field').show();
         
         if(type == 'RIGID') {
-            // Rigid Truck: Show truck only
             $('#assignment_truck_field').show();
-            
         } else if(type == 'TRACTOR_CHASSIS') {
-            // Tractor + Owned Chassis: Show tractor, chassis, chassis type
             $('#assignment_tractor_field').show();
             $('#assignment_chassis_field').show();
             $('#assignment_chassis_type_field').show();
-            
         } else if(type == 'TRACTOR_RENTED_CHASSIS') {
-            // Tractor + Rented Chassis: Show tractor, chassis, vendor, rental fields
             $('#assignment_tractor_field').show();
             $('#assignment_chassis_field').show();
             $('#assignment_chassis_type_field').show();
             $('#assignment_chassis_type').val('RENTED');
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
-            
         } else if(type == 'RENTED_ALL') {
-            // Rented All: Show vendor, rental fields, and all vehicle fields are optional/disabled
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
             $('#assignment_rented_section').show();
-            // Make vehicle fields optional
             $('#assignment_truck_plate').prop('required', false);
             $('#assignment_tractor_plate').prop('required', false);
             $('#assignment_chassis_plate').prop('required', false);
@@ -62,7 +52,6 @@ function __Trips() {
         var chassisType = $('#assignment_chassis_type').val();
         var vehicleType = $('#assignment_vehicle_type').val();
         
-        // For TRACTOR_RENTED_CHASSIS or when chassis type is RENTED
         if(vehicleType == 'TRACTOR_RENTED_CHASSIS' || chassisType == 'RENTED') {
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
@@ -99,7 +88,6 @@ function __Trips() {
         $('#assignment_remarks').val('');
         $('#assignment_status').val('ASSIGNED');
         
-        // Hide all fields
         $('#assignment_truck_field').hide();
         $('#assignment_tractor_field').hide();
         $('#assignment_chassis_field').hide();
@@ -395,7 +383,6 @@ function __Trips() {
                     $('#assignment_trip_id').val(trip_id);
                     $('#assignment_trip_code').text(data.trip_code);
                     
-                    // Reset form
                     $('#assignment_id').val('');
                     $('#assignment_vehicle_type').val('');
                     $('#assignment_truck_plate').val('');
@@ -420,11 +407,8 @@ function __Trips() {
                     $('#assignment_remarks').val('');
                     $('#assignment_status').val('ASSIGNED');
                     
-                    // Show driver and helper fields by default
                     $('#assignment_driver_field').show();
                     $('#assignment_helper_field').show();
-                    
-                    // Hide vehicle-specific fields
                     $('#assignment_truck_field').hide();
                     $('#assignment_tractor_field').hide();
                     $('#assignment_chassis_field').hide();
@@ -433,10 +417,7 @@ function __Trips() {
                     $('#assignment_rental_fields').hide();
                     $('#assignment_rented_section').hide();
                     
-                    // Load resources (dropdowns)
                     __Trips.__loadResources();
-                    
-                    // Check if assignment exists
                     __Trips.__loadAssignment(trip_id);
                     
                     var modal = new bootstrap.Modal(document.getElementById('assignmentModal'));
@@ -450,7 +431,7 @@ function __Trips() {
     };
 
     // ==============================
-    // LOAD ASSIGNMENT - UPDATED
+    // LOAD ASSIGNMENT
     // ==============================
     this.__loadAssignment = function(trip_id) {
         var mparam = {
@@ -490,17 +471,14 @@ function __Trips() {
                     $('#assignment_status').val(data.assignment_status || 'ASSIGNED');
                     $('#assignment_remarks').val(data.remarks || '');
                     
-                    // Show fields based on vehicle type
                     __Trips.__toggleVehicleFields();
                     __Trips.__toggleRentalFields();
                     
-                    // Update button texts
                     $('#assignmentActionBtn').text('Update Assignment');
                     $('#assignmentActionBtn').attr('onclick', '__Trips.__updateAssignment()');
                     $('#assignment_status_badge').html('<span class="badge badge-success">Assigned</span>');
                     $('#assignment_remove_btn').show();
                 } else {
-                    // No assignment found
                     $('#assignmentActionBtn').text('Save Assignment');
                     $('#assignmentActionBtn').attr('onclick', '__Trips.__saveAssignment()');
                     $('#assignment_status_badge').html('<span class="badge badge-secondary">No Assignment</span>');
@@ -515,7 +493,7 @@ function __Trips() {
     };
 
     // ==============================
-    // SAVE ASSIGNMENT - UPDATED
+    // SAVE ASSIGNMENT
     // ==============================
     this.__saveAssignment = function() {
         var trip_id = $('#assignment_trip_id').val();
@@ -529,7 +507,6 @@ function __Trips() {
             return;
         }
         
-        // Validation based on vehicle type
         if(vehicle_type == 'RIGID') {
             if(!$('#assignment_truck_plate').val()) {
                 toastr.warning('Please select a truck', 'Missing field');
@@ -552,13 +529,11 @@ function __Trips() {
                 return;
             }
         } else if(vehicle_type == 'RENTED_ALL') {
-            // For RENTED_ALL, vendor is required
             if(!$('#assignment_vendor_name').val()) {
                 toastr.warning('Please select a vendor', 'Missing field');
                 $('#assignment_vendor_name').focus();
                 return;
             }
-            // Vehicle fields are optional but need at least one
             if(!$('#assignment_truck_plate').val() && !$('#assignment_tractor_plate').val() && !$('#assignment_chassis_plate').val()) {
                 toastr.warning('Please provide at least one vehicle (Truck, Tractor, or Chassis)', 'Missing field');
                 return;
@@ -577,7 +552,6 @@ function __Trips() {
             return;
         }
 
-        // For RENTED_ALL, set chassis_type to RENTED
         var chassis_type = $('#assignment_chassis_type').val();
         if(vehicle_type == 'RENTED_ALL') {
             chassis_type = 'RENTED';
@@ -639,7 +613,7 @@ function __Trips() {
     };
 
     // ==============================
-    // UPDATE ASSIGNMENT - UPDATED
+    // UPDATE ASSIGNMENT
     // ==============================
     this.__updateAssignment = function() {
         var assignment_id = $('#assignment_id').val();
@@ -813,17 +787,10 @@ function __Trips() {
         this.__loadVendors();
     };
 
-    // ==============================
-    // LOAD TRUCKS
-    // ==============================
     this.__loadTrucks = function() {
         var mparam = { meaction: 'GET_AVAILABLE_TRUCKS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -839,17 +806,10 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // LOAD TRACTORS
-    // ==============================
     this.__loadTractors = function() {
         var mparam = { meaction: 'GET_AVAILABLE_TRACTORS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -865,17 +825,10 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // LOAD CHASSIS
-    // ==============================
     this.__loadChassis = function() {
         var mparam = { meaction: 'GET_AVAILABLE_CHASSIS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -891,17 +844,10 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // LOAD DRIVERS
-    // ==============================
     this.__loadDrivers = function() {
         var mparam = { meaction: 'GET_AVAILABLE_DRIVERS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -917,17 +863,10 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // LOAD HELPERS
-    // ==============================
     this.__loadHelpers = function() {
         var mparam = { meaction: 'GET_AVAILABLE_HELPERS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -943,17 +882,10 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // LOAD VENDORS
-    // ==============================
     this.__loadVendors = function() {
         var mparam = { meaction: 'GET_ACTIVE_VENDORS' };
-
         jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-trips',
-            data: mparam,
-            dataType: 'json',
+            type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
@@ -995,6 +927,9 @@ function __Trips() {
         $('#form_special_instructions').val('');
         $('#form_trip_status').val('SCHEDULED');
         $('#form_remarks').val('');
+        
+        // Hide cargo items card in New Trip mode
+        $('#cargoItemsCard').hide();
         
         $('#tripForm').removeClass('was-validated');
         var modal = new bootstrap.Modal(document.getElementById('tripModal'));
@@ -1040,6 +975,10 @@ function __Trips() {
                     $('#form_trip_status').val(data.trip_status);
                     $('#form_remarks').val(data.remarks);
                     
+                    // Show cargo items section
+                    $('#cargoItemsCard').show();
+                    __Trips.__loadCargoItems(data.trip_id);
+                    
                     $('#tripForm').removeClass('was-validated');
                     var modal = new bootstrap.Modal(document.getElementById('tripModal'));
                     modal.show();
@@ -1049,6 +988,223 @@ function __Trips() {
                 toastr.error("Error loading trip: " + error);
             }
         });
+    };
+
+    // ==============================
+    // CARGO ITEMS — LOAD
+    // ==============================
+    this.__loadCargoItems = function(trip_id) {
+        if(!trip_id || trip_id == 0) {
+            $('#cargoItemsBody').html('<tr><td colspan="7" class="text-center text-muted">Save trip first to add cargo items</td></tr>');
+            return;
+        }
+
+        var mparam = { trip_id: trip_id, meaction: 'GET_CARGO_ITEMS' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-trips',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                var html = '';
+                if(data && data.length > 0) {
+                    $.each(data, function(index, row) {
+                        html += '<tr>';
+                        html += '<td>' + (index + 1) + '</td>';
+                        html += '<td><strong>' + row.item_description + '</strong></td>';
+                        html += '<td>' + parseFloat(row.quantity).toFixed(2) + '</td>';
+                        html += '<td>' + (row.unit || '—') + '</td>';
+                        html += '<td>' + parseFloat(row.weight).toFixed(2) + '</td>';
+                        html += '<td>' + (row.remarks || '—') + '</td>';
+                        html += '<td class="text-center">';
+                        html += '<div class="action-group">';
+                        html += '<button type="button" class="btn-icon btn-icon-edit" onclick="__Trips.__editCargoItem(' + row.item_id + ')" title="Edit"><i class="bi bi-pencil"></i></button>';
+                        html += '<button type="button" class="btn-icon btn-icon-delete" onclick="__Trips.__deleteCargoItem(' + row.item_id + ')" title="Delete"><i class="bi bi-trash"></i></button>';
+                        html += '</div>';
+                        html += '</td>';
+                        html += '</tr>';
+                    });
+                } else {
+                    html = '<tr><td colspan="7" class="text-center text-muted">No cargo items</td></tr>';
+                }
+                $('#cargoItemsBody').html(html);
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error loading cargo items: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // CARGO ITEMS — SAVE
+    // ==============================
+    this.__saveCargoItem = function() {
+        var trip_id = $('#form_trip_id').val();
+        var item_description = $('#cargo_item_description').val().trim();
+
+        if(!trip_id) {
+            toastr.warning('Please save the trip first');
+            return;
+        }
+        if(!item_description) {
+            toastr.warning('Please enter item description', 'Missing field');
+            $('#cargo_item_description').focus();
+            return;
+        }
+
+        var mparam = {
+            trip_id: trip_id,
+            item_description: item_description,
+            quantity: $('#cargo_quantity').val() || 0,
+            unit: $('#cargo_unit').val(),
+            weight: $('#cargo_weight').val() || 0,
+            remarks: $('#cargo_remarks').val(),
+            meaction: 'SAVE_CARGO_ITEM'
+        };
+
+        var btn = $('#cargoActionBtn');
+        btn.prop('disabled', true);
+        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Saving...');
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-trips',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                btn.prop('disabled', false);
+                if(data.status == 'success'){
+                    toastr.success(data.message);
+                    $('#cargo_item_description').val('');
+                    $('#cargo_quantity').val('');
+                    $('#cargo_unit').val('');
+                    $('#cargo_weight').val('');
+                    $('#cargo_remarks').val('');
+                    $('#cargo_editing_id').val('');
+                    btn.html('<i class="bi bi-plus"></i> Add');
+                    btn.attr('onclick', '__Trips.__saveCargoItem()');
+                    btn.removeClass('btn-warning').addClass('btn-primary');
+                    __Trips.__loadCargoItems(trip_id);
+                } else {
+                    toastr.error(data.message);
+                    btn.html('<i class="bi bi-plus"></i> Add');
+                }
+            },
+            error: function(xhr, status, error) {
+                btn.prop('disabled', false);
+                btn.html('<i class="bi bi-plus"></i> Add');
+                toastr.error("Error: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // CARGO ITEMS — EDIT
+    // ==============================
+    this.__editCargoItem = function(item_id) {
+        var mparam = { item_id: item_id, meaction: 'GET_CARGO_ITEM' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-trips',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                if(data) {
+                    $('#cargo_editing_id').val(data.item_id);
+                    $('#cargo_item_description').val(data.item_description);
+                    $('#cargo_quantity').val(data.quantity);
+                    $('#cargo_unit').val(data.unit);
+                    $('#cargo_weight').val(data.weight);
+                    $('#cargo_remarks').val(data.remarks);
+
+                    var btn = $('#cargoActionBtn');
+                    btn.html('<i class="bi bi-pencil"></i> Update');
+                    btn.attr('onclick', '__Trips.__updateCargoItem()');
+                    btn.removeClass('btn-primary').addClass('btn-warning');
+                }
+            }
+        });
+    };
+
+    // ==============================
+    // CARGO ITEMS — UPDATE
+    // ==============================
+    this.__updateCargoItem = function() {
+        var item_id = $('#cargo_editing_id').val();
+        var trip_id = $('#form_trip_id').val();
+        var item_description = $('#cargo_item_description').val().trim();
+
+        if(!item_description) {
+            toastr.warning('Please enter item description');
+            return;
+        }
+
+        var mparam = {
+            item_id: item_id,
+            item_description: item_description,
+            quantity: $('#cargo_quantity').val() || 0,
+            unit: $('#cargo_unit').val(),
+            weight: $('#cargo_weight').val() || 0,
+            remarks: $('#cargo_remarks').val(),
+            meaction: 'UPDATE_CARGO_ITEM'
+        };
+
+        var btn = $('#cargoActionBtn');
+        btn.prop('disabled', true);
+        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Updating...');
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-trips',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                btn.prop('disabled', false);
+                if(data.status == 'success'){
+                    toastr.success(data.message);
+                    $('#cargo_item_description').val('');
+                    $('#cargo_quantity').val('');
+                    $('#cargo_unit').val('');
+                    $('#cargo_weight').val('');
+                    $('#cargo_remarks').val('');
+                    $('#cargo_editing_id').val('');
+                    btn.html('<i class="bi bi-plus"></i> Add');
+                    btn.attr('onclick', '__Trips.__saveCargoItem()');
+                    btn.removeClass('btn-warning').addClass('btn-primary');
+                    __Trips.__loadCargoItems(trip_id);
+                } else {
+                    toastr.error(data.message);
+                    btn.html('Update');
+                }
+            }
+        });
+    };
+
+    // ==============================
+    // CARGO ITEMS — DELETE
+    // ==============================
+    this.__deleteCargoItem = function(item_id) {
+        if(confirm('Are you sure you want to delete this cargo item?')) {
+            var trip_id = $('#form_trip_id').val();
+            var mparam = { item_id: item_id, meaction: 'DELETE_CARGO_ITEM' };
+
+            jQuery.ajax({
+                type: "POST",
+                url: mesiteurl + 'fms-trips',
+                data: mparam,
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status == 'success'){
+                        toastr.success(data.message);
+                        __Trips.__loadCargoItems(trip_id);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
     };
 
     // ==============================
@@ -1078,9 +1234,6 @@ function __Trips() {
         modal.show();
     };
 
-    // ==============================
-    // LOAD WAYPOINTS
-    // ==============================
     this.__loadWaypoints = function(trip_id) {
         var mparam = {
             trip_id: trip_id,
@@ -1139,9 +1292,6 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // SAVE WAYPOINT
-    // ==============================
     this.__saveWaypoint = function() {
         var trip_id = $('#route_trip_id').val();
         var waypoint_name = $('#wp_name').val().trim();
@@ -1230,9 +1380,6 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // EDIT WAYPOINT
-    // ==============================
     this.__editWaypoint = function(waypoint_id) {
         var mparam = {
             waypoint_id: waypoint_id,
@@ -1282,9 +1429,6 @@ function __Trips() {
         });
     };
 
-    // ==============================
-    // DELETE WAYPOINT
-    // ==============================
     this.__deleteWaypoint = function(waypoint_id) {
         if(confirm('Are you sure you want to delete this waypoint?')) {
             var trip_id = $('#route_trip_id').val();

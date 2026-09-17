@@ -149,6 +149,10 @@ class FMS_Dispatch extends BaseController
                 $result = $this->dispatchModel->updateWaypointDeparture();
                 echo json_encode($result);
                 break;
+                
+            case 'PRINT-DR-PREVIEW':
+                return view('fms/dispatch/dispatch-pdf-preview');
+                break;
 
             default:
                 return view('fms/dispatch/dispatch-main');

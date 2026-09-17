@@ -1,0 +1,110 @@
+ERROR - 2026-09-17 09:52:59 --> mysqli_sql_exception: Column 'dr_id' cannot be null in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n             ...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n             ...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n             ...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_DeliveryReceipt_Model.php(657): CodeIgniter\Database\BaseConnection->query('\r\n             ...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Models\FMS_DeliveryReceipt_Model.php(677): App\Models\FMS_DeliveryReceipt_Model->savePOD()
+#5 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_DeliveryReceipt.php(139): App\Models\FMS_DeliveryReceipt_Model->updatePOD()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_DeliveryReceipt->index()
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_DeliveryReceipt))
+#8 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2026-09-17 09:52:59 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'dr_id' cannot be null
+[Method: POST, Route: fms-delivery-receipt]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_DeliveryReceipt_Model.php(657): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Models\FMS_DeliveryReceipt_Model.php(677): App\Models\FMS_DeliveryReceipt_Model->savePOD()
+ 3 APPPATH\Controllers\FMS_DeliveryReceipt.php(139): App\Models\FMS_DeliveryReceipt_Model->updatePOD()
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_DeliveryReceipt->index()
+ 5 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_DeliveryReceipt))
+ 6 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-17 09:52:59 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'dr_id' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (NULL, \'JAMIE\', \'DR OFFICER\', \'2026-09-17\', \'09:52:00\', \'15\', \'GOOD\', \'uploads/delivery_receipts/DR_9_SIGNATURE_1789609976.png\', \'\', \'\', \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (NULL, \'JAMIE\', \'DR OFFICER\', \'2026-09-17\', \'09:52:00\', \'15\', \'GOOD\', \'uploads/delivery_receipts/DR_9_SIGNATURE_1789609976.png\', \'\', \'\', \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_DeliveryReceipt_Model.php(657): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Models\FMS_DeliveryReceipt_Model.php(677): App\Models\FMS_DeliveryReceipt_Model->savePOD()
+ 5 APPPATH\Controllers\FMS_DeliveryReceipt.php(139): App\Models\FMS_DeliveryReceipt_Model->updatePOD()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_DeliveryReceipt->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_DeliveryReceipt))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-17 09:52:59 --> [Caused by] mysqli_sql_exception: Column 'dr_id' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (NULL, \'JAMIE\', \'DR OFFICER\', \'2026-09-17\', \'09:52:00\', \'15\', \'GOOD\', \'uploads/delivery_receipts/DR_9_SIGNATURE_1789609976.png\', \'\', \'\', \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (NULL, \'JAMIE\', \'DR OFFICER\', \'2026-09-17\', \'09:52:00\', \'15\', \'GOOD\', \'uploads/delivery_receipts/DR_9_SIGNATURE_1789609976.png\', \'\', \'\', \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (NULL, \'JAMIE\', \'DR OFFICER\', \'2026-09-17\', \'09:52:00\', \'15\', \'GOOD\', \'uploads/delivery_receipts/DR_9_SIGNATURE_1789609976.png\', \'\', \'\', \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_DeliveryReceipt_Model.php(657): CodeIgniter\Database\BaseConnection->query('
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Models\FMS_DeliveryReceipt_Model.php(677): App\Models\FMS_DeliveryReceipt_Model->savePOD()
+ 6 APPPATH\Controllers\FMS_DeliveryReceipt.php(139): App\Models\FMS_DeliveryReceipt_Model->updatePOD()
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_DeliveryReceipt->index()
+ 8 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_DeliveryReceipt))
+ 9 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

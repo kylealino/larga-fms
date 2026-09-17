@@ -1,3 +1,4 @@
+var __DR_PREVIEW_ITEMS = [];
 var __DR = new __DR();
 
 function __DR() {
@@ -7,58 +8,54 @@ function __DR() {
     console.log('Delivery Receipt initialized, URL: ' + mesiteurl);
 
     // ==============================
-    // OPEN NEW DR MODAL (select trip first)
+    // OPEN DR MODAL FROM TRIP (create new DR directly)
     // ==============================
-    this.__openNewDRModal = function() {
-        $('#selectTripBody').html('<tr><td colspan="5" class="text-center text-muted">Loading trips...</td></tr>');
+    this.__openDRModalFromTrip = function(trip_id, dispatch_id) {
+        // Reset all fields
+        $('#dr_id').val('');
+        $('#dr_trip_id').val(trip_id);
+        $('#dr_customer_id').val('');
+        $('#dr_dispatch_id').val(dispatch_id);
+        $('#dr_code_display').text('Auto-generated');
+        $('#dr_trip_code_display').text('—');
+        $('#dr_customer_display').text('—');
+        $('#dr_truck_display').text('—');
+        $('#dr_driver_display').text('—');
+        $('#dr_helper_display').text('—');
 
-        var mparam = { meaction: 'GET_DISPATCHED_TRIPS_FOR_DR' };
+        var today = new Date().toISOString().split('T')[0];
+        $('#dr_date').val(today);
+        $('#dr_time').val('');
+        $('#dr_status').val('PENDING');
+        $('#dr_truck').val('');
+        $('#dr_driver').val('');
+        $('#dr_helper').val('');
+        $('#dr_origin').val('');
+        $('#dr_destination').val('');
+        $('#dr_container_required').prop('checked', false);
+        $('#dr_container_number').val('');
+        $('#dr_container_type').val('');
+        $('#dr_container_reference').val('');
+        $('#dr_remarks').val('');
 
-        jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-delivery-receipt',
-            data: mparam,
-            dataType: 'json',
-            success: function(data) {
-                var html = '';
-                if(data && data.length > 0) {
-                    $.each(data, function(i, row) {
-                        html += '<tr>';
-                        html += '<td><span class="badge badge-primary">' + row.trip_code + '</span></td>';
-                        html += '<td>' + (row.customer_name || '—') + '</td>';
-                        html += '<td>' + (row.destination || '—') + '</td>';
-                        html += '<td>' + (row.dispatch_date || '—') + '</td>';
-                        html += '<td class="text-center">';
-                        html += '<button class="btn-icon btn-icon-dispatch" onclick="__DR.__createDRFromTrip(' + row.trip_id + ',' + row.dispatch_id + ')" title="Create DR">';
-                        html += '<i class="bi bi-plus-circle"></i>';
-                        html += '</button>';
-                        html += '</td>';
-                        html += '</tr>';
-                    });
-                } else {
-                    html = '<tr><td colspan="5" class="text-center text-muted">No dispatched trips available</td></tr>';
-                }
-                $('#selectTripBody').html(html);
-            },
-            error: function(xhr, status, error) {
-                toastr.error("Error loading trips: " + error);
-            }
-        });
+        $('#dr_container_fields').hide();
 
-        var modal = new bootstrap.Modal(document.getElementById('selectTripModal'));
+        // Reset preview items + item form
+        __DR_PREVIEW_ITEMS = [];
+        __DR.__resetItemForm();
+        $('#drItemsBody').html('<tr><td colspan="10" class="text-center text-muted">Loading trip cargo items...</td></tr>');
+
+        $('#drModalTitle').html('<i class="bi bi-plus-circle me-2"></i>New Delivery Receipt');
+        $('#drBtnText').text('Save DR');
+        $('#drSubmitBtn').attr('onclick', '__DR.__saveDR()');
+
+        var modal = new bootstrap.Modal(document.getElementById('drModal'));
         modal.show();
-    };
 
-    // ==============================
-    // CREATE DR FROM SELECTED TRIP
-    // ==============================
-    this.__createDRFromTrip = function(trip_id, dispatch_id) {
-        if(!confirm('Create a new Delivery Receipt for this trip?')) return;
-
+        // Fetch trip info to auto-fill
         var mparam = {
             trip_id: trip_id,
-            dispatch_id: dispatch_id,
-            meaction: 'CREATE_DR_FROM_TRIP'
+            meaction: 'GET_TRIP_FOR_DR'
         };
 
         jQuery.ajax({
@@ -67,27 +64,167 @@ function __DR() {
             data: mparam,
             dataType: 'json',
             success: function(data) {
-                if(data.status == 'success'){
-                    toastr.success(data.message);
+                if(data && data.trip_id) {
+                    $('#dr_customer_id').val(data.customer_id || '');
+                    $('#dr_trip_code_display').text(data.trip_code || '—');
+                    $('#dr_customer_display').text(data.customer_name || '—');
+                    $('#dr_truck_display').text(data.truck || '—');
+                    $('#dr_driver_display').text(data.driver || '—');
+                    $('#dr_helper_display').text(data.helper || '—');
 
-                    var selModal = bootstrap.Modal.getInstance(document.getElementById('selectTripModal'));
-                    if(selModal) selModal.hide();
+                    $('#dr_truck').val(data.truck || '');
+                    $('#dr_driver').val(data.driver || '');
+                    $('#dr_helper').val(data.helper || '');
+                    $('#dr_origin').val(data.origin || '');
+                    $('#dr_destination').val(data.destination || '');
+                    $('#dr_container_required').prop('checked', data.container_required == 1);
+                    $('#dr_container_number').val(data.container_number || '');
+                    $('#dr_container_type').val(data.container_type || '');
+                    $('#dr_container_reference').val(data.container_reference || '');
 
-                    setTimeout(function() {
-                        __DR.__openDRModal(data.dr_id);
-                    }, 400);
-                } else {
-                    toastr.error(data.message);
+                    __DR.__toggleContainerFields();
                 }
+
+                // Load cargo items preview
+                __DR.__loadTripCargoPreview(trip_id);
             },
             error: function(xhr, status, error) {
-                toastr.error("Error: " + error);
+                console.error('Error loading trip info:', error);
+                __DR.__loadTripCargoPreview(trip_id);
             }
         });
     };
 
     // ==============================
-    // OPEN DR MODAL
+    // LOAD TRIP CARGO ITEMS AS PREVIEW
+    // ==============================
+    this.__loadTripCargoPreview = function(trip_id) {
+        if (!trip_id) return;
+
+        var mparam = { trip_id: trip_id, meaction: 'GET_TRIP_CARGO_ITEMS' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-delivery-receipt',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                __DR_PREVIEW_ITEMS = [];
+
+                if (data && data.length > 0) {
+                    $.each(data, function(i, row) {
+                        __DR_PREVIEW_ITEMS.push({
+                            item_description: row.item_description,
+                            quantity_dispatched: parseFloat(row.quantity) || 0,
+                            quantity_delivered: parseFloat(row.quantity) || 0,
+                            quantity_shortage: 0,
+                            quantity_damaged: 0,
+                            unit: row.unit || '',
+                            weight: parseFloat(row.weight) || 0,
+                            condition_on_arrival: 'GOOD',
+                            remarks: row.remarks || ''
+                        });
+                    });
+                }
+
+                __DR.__renderPreviewItems();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error loading trip cargo preview:', error);
+                $('#drItemsBody').html('<tr><td colspan="10" class="text-center text-muted">Failed to load cargo items</td></tr>');
+            }
+        });
+    };
+
+    // ==============================
+    // RENDER PREVIEW ITEMS
+    // ==============================
+    this.__renderPreviewItems = function() {
+        var html = '';
+
+        if (__DR_PREVIEW_ITEMS.length > 0) {
+            $.each(__DR_PREVIEW_ITEMS, function(i, row) {
+                html += '<tr>';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td><strong>' + row.item_description + '</strong></td>';
+                html += '<td>' + parseFloat(row.quantity_dispatched).toFixed(2) + '</td>';
+                html += '<td>' + parseFloat(row.quantity_delivered).toFixed(2) + '</td>';
+                html += '<td>' + parseFloat(row.quantity_shortage).toFixed(2) + '</td>';
+                html += '<td>' + parseFloat(row.quantity_damaged).toFixed(2) + '</td>';
+                html += '<td>' + (row.unit || '—') + '</td>';
+                html += '<td>' + parseFloat(row.weight).toFixed(2) + '</td>';
+                html += '<td>' + getConditionBadge(row.condition_on_arrival) + '</td>';
+                html += '<td class="text-center">';
+                html += '<div class="action-group">';
+                html += '<button type="button" class="btn-icon btn-icon-edit" onclick="__DR.__editPreviewItem(' + i + ')" title="Edit"><i class="bi bi-pencil"></i></button>';
+                html += '<button type="button" class="btn-icon btn-icon-delete" onclick="__DR.__deletePreviewItem(' + i + ')" title="Remove"><i class="bi bi-trash"></i></button>';
+                html += '</div>';
+                html += '</td>';
+                html += '</tr>';
+            });
+        } else {
+            html = '<tr><td colspan="10" class="text-center text-muted">No cargo items from trip</td></tr>';
+        }
+
+        $('#drItemsBody').html(html);
+    };
+
+    // ==============================
+    // EDIT PREVIEW ITEM
+    // ==============================
+    this.__editPreviewItem = function(index) {
+        var row = __DR_PREVIEW_ITEMS[index];
+        if (!row) return;
+
+        $('#item_description').val(row.item_description);
+        $('#item_qty_dispatched').val(row.quantity_dispatched);
+        $('#item_qty_delivered').val(row.quantity_delivered);
+        $('#item_qty_shortage').val(row.quantity_shortage);
+        $('#item_qty_damaged').val(row.quantity_damaged);
+        $('#item_unit').val(row.unit);
+        $('#item_weight').val(row.weight);
+        $('#item_condition').val(row.condition_on_arrival);
+        $('#item_remarks').val(row.remarks);
+
+        __DR_PREVIEW_ITEMS.splice(index, 1);
+        __DR.__renderPreviewItems();
+
+        toastr.info('Item removed from list — edit and click Add to re-add.');
+    };
+
+    // ==============================
+    // DELETE PREVIEW ITEM
+    // ==============================
+    this.__deletePreviewItem = function(index) {
+        if (confirm('Remove this item from the DR?')) {
+            __DR_PREVIEW_ITEMS.splice(index, 1);
+            __DR.__renderPreviewItems();
+        }
+    };
+
+    // ==============================
+    // RESET ITEM FORM
+    // ==============================
+    this.__resetItemForm = function() {
+        $('#item_description').val('');
+        $('#item_qty_dispatched').val('');
+        $('#item_qty_delivered').val('');
+        $('#item_qty_shortage').val('');
+        $('#item_qty_damaged').val('');
+        $('#item_unit').val('');
+        $('#item_weight').val('');
+        $('#item_condition').val('GOOD');
+        $('#item_remarks').val('');
+        $('#item_editing_id').val('');
+
+        var btn = $('#itemActionBtn');
+        btn.html('<i class="bi bi-plus"></i> Add');
+        btn.attr('onclick', '__DR.__saveDRItem()');
+        btn.removeClass('btn-warning').addClass('btn-primary');
+    };
+
+    // ==============================
+    // OPEN DR MODAL (Edit mode)
     // ==============================
     this.__openDRModal = function(dr_id) {
         var mparam = {
@@ -102,6 +239,8 @@ function __DR() {
             dataType: 'json',
             success: function(data) {
                 if(data && data.dr_id) {
+                    __DR_PREVIEW_ITEMS = [];
+
                     $('#dr_id').val(data.dr_id);
                     $('#dr_trip_id').val(data.trip_id);
                     $('#dr_customer_id').val(data.customer_id);
@@ -134,7 +273,6 @@ function __DR() {
                     $('#drSubmitBtn').attr('onclick', '__DR.__updateDR()');
 
                     __DR.__loadDRItems(data.dr_id);
-                    __DR.__loadContainerReturn(data.dr_id);
                 }
 
                 var modal = new bootstrap.Modal(document.getElementById('drModal'));
@@ -153,10 +291,8 @@ function __DR() {
     this.__toggleContainerFields = function() {
         if($('#dr_container_required').is(':checked')) {
             $('#dr_container_fields').show();
-            $('#containerReturnCard').show();
         } else {
             $('#dr_container_fields').hide();
-            $('#containerReturnCard').hide();
         }
     };
 
@@ -190,6 +326,21 @@ function __DR() {
             remarks: $('#dr_remarks').val(),
             meaction: 'SAVE_DR'
         };
+
+        // Attach preview items
+        if (__DR_PREVIEW_ITEMS.length > 0) {
+            $.each(__DR_PREVIEW_ITEMS, function(i, item) {
+                mparam['dr_items[' + i + '][item_description]'] = item.item_description;
+                mparam['dr_items[' + i + '][quantity_dispatched]'] = item.quantity_dispatched;
+                mparam['dr_items[' + i + '][quantity_delivered]'] = item.quantity_delivered;
+                mparam['dr_items[' + i + '][quantity_shortage]'] = item.quantity_shortage;
+                mparam['dr_items[' + i + '][quantity_damaged]'] = item.quantity_damaged;
+                mparam['dr_items[' + i + '][unit]'] = item.unit;
+                mparam['dr_items[' + i + '][weight]'] = item.weight;
+                mparam['dr_items[' + i + '][condition_on_arrival]'] = item.condition_on_arrival;
+                mparam['dr_items[' + i + '][remarks]'] = item.remarks;
+            });
+        }
 
         var btn = $('#drSubmitBtn');
         btn.prop('disabled', true);
@@ -271,7 +422,6 @@ function __DR() {
                 btn.prop('disabled', false);
                 if(data.status == 'success'){
                     toastr.success(data.message);
-                    __DR.__saveContainerReturn(dr_id);
                     var modal = bootstrap.Modal.getInstance(document.getElementById('drModal'));
                     if(modal) modal.hide();
                     setTimeout(function() {
@@ -378,72 +528,106 @@ function __DR() {
         });
     };
 
+    // ==============================
+    // SAVE DR ITEM (handles 3 cases)
+    // ==============================
     this.__saveDRItem = function() {
-        var dr_id = $('#dr_id').val();
         var item_description = $('#item_description').val().trim();
 
-        if(!dr_id || dr_id == 0) {
-            toastr.warning('Please save the DR first before adding items');
-            return;
-        }
         if(!item_description) {
             toastr.warning('Please enter item description', 'Missing field');
             $('#item_description').focus();
             return;
         }
 
-        var mparam = {
-            dr_id: dr_id,
-            item_description: item_description,
-            quantity_dispatched: $('#item_qty_dispatched').val() || 0,
-            quantity_delivered: $('#item_qty_delivered').val() || 0,
-            quantity_shortage: $('#item_qty_shortage').val() || 0,
-            quantity_damaged: $('#item_qty_damaged').val() || 0,
-            unit: $('#item_unit').val(),
-            weight: $('#item_weight').val() || 0,
-            condition_on_arrival: $('#item_condition').val(),
-            remarks: $('#item_remarks').val(),
-            meaction: 'SAVE_DR_ITEM'
-        };
+        var editing_id = $('#item_editing_id').val();
 
-        var btn = $('#itemActionBtn');
-        btn.prop('disabled', true);
-        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Saving...');
+        // === Case 1: Editing an existing saved DR item ===
+        if (editing_id !== '' && editing_id !== null && editing_id !== undefined) {
+            var dr_id = $('#dr_id').val();
+            var mparam = {
+                item_id: editing_id,
+                item_description: item_description,
+                quantity_dispatched: $('#item_qty_dispatched').val() || 0,
+                quantity_delivered: $('#item_qty_delivered').val() || 0,
+                quantity_shortage: $('#item_qty_shortage').val() || 0,
+                quantity_damaged: $('#item_qty_damaged').val() || 0,
+                unit: $('#item_unit').val(),
+                weight: $('#item_weight').val() || 0,
+                condition_on_arrival: $('#item_condition').val(),
+                remarks: $('#item_remarks').val(),
+                meaction: 'UPDATE_DR_ITEM'
+            };
 
-        jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-delivery-receipt',
-            data: mparam,
-            dataType: 'json',
-            success: function(data) {
-                btn.prop('disabled', false);
-                if(data.status == 'success'){
-                    toastr.success(data.message);
-                    $('#item_description').val('');
-                    $('#item_qty_dispatched').val('');
-                    $('#item_qty_delivered').val('');
-                    $('#item_qty_shortage').val('');
-                    $('#item_qty_damaged').val('');
-                    $('#item_unit').val('');
-                    $('#item_weight').val('');
-                    $('#item_condition').val('GOOD');
-                    $('#item_remarks').val('');
-                    $('#item_editing_id').val('');
-                    btn.html('<i class="bi bi-plus"></i> Add');
-                    btn.attr('onclick', '__DR.__saveDRItem()');
-                    btn.removeClass('btn-warning').addClass('btn-primary');
-                    __DR.__loadDRItems(dr_id);
-                } else {
-                    toastr.error(data.message);
-                    btn.html('<i class="bi bi-plus"></i> Add');
+            jQuery.ajax({
+                type: "POST",
+                url: mesiteurl + 'fms-delivery-receipt',
+                data: mparam,
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status == 'success'){
+                        toastr.success(data.message);
+                        __DR.__resetItemForm();
+                        __DR.__loadDRItems(dr_id);
+                    } else {
+                        toastr.error(data.message);
+                    }
                 }
-            },
-            error: function(xhr, status, error) {
-                btn.prop('disabled', false);
-                btn.html('<i class="bi bi-plus"></i> Add');
-                toastr.error("Error: " + error);
-            }
+            });
+            return;
+        }
+
+        // === Case 2: DR already saved, adding new item directly to DB ===
+        if ($('#dr_id').val()) {
+            var dr_id = $('#dr_id').val();
+            var mparam = {
+                dr_id: dr_id,
+                item_description: item_description,
+                quantity_dispatched: $('#item_qty_dispatched').val() || 0,
+                quantity_delivered: $('#item_qty_delivered').val() || 0,
+                quantity_shortage: $('#item_qty_shortage').val() || 0,
+                quantity_damaged: $('#item_qty_damaged').val() || 0,
+                unit: $('#item_unit').val(),
+                weight: $('#item_weight').val() || 0,
+                condition_on_arrival: $('#item_condition').val(),
+                remarks: $('#item_remarks').val(),
+                meaction: 'SAVE_DR_ITEM'
+            };
+
+            jQuery.ajax({
+                type: "POST",
+                url: mesiteurl + 'fms-delivery-receipt',
+                data: mparam,
+                dataType: 'json',
+                success: function(data) {
+                    if(data.status == 'success'){
+                        toastr.success(data.message);
+                        __DR.__resetItemForm();
+                        __DR.__loadDRItems(dr_id);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+            return;
+        }
+
+        // === Case 3: DR not saved yet → add to preview in memory ===
+        __DR_PREVIEW_ITEMS.push({
+            item_description: item_description,
+            quantity_dispatched: parseFloat($('#item_qty_dispatched').val()) || 0,
+            quantity_delivered: parseFloat($('#item_qty_delivered').val()) || 0,
+            quantity_shortage: parseFloat($('#item_qty_shortage').val()) || 0,
+            quantity_damaged: parseFloat($('#item_qty_damaged').val()) || 0,
+            unit: $('#item_unit').val(),
+            weight: parseFloat($('#item_weight').val()) || 0,
+            condition_on_arrival: $('#item_condition').val(),
+            remarks: $('#item_remarks').val()
         });
+
+        __DR.__resetItemForm();
+        __DR.__renderPreviewItems();
+        toastr.success('Item added to list');
     };
 
     this.__editDRItem = function(item_id) {
@@ -472,67 +656,8 @@ function __DR() {
 
                     var btn = $('#itemActionBtn');
                     btn.html('<i class="bi bi-pencil"></i> Update');
-                    btn.attr('onclick', '__DR.__updateDRItem()');
-                    btn.removeClass('btn-primary').addClass('btn-warning');
-                }
-            }
-        });
-    };
-
-    this.__updateDRItem = function() {
-        var item_id = $('#item_editing_id').val();
-        var dr_id = $('#dr_id').val();
-        var item_description = $('#item_description').val().trim();
-
-        if(!item_description) {
-            toastr.warning('Please enter item description');
-            return;
-        }
-
-        var mparam = {
-            item_id: item_id,
-            item_description: item_description,
-            quantity_dispatched: $('#item_qty_dispatched').val() || 0,
-            quantity_delivered: $('#item_qty_delivered').val() || 0,
-            quantity_shortage: $('#item_qty_shortage').val() || 0,
-            quantity_damaged: $('#item_qty_damaged').val() || 0,
-            unit: $('#item_unit').val(),
-            weight: $('#item_weight').val() || 0,
-            condition_on_arrival: $('#item_condition').val(),
-            remarks: $('#item_remarks').val(),
-            meaction: 'UPDATE_DR_ITEM'
-        };
-
-        var btn = $('#itemActionBtn');
-        btn.prop('disabled', true);
-        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Updating...');
-
-        jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-delivery-receipt',
-            data: mparam,
-            dataType: 'json',
-            success: function(data) {
-                btn.prop('disabled', false);
-                if(data.status == 'success'){
-                    toastr.success(data.message);
-                    $('#item_description').val('');
-                    $('#item_qty_dispatched').val('');
-                    $('#item_qty_delivered').val('');
-                    $('#item_qty_shortage').val('');
-                    $('#item_qty_damaged').val('');
-                    $('#item_unit').val('');
-                    $('#item_weight').val('');
-                    $('#item_condition').val('GOOD');
-                    $('#item_remarks').val('');
-                    $('#item_editing_id').val('');
-                    btn.html('<i class="bi bi-plus"></i> Add');
                     btn.attr('onclick', '__DR.__saveDRItem()');
-                    btn.removeClass('btn-warning').addClass('btn-primary');
-                    __DR.__loadDRItems(dr_id);
-                } else {
-                    toastr.error(data.message);
-                    btn.html('Update');
+                    btn.removeClass('btn-primary').addClass('btn-warning');
                 }
             }
         });
@@ -561,73 +686,6 @@ function __DR() {
                 }
             });
         }
-    };
-
-    // ==============================
-    // CONTAINER RETURN
-    // ==============================
-    this.__loadContainerReturn = function(dr_id) {
-        if(!dr_id || dr_id == 0) return;
-
-        var mparam = {
-            dr_id: dr_id,
-            meaction: 'GET_CONTAINER_RETURN'
-        };
-
-        jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-delivery-receipt',
-            data: mparam,
-            dataType: 'json',
-            success: function(data) {
-                if(data && data.return_id) {
-                    $('#cr_required').prop('checked', data.container_return_required == 1);
-                    $('#cr_port').val(data.container_return_port);
-                    $('#cr_date').val(data.container_return_date);
-                    $('#cr_time').val(data.container_return_time);
-                    $('#cr_status').val(data.container_return_status);
-                    $('#cr_odometer').val(data.container_return_odometer);
-                    $('#cr_distance').val(data.container_return_distance);
-                    $('#cr_proof').val(data.container_return_proof);
-                    $('#cr_remarks').val(data.remarks);
-                } else {
-                    $('#cr_required').prop('checked', false);
-                    $('#cr_port').val('');
-                    $('#cr_date').val('');
-                    $('#cr_time').val('');
-                    $('#cr_status').val('NOT_APPLICABLE');
-                    $('#cr_odometer').val('');
-                    $('#cr_distance').val('');
-                    $('#cr_proof').val('');
-                    $('#cr_remarks').val('');
-                }
-            }
-        });
-    };
-
-    this.__saveContainerReturn = function(dr_id) {
-        if(!dr_id) return;
-
-        var mparam = {
-            dr_id: dr_id,
-            container_return_required: $('#cr_required').is(':checked') ? 1 : 0,
-            container_return_port: $('#cr_port').val(),
-            container_return_date: $('#cr_date').val(),
-            container_return_time: $('#cr_time').val(),
-            container_return_status: $('#cr_status').val(),
-            container_return_odometer: $('#cr_odometer').val() || 0,
-            container_return_distance: $('#cr_distance').val() || 0,
-            container_return_proof: $('#cr_proof').val(),
-            remarks: $('#cr_remarks').val(),
-            meaction: 'SAVE_CONTAINER_RETURN'
-        };
-
-        jQuery.ajax({
-            type: "POST",
-            url: mesiteurl + 'fms-delivery-receipt',
-            data: mparam,
-            dataType: 'json'
-        });
     };
 
     // ==============================
@@ -702,7 +760,6 @@ function __DR() {
                     __DR.__clearSignaturePad();
                 }, 400);
 
-                // iOS Safari: address bar hide/show triggers resize — re-fit only
                 $(window).off('resize.dr-sig').on('resize.dr-sig', function() {
                     var canvas = document.getElementById('signaturePad');
                     if (canvas && canvas.dataset.initialized === '1') {
@@ -984,19 +1041,16 @@ function __DR() {
         var canvas = document.getElementById('signaturePad');
         if (!canvas) return;
 
-        // Prevent iOS Safari from scrolling the page when drawing
         canvas.style.touchAction = 'none';
         canvas.style.webkitUserSelect = 'none';
         canvas.style.userSelect = 'none';
 
-        // If already initialized, just re-fit the canvas size (do NOT re-bind events)
         if (canvas.dataset.initialized === '1') {
             __DR.__fitCanvasSize(canvas);
             return;
         }
         canvas.dataset.initialized = '1';
 
-        // Fit canvas to display size
         __DR.__fitCanvasSize(canvas);
 
         var ctx = canvas.getContext('2d');
@@ -1031,7 +1085,6 @@ function __DR() {
             var p = getPos(e);
             lastX = p.x; lastY = p.y;
 
-            // Draw a dot for tap-only signatures
             ctx.beginPath();
             ctx.arc(p.x, p.y, 1.1, 0, Math.PI * 2);
             ctx.fillStyle = '#1a1a1a';
@@ -1056,13 +1109,11 @@ function __DR() {
             $('#sigPadWrapper').removeClass('active');
         }
 
-        // Mouse
         canvas.addEventListener('mousedown', start);
         canvas.addEventListener('mousemove', move);
         canvas.addEventListener('mouseup', stop);
         canvas.addEventListener('mouseleave', stop);
 
-        // Touch — passive:false is required to allow preventDefault
         canvas.addEventListener('touchstart', start, { passive: false });
         canvas.addEventListener('touchmove', move, { passive: false });
         canvas.addEventListener('touchend', stop, { passive: false });
@@ -1078,13 +1129,11 @@ function __DR() {
         var displayW = canvas.offsetWidth;
         var displayH = canvas.offsetHeight;
 
-        // Avoid zero-size when modal is not fully rendered yet
         if (displayW < 10 || displayH < 10) {
             setTimeout(function() { __DR.__fitCanvasSize(canvas); }, 200);
             return;
         }
 
-        // Preserve existing drawing when resizing (iOS address bar hide/show)
         var prevImage = null;
         try {
             if (canvas.width > 0 && canvas.height > 0) {
@@ -1103,7 +1152,6 @@ function __DR() {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
 
-        // Restore prior drawing if we had one
         if (prevImage) {
             var img = new Image();
             img.onload = function() {
@@ -1215,12 +1263,10 @@ $(document).ready(function() {
         __DR.__toggleContainerFields();
     });
 
-    // Clear iframe when PDF modal closes (frees memory)
     $('#pdfModal').on('hidden.bs.modal', function () {
         document.getElementById('pdfFrame').src = '';
     });
 
-    // Clean up resize listener when POD modal closes
     $('#podModal').on('hidden.bs.modal', function () {
         $(window).off('resize.dr-sig');
     });

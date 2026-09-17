@@ -30,7 +30,9 @@ class FMS_DeliveryReceipt extends BaseController
                 return view('fms/delivery_receipt/dr-main');
                 break;
 
+            // ==============================
             // DR CRUD
+            // ==============================
             case 'SAVE_DR':
                 $result = $this->drModel->saveDR();
                 echo json_encode($result);
@@ -73,7 +75,21 @@ class FMS_DeliveryReceipt extends BaseController
                 echo json_encode($result);
                 break;
 
+            case 'GET_TRIP_FOR_DR':
+                $trip_id = $this->request->getPost('trip_id');
+                $trip = $this->drModel->getTripForDR($trip_id);
+                echo json_encode($trip);
+                break;
+
+            case 'GET_TRIP_CARGO_ITEMS':
+                $trip_id = $this->request->getPost('trip_id');
+                $items = $this->drModel->getTripCargoItems($trip_id);
+                echo json_encode($items);
+                break;
+
+            // ==============================
             // DR ITEMS
+            // ==============================
             case 'GET_DR_ITEMS':
                 $dr_id = $this->request->getPost('dr_id');
                 if($dr_id) {
@@ -105,7 +121,9 @@ class FMS_DeliveryReceipt extends BaseController
                 echo json_encode($result);
                 break;
 
+            // ==============================
             // POD
+            // ==============================
             case 'GET_POD':
                 $dr_id = $this->request->getPost('dr_id');
                 $pod = $this->drModel->getPOD($dr_id);
@@ -132,23 +150,9 @@ class FMS_DeliveryReceipt extends BaseController
                 echo json_encode($result);
                 break;
 
-            // CONTAINER RETURN
-            case 'GET_CONTAINER_RETURN':
-                $dr_id = $this->request->getPost('dr_id');
-                $cr = $this->drModel->getContainerReturn($dr_id);
-                echo json_encode($cr);
-                break;
-
-            case 'SAVE_CONTAINER_RETURN':
-                $result = $this->drModel->saveContainerReturn();
-                echo json_encode($result);
-                break;
-
-            case 'UPDATE_CONTAINER_RETURN':
-                $result = $this->drModel->updateContainerReturn();
-                echo json_encode($result);
-                break;
-                
+            // ==============================
+            // PDF
+            // ==============================
             case 'PRINT-DR': 
                 return view('fms/delivery_receipt/dr-pdf');
                 break;

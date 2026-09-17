@@ -60,3 +60,27 @@ $routes->post('fms-dispatch', 'FMS_Dispatch::index', ['filter' => 'myauthuser'])
 // =============================================
 $routes->get('fms-delivery-receipt', 'FMS_DeliveryReceipt::index', ['filter' => 'myauthuser']);
 $routes->post('fms-delivery-receipt', 'FMS_DeliveryReceipt::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// PREVENTIVE MAINTENANCE
+// =============================================
+$routes->get('fms-maintenance', 'FMS_Maintenance::index', ['filter' => 'myauthuser']);
+$routes->post('fms-maintenance', 'FMS_Maintenance::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// TIRE MANAGEMENT
+// =============================================
+$routes->get('fms-tire', 'FMS_Tire::index', ['filter' => 'myauthuser']);
+$routes->post('fms-tire', 'FMS_Tire::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// SUPPLIES MANAGEMENT
+// =============================================
+$routes->get('fms-supply', 'FMS_Supply::index', ['filter' => 'myauthuser']);
+$routes->post('fms-supply', 'FMS_Supply::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// TOOL MANAGEMENT
+// =============================================
+$routes->get('fms-tool', 'FMS_Tool::index', ['filter' => 'myauthuser']);
+$routes->post('fms-tool', 'FMS_Tool::index', ['filter' => 'myauthuser']);

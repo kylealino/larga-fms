@@ -935,6 +935,13 @@ echo view('templates/myheader.php');
                                                     title="<?=$hasDispatch ? 'Edit Dispatch' : 'Create Dispatch';?>">
                                                 <i class="bi bi-<?=$hasDispatch ? 'pencil' : 'plus-circle';?>"></i>
                                             </button>
+                                            <?php if($hasDispatch): ?>
+                                            <button class="btn-icon btn-icon-print" 
+                                                    onclick="__Dispatch.__showPdfInModal('<?= base_url('fms-dispatch?meaction=PRINT-DR-PREVIEW&trip_id='.$row['trip_id']) ?>')" 
+                                                    title="Print DR (Pre-Print)">
+                                                <i class="bi bi-printer"></i>
+                                            </button>
+                                            <?php endif; ?>
                                             <button class="btn-icon btn-icon-view" 
                                                     onclick="__Dispatch.__openWaypointTracking(<?=$row['trip_id'];?>, '<?=addslashes($row['trip_code']);?>')" 
                                                     title="Track Waypoints">
@@ -1483,6 +1490,23 @@ echo view('templates/myheader.php');
                 <button type="button" class="btn btn-primary" id="trackingUpdateBtn" onclick="__Dispatch.__saveWaypointTracking()">
                     <i class="bi bi-check"></i> Save
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PDF PREVIEW MODAL -->
+<!-- ============================================ -->
+<div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delivery Receipt Preview (Pre-Print)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="pdfFrame" src="" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
             </div>
         </div>
     </div>

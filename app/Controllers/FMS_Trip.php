@@ -133,6 +133,34 @@ class FMS_Trip extends BaseController
                 echo json_encode($waypoint);
                 break;
 
+            // CARGO ITEMS
+            case 'GET_CARGO_ITEMS':
+                $trip_id = $this->request->getPost('trip_id');
+                $items = $this->tripModel->getCargoItems($trip_id);
+                echo json_encode($items);
+                break;
+
+            case 'GET_CARGO_ITEM':
+                $item_id = $this->request->getPost('item_id');
+                $item = $this->tripModel->getCargoItem($item_id);
+                echo json_encode($item);
+                break;
+
+            case 'SAVE_CARGO_ITEM':
+                $result = $this->tripModel->saveCargoItem();
+                echo json_encode($result);
+                break;
+
+            case 'UPDATE_CARGO_ITEM':
+                $result = $this->tripModel->updateCargoItem();
+                echo json_encode($result);
+                break;
+
+            case 'DELETE_CARGO_ITEM':
+                $result = $this->tripModel->deleteCargoItem();
+                echo json_encode($result);
+                break;
+
             default:
                 return view('fms/trip/trip-main');
                 break;

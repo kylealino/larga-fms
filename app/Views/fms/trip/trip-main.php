@@ -369,6 +369,27 @@ echo view('templates/myheader.php');
         color: #ffffff;
     }
 
+    .btn-warning {
+        background: var(--warning);
+        border: none;
+        border-radius: 8px;
+        padding: 9px 20px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s;
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-warning:hover {
+        background: #d97706;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(245,158,11,0.3);
+        color: #ffffff;
+    }
+
     .btn-sm {
         padding: 5px 14px;
         font-size: 11px;
@@ -607,6 +628,14 @@ echo view('templates/myheader.php');
     .empty-state i { font-size: 48px; color: var(--gray-300); margin-bottom: 16px; }
     .empty-state h5 { font-size: 16px; font-weight: 600; color: var(--gray-600); margin-bottom: 4px; }
     .empty-state p { font-size: 13px; color: var(--gray-400); }
+
+    .item-form {
+        background: var(--gray-50);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        border: 1px solid var(--gray-200);
+    }
 
     @media (max-width: 992px) {
         .lrg-module-header {
@@ -994,6 +1023,71 @@ echo view('templates/myheader.php');
                             </div>
                         </div>
                     </div>
+
+                    <!-- ============================================ -->
+                    <!-- CARGO ITEMS SECTION (Edit mode only) -->
+                    <!-- ============================================ -->
+                    <div class="card mb-3" id="cargoItemsCard" style="display:none;">
+                        <div class="card-header bg-light">
+                            <h6 class="mb-0"><i class="bi bi-box-seam me-2"></i>Cargo Items</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="item-form">
+                                <input type="hidden" id="cargo_editing_id">
+                                <div class="row g-2">
+                                    <div class="col-md-5">
+                                        <label class="form-label" style="font-size:9px;">Item Description *</label>
+                                        <input type="text" class="form-control" id="cargo_item_description">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label" style="font-size:9px;">Quantity</label>
+                                        <input type="number" class="form-control" id="cargo_quantity" step="0.01">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="form-label" style="font-size:9px;">Unit</label>
+                                        <input type="text" class="form-control" id="cargo_unit" placeholder="Cartons, Pcs, Kg">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label" style="font-size:9px;">Weight (kg)</label>
+                                        <input type="number" class="form-control" id="cargo_weight" step="0.01">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label class="form-label" style="font-size:9px;">Remarks</label>
+                                        <input type="text" class="form-control" id="cargo_remarks">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label" style="font-size:9px;">&nbsp;</label>
+                                        <button type="button" class="btn btn-primary w-100" id="cargoActionBtn" 
+                                                onclick="__Trips.__saveCargoItem()" 
+                                                style="font-size:12px;padding:6px 8px;white-space:nowrap;">
+                                            <i class="bi bi-plus"></i> Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th width="40">#</th>
+                                            <th>Item</th>
+                                            <th width="80">Qty</th>
+                                            <th width="60">Unit</th>
+                                            <th width="80">Weight</th>
+                                            <th>Remarks</th>
+                                            <th width="80" class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cargoItemsBody">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Save trip first to add cargo items</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -1009,7 +1103,7 @@ echo view('templates/myheader.php');
 </div>
 
 <!-- ============================================ -->
-<!-- ASSIGNMENT MODAL - UPDATED -->
+<!-- ASSIGNMENT MODAL -->
 <!-- ============================================ -->
 <div class="modal fade" id="assignmentModal" tabindex="-1" data-bs-backdrop="static">
     <div class="modal-dialog modal-xl">
@@ -1024,7 +1118,6 @@ echo view('templates/myheader.php');
                 <input type="hidden" id="assignment_id">
                 <input type="hidden" id="assignment_trip_id">
                 
-                <!-- Trip Info -->
                 <div class="assignment-info-box">
                     <div class="d-flex align-items-center gap-3">
                         <i class="bi bi-truck" style="font-size:24px;color:var(--primary);"></i>
@@ -1038,14 +1131,12 @@ echo view('templates/myheader.php');
                     </div>
                 </div>
                 
-                <!-- Assignment Form -->
                 <div class="card">
                     <div class="card-header bg-light">
                         <h6 class="mb-0"><i class="bi bi-plus-circle me-2"></i>Assignment Details</h6>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <!-- Vehicle Type -->
                             <div class="col-md-4 mb-2">
                                 <label class="form-label">Vehicle Type <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_vehicle_type" onchange="__Trips.__toggleVehicleFields()">
@@ -1057,7 +1148,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Truck (RIGID) -->
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_truck_field" style="display:none;">
                                 <label class="form-label">Truck <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_truck_plate">
@@ -1065,7 +1155,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Tractor -->
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_tractor_field" style="display:none;">
                                 <label class="form-label">Tractor <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_tractor_plate">
@@ -1073,7 +1162,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Chassis -->
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_chassis_field" style="display:none;">
                                 <label class="form-label">Chassis <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_chassis_plate">
@@ -1081,7 +1169,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Chassis Type -->
                             <div class="col-md-3 mb-2 toggle-field" id="assignment_chassis_type_field" style="display:none;">
                                 <label class="form-label">Chassis Type</label>
                                 <select class="form-control" id="assignment_chassis_type" onchange="__Trips.__toggleRentalFields()">
@@ -1090,7 +1177,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Rented All Section -->
                             <div class="col-md-12 mb-2 toggle-field" id="assignment_rented_section" style="display:none;">
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle me-2"></i>
@@ -1098,7 +1184,6 @@ echo view('templates/myheader.php');
                                 </div>
                             </div>
                             
-                            <!-- Vendor -->
                             <div class="col-md-3 mb-2 toggle-field" id="assignment_vendor_field" style="display:none;">
                                 <label class="form-label">Vendor <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_vendor_name">
@@ -1106,7 +1191,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Driver -->
                             <div class="col-md-3 mb-2" id="assignment_driver_field">
                                 <label class="form-label">Driver <span class="required">*</span></label>
                                 <select class="form-control" id="assignment_driver_name">
@@ -1114,7 +1198,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Helper -->
                             <div class="col-md-3 mb-2" id="assignment_helper_field">
                                 <label class="form-label">Helper</label>
                                 <select class="form-control" id="assignment_helper_name">
@@ -1122,7 +1205,6 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Rental Fields -->
                             <div id="assignment_rental_fields" style="display:none;" class="row">
                                 <div class="col-md-3 mb-2">
                                     <label class="form-label">Rental Rate</label>
@@ -1150,37 +1232,31 @@ echo view('templates/myheader.php');
                                 </div>
                             </div>
                             
-                            <!-- Assignment Date -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Assignment Date <span class="required">*</span></label>
                                 <input type="date" class="form-control" id="assignment_assignment_date">
                             </div>
                             
-                            <!-- Dispatch Time -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Dispatch Time</label>
                                 <input type="time" class="form-control" id="assignment_dispatch_time" value="06:00">
                             </div>
                             
-                            <!-- Dispatch Location -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Dispatch Location</label>
                                 <input type="text" class="form-control" id="assignment_dispatch_location" placeholder="Main Yard">
                             </div>
                             
-                            <!-- Odometer -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Odometer (km)</label>
                                 <input type="number" class="form-control" id="assignment_odometer_before_trip" step="0.01" placeholder="0.00">
                             </div>
                             
-                            <!-- Fuel Level -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Fuel Level %</label>
                                 <input type="number" class="form-control" id="assignment_fuel_level" max="100" placeholder="100">
                             </div>
                             
-                            <!-- Status -->
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Status</label>
                                 <select class="form-control" id="assignment_status">
@@ -1192,13 +1268,11 @@ echo view('templates/myheader.php');
                                 </select>
                             </div>
                             
-                            <!-- Remarks -->
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Remarks</label>
                                 <textarea class="form-control" id="assignment_remarks" rows="2" placeholder="Additional notes"></textarea>
                             </div>
                             
-                            <!-- Action Buttons -->
                             <div class="col-12 text-end mt-2">
                                 <button type="button" class="btn btn-secondary me-2" onclick="__Trips.__resetAssignmentForm()">
                                     <i class="bi bi-arrow-counterclockwise"></i> Reset
@@ -1222,6 +1296,7 @@ echo view('templates/myheader.php');
         </div>
     </div>
 </div>
+
 <!-- ============================================ -->
 <!-- VIEW TRIP MODAL -->
 <!-- ============================================ -->
@@ -1419,9 +1494,6 @@ $(document).ready(function () {
     });
 });
 
-// =============================================
-// FILTER TABLE BY STATUS
-// =============================================
 function filterTable(status) {
     $('.stat-card').removeClass('active');
     

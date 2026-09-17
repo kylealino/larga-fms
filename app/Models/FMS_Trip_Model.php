@@ -213,9 +213,10 @@ class FMS_Trip_Model extends Model
     {
         $trip_id = $this->request->getPost('trip_id');
 
-        // Delete assignment and waypoints first
+        // Delete assignment, waypoints, and cargo items first
         $this->db->query("DELETE FROM `tbl_trip_assignments` WHERE `trip_id` = ?", [$trip_id]);
         $this->db->query("DELETE FROM `tbl_trip_waypoints` WHERE `trip_id` = ?", [$trip_id]);
+        $this->db->query("DELETE FROM `tbl_trip_cargo_items` WHERE `trip_id` = ?", [$trip_id]);
 
         $query = $this->db->query("DELETE FROM `tbl_trips` WHERE `trip_id` = ?", [$trip_id]);
 
@@ -243,10 +244,6 @@ class FMS_Trip_Model extends Model
     // ==============================
     // ASSIGNMENT METHODS
     // ==============================
-
-    // ==============================
-    // GET ASSIGNMENT BY TRIP
-    // ==============================
     public function getAssignment($trip_id)
     {
         $query = $this->db->query("
@@ -257,9 +254,6 @@ class FMS_Trip_Model extends Model
         return $query->getRowArray();
     }
 
-    // ==============================
-    // SAVE ASSIGNMENT
-    // ==============================
     public function saveAssignment()
     {
         $trip_id = $this->request->getPost('trip_id');
@@ -285,7 +279,6 @@ class FMS_Trip_Model extends Model
         $assignment_status = $this->request->getPost('assignment_status') ?: 'ASSIGNED';
         $remarks = $this->request->getPost('remarks');
 
-        // For RENTED_ALL, set chassis_type to RENTED
         if($vehicle_type == 'RENTED_ALL') {
             $chassis_type = 'RENTED';
         }
@@ -318,9 +311,6 @@ class FMS_Trip_Model extends Model
         }
     }
 
-    // ==============================
-    // UPDATE ASSIGNMENT
-    // ==============================
     public function updateAssignment()
     {
         $assignment_id = $this->request->getPost('assignment_id');
@@ -347,7 +337,6 @@ class FMS_Trip_Model extends Model
         $assignment_status = $this->request->getPost('assignment_status') ?: 'ASSIGNED';
         $remarks = $this->request->getPost('remarks');
 
-        // For RENTED_ALL, set chassis_type to RENTED
         if($vehicle_type == 'RENTED_ALL') {
             $chassis_type = 'RENTED';
         }
@@ -385,9 +374,6 @@ class FMS_Trip_Model extends Model
         }
     }
 
-    // ==============================
-    // DELETE ASSIGNMENT
-    // ==============================
     public function deleteAssignment()
     {
         $assignment_id = $this->request->getPost('assignment_id');
@@ -405,10 +391,6 @@ class FMS_Trip_Model extends Model
 
     // ==============================
     // WAYPOINT METHODS
-    // ==============================
-
-    // ==============================
-    // SAVE WAYPOINT
     // ==============================
     public function saveWaypoint()
     {
@@ -460,9 +442,6 @@ class FMS_Trip_Model extends Model
         }
     }
 
-    // ==============================
-    // UPDATE WAYPOINT
-    // ==============================
     public function updateWaypoint()
     {
         $waypoint_id = $this->request->getPost('waypoint_id');
@@ -518,9 +497,6 @@ class FMS_Trip_Model extends Model
         }
     }
 
-    // ==============================
-    // DELETE WAYPOINT
-    // ==============================
     public function deleteWaypoint()
     {
         $waypoint_id = $this->request->getPost('waypoint_id');
@@ -534,9 +510,6 @@ class FMS_Trip_Model extends Model
         }
     }
 
-    // ==============================
-    // GET WAYPOINTS BY TRIP
-    // ==============================
     public function getWaypointsByTrip($trip_id)
     {
         $query = $this->db->query("
@@ -548,12 +521,89 @@ class FMS_Trip_Model extends Model
         return $query->getResultArray();
     }
 
-    // ==============================
-    // GET SINGLE WAYPOINT
-    // ==============================
     public function getWaypoint($waypoint_id)
     {
         $query = $this->db->query("SELECT * FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id]);
         return $query->getRowArray();
+    }
+
+    // ==============================
+    // CARGO ITEM METHODS
+    // ==============================
+    public function getCargoItems($trip_id)
+    {
+        return $this->db->query("
+            SELECT * FROM tbl_trip_cargo_items
+            WHERE trip_id = ?
+            ORDER BY item_id ASC
+        ", [$trip_id])->getResultArray();
+    }
+
+    public function getCargoItem($item_id)
+    {
+        $query = $this->db->query("SELECT * FROM tbl_trip_cargo_items WHERE item_id = ?", [$item_id]);
+        return $query->getRowArray();
+    }
+
+    public function saveCargoItem()
+    {
+        $trip_id = $this->request->getPost('trip_id');
+        $item_description = $this->request->getPost('item_description');
+        $quantity = $this->request->getPost('quantity') ?: 0;
+        $unit = $this->request->getPost('unit');
+        $weight = $this->request->getPost('weight') ?: 0;
+        $remarks = $this->request->getPost('remarks');
+
+        $query = $this->db->query("
+            INSERT INTO `tbl_trip_cargo_items`(
+                `trip_id`, `item_description`, `quantity`, `unit`, `weight`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [$trip_id, $item_description, $quantity, $unit, $weight, $remarks, $this->cuser]
+        );
+
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Cargo Item Added Successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'An error occurred while adding cargo item.'];
+        }
+    }
+
+    public function updateCargoItem()
+    {
+        $item_id = $this->request->getPost('item_id');
+        $item_description = $this->request->getPost('item_description');
+        $quantity = $this->request->getPost('quantity') ?: 0;
+        $unit = $this->request->getPost('unit');
+        $weight = $this->request->getPost('weight') ?: 0;
+        $remarks = $this->request->getPost('remarks');
+
+        $query = $this->db->query("
+            UPDATE `tbl_trip_cargo_items`
+            SET 
+                `item_description` = ?, `quantity` = ?, `unit` = ?, `weight` = ?, 
+                `remarks` = ?, `updated_at` = NOW()
+            WHERE `item_id` = ?
+            ",
+            [$item_description, $quantity, $unit, $weight, $remarks, $item_id]
+        );
+
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Cargo Item Updated Successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'An error occurred while updating cargo item.'];
+        }
+    }
+
+    public function deleteCargoItem()
+    {
+        $item_id = $this->request->getPost('item_id');
+        $query = $this->db->query("DELETE FROM `tbl_trip_cargo_items` WHERE `item_id` = ?", [$item_id]);
+
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Cargo Item Deleted Successfully!'];
+        } else {
+            return ['status' => 'error', 'message' => 'An error occurred while deleting cargo item.'];
+        }
     }
 }

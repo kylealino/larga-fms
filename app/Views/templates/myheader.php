@@ -704,25 +704,10 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             </a>
           </li>
 
-
-          <!-- ============================================ -->
-          <!-- DELIVERY RECEIPT -->
-          <!-- ============================================ -->
-          <li class="nav-small-cap">
-            <span>Delivery</span>
-          </li>
-
           <li class="sidebar-item <?= strpos($current_url, 'fms-delivery-receipt') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-delivery-receipt">
               <i class="bi bi-receipt"></i>
               <span>Delivery Receipt</span>
-            </a>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'proofofdelivery') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>proofofdelivery">
-              <i class="bi bi-file-check"></i>
-              <span>Proof of Delivery</span>
             </a>
           </li>
 
@@ -775,52 +760,31 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Maintenance</span>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'preventivemaintenance') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>preventivemaintenance">
+          <li class="sidebar-item <?= strpos($current_url, 'fms-maintenance') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-maintenance">
               <i class="bi bi-tools"></i>
               <span>Preventive Maintenance</span>
             </a>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'maintenancerecords') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>maintenancerecords">
-              <i class="bi bi-clipboard2-list"></i>
-              <span>Maintenance Records</span>
-            </a>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'partsmanagement') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>partsmanagement">
-              <i class="bi bi-box"></i>
-              <span>Parts Management</span>
-            </a>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'tiremanagement') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>tiremanagement">
-              <i class="bi bi-circle"></i>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-tire') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-tire">
+              <i class="bi bi-circle-square"></i>
               <span>Tire Management</span>
             </a>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'toolmanagement') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>toolmanagement">
-              <i class="bi bi-wrench"></i>
-              <span>Tools Management</span>
-            </a>
-          </li>
-
-          <li class="sidebar-item <?= strpos($current_url, 'suppliesmanagement') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>suppliesmanagement">
-              <i class="bi bi-box-seam"></i>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-supply') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-supply">
+              <i class="bi bi-box"></i>
               <span>Supplies Management</span>
             </a>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'truckdocuments') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>truckdocuments">
-              <i class="bi bi-file-earmark"></i>
-              <span>Truck Documents</span>
+          <li class="sidebar-item <?= strpos($current_url, 'fms-tool') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>fms-tool">
+              <i class="bi bi-wrench"></i>
+              <span>Tools Management</span>
             </a>
           </li>
 

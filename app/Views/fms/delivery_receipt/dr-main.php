@@ -2,6 +2,10 @@
 $this->request = \Config\Services::request();
 $this->db = \Config\Database::connect();
 
+// ==============================
+// 1. EXISTING DELIVERY RECEIPTS
+// Latest POD only (prevents duplicates when a DR has multiple POD rows)
+// ==============================
 $drs = $this->db->query("
     SELECT d.*,
            t.trip_code,
@@ -9,30 +13,61 @@ $drs = $this->db->query("
            dp.dispatch_code,
            pod.received_by,
            pod.date_received,
-           pod.delivery_condition,
-           cr.container_return_status
+           pod.delivery_condition
     FROM tbl_delivery_receipts d
     LEFT JOIN tbl_trips t ON d.trip_id = t.trip_id
     LEFT JOIN tbl_customers c ON d.customer_id = c.customer_id
     LEFT JOIN tbl_dispatch dp ON d.dispatch_id = dp.dispatch_id
-    LEFT JOIN tbl_delivery_receipt_pod pod ON d.dr_id = pod.dr_id
-    LEFT JOIN tbl_delivery_receipt_container_return cr ON d.dr_id = cr.dr_id
+    LEFT JOIN tbl_delivery_receipt_pod pod ON pod.pod_id = (
+        SELECT MAX(p2.pod_id) FROM tbl_delivery_receipt_pod p2 WHERE p2.dr_id = d.dr_id
+    )
     ORDER BY d.dr_date DESC, d.dr_id DESC
 ")->getResultArray();
 
+// ==============================
+// 2. PENDING TRIPS (dispatched, no DR yet)
+// ==============================
+$pending_trips = $this->db->query("
+    SELECT t.trip_id,
+           t.trip_code,
+           t.customer_id,
+           t.destination,
+           t.scheduled_date,
+           t.trip_status,
+           c.customer_name,
+           d.dispatch_id,
+           d.dispatch_date,
+           d.dispatch_status,
+           d.truck,
+           d.driver,
+           d.helper,
+           d.origin AS dispatch_origin,
+           d.destination AS dispatch_destination
+    FROM tbl_trips t
+    LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
+    LEFT JOIN tbl_dispatch d ON t.trip_id = d.trip_id
+    WHERE d.dispatch_id IS NOT NULL
+      AND t.trip_status IN ('DISPATCHED','IN_TRANSIT','DELIVERED','COMPLETED')
+      AND NOT EXISTS (
+          SELECT 1 FROM tbl_delivery_receipts dr WHERE dr.dispatch_id = d.dispatch_id
+      )
+    ORDER BY d.dispatch_date DESC, t.trip_id DESC
+")->getResultArray();
+
+// ==============================
+// 3. STATS
+// ==============================
 $total_drs = 0;
 $total_delivered = 0;
 $total_partial = 0;
-$total_container_for_return = 0;
-$total_container_returned = 0;
 
 foreach($drs as $row) {
     $total_drs++;
     if($row['dr_status'] == 'DELIVERED') $total_delivered++;
     elseif($row['dr_status'] == 'PARTIALLY_DELIVERED') $total_partial++;
-    elseif($row['dr_status'] == 'CONTAINER_FOR_RETURN') $total_container_for_return++;
-    elseif($row['dr_status'] == 'CONTAINER_RETURNED') $total_container_returned++;
 }
+
+$total_pending_dr = count($pending_trips);
 
 echo view('templates/myheader.php');
 ?>
@@ -105,15 +140,9 @@ echo view('templates/myheader.php');
         background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.25);
         color: #ffffff; transform: translateY(-1px);
     }
-    .btn-header-primary {
-        background: #ffffff; border-color: #ffffff; color: var(--primary);
-    }
-    .btn-header-primary:hover {
-        background: rgba(255,255,255,0.9); color: var(--primary-dark);
-    }
 
     .stat-grid {
-        display: grid; grid-template-columns: repeat(5, 1fr);
+        display: grid; grid-template-columns: repeat(4, 1fr);
         gap: 16px; margin-bottom: 24px;
     }
     .stat-card {
@@ -241,8 +270,6 @@ echo view('templates/myheader.php');
         transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;
     }
     .btn-toolbar:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-    .btn-toolbar-primary { background: var(--primary); border-color: var(--primary); color: #ffffff; }
-    .btn-toolbar-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #ffffff; }
     .btn-toolbar-filter {
         background: var(--gray-50); border-color: var(--gray-200);
         color: var(--gray-600); font-size: 11px; padding: 3px 10px;
@@ -297,10 +324,6 @@ echo view('templates/myheader.php');
     .trip-info-box {
         background: var(--gray-50); border-radius: 8px; padding: 16px;
         margin-bottom: 16px; border-left: 4px solid var(--primary);
-    }
-    .container-fields {
-        background: var(--gray-50); border-radius: 8px; padding: 16px;
-        margin-top: 10px; border-left: 3px solid var(--info);
     }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .section-header h6 { margin: 0; font-weight: 600; }
@@ -359,6 +382,10 @@ echo view('templates/myheader.php');
         color: #ffffff;
     }
 
+    /* Pending DR row styling */
+    tr.pending-dr-row { background: #fff9ec !important; }
+    tr.pending-dr-row:hover { background: #fff3d6 !important; }
+
     @media (max-width: 992px) {
         .lrg-module-header { flex-direction: column; align-items: stretch; padding: 16px 20px; }
         .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -402,9 +429,6 @@ echo view('templates/myheader.php');
         </div>
     </div>
     <div class="header-actions">
-        <button class="btn-header btn-header-primary" onclick="__DR.__openNewDRModal()">
-            <i class="bi bi-plus-circle"></i> New Delivery Receipt
-        </button>
         <button class="btn-header" onclick="window.location.reload();">
             <i class="bi bi-arrow-clockwise"></i> Refresh
         </button>
@@ -412,16 +436,24 @@ echo view('templates/myheader.php');
 </div>
 
 <!-- ============================================ -->
-<!-- STATS CARDS - CLICKABLE -->
+<!-- STATS CARDS -->
 <!-- ============================================ -->
 <div class="stat-grid">
     <div class="stat-card active" data-filter="all" onclick="filterDRTable('all')">
         <div class="stat-left">
-            <div class="stat-label">Total DRs</div>
+            <div class="stat-label">All DRs</div>
             <div class="stat-value"><?=$total_drs;?></div>
             <div class="stat-sub">All delivery receipts</div>
         </div>
         <div class="stat-right"><i class="bi bi-receipt"></i></div>
+    </div>
+    <div class="stat-card" data-filter="PENDING_DR" onclick="filterDRTable('PENDING_DR')">
+        <div class="stat-left">
+            <div class="stat-label">Pending DR</div>
+            <div class="stat-value"><?=$total_pending_dr;?></div>
+            <div class="stat-sub">Awaiting creation</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-hourglass-split"></i></div>
     </div>
     <div class="stat-card" data-filter="DELIVERED" onclick="filterDRTable('DELIVERED')">
         <div class="stat-left">
@@ -438,22 +470,6 @@ echo view('templates/myheader.php');
             <div class="stat-sub">Partial delivery</div>
         </div>
         <div class="stat-right"><i class="bi bi-exclamation-circle"></i></div>
-    </div>
-    <div class="stat-card" data-filter="CONTAINER_FOR_RETURN" onclick="filterDRTable('CONTAINER_FOR_RETURN')">
-        <div class="stat-left">
-            <div class="stat-label">Container For Return</div>
-            <div class="stat-value"><?=$total_container_for_return;?></div>
-            <div class="stat-sub">Pending container return</div>
-        </div>
-        <div class="stat-right"><i class="bi bi-box-seam"></i></div>
-    </div>
-    <div class="stat-card" data-filter="CONTAINER_RETURNED" onclick="filterDRTable('CONTAINER_RETURNED')">
-        <div class="stat-left">
-            <div class="stat-label">Container Returned</div>
-            <div class="stat-value"><?=$total_container_returned;?></div>
-            <div class="stat-sub">Returned to port</div>
-        </div>
-        <div class="stat-right"><i class="bi bi-arrow-return-left"></i></div>
     </div>
 </div>
 
@@ -481,7 +497,7 @@ echo view('templates/myheader.php');
                     </div>
                     <div class="toolbar-right">
                         <span class="text-muted" style="font-size:12px;">
-                            <i class="bi bi-info-circle"></i> Click <strong>POD</strong> to record proof of delivery
+                            <i class="bi bi-info-circle"></i> Click <strong>+</strong> on a pending row to create its DR
                         </span>
                     </div>
                 </div>
@@ -497,12 +513,35 @@ echo view('templates/myheader.php');
                                 <th>Driver</th>
                                 <th width="100">Delivery Date</th>
                                 <th width="120">Received By</th>
-                                <th width="120">Container Return</th>
                                 <th width="130">DR Status</th>
-                                <th width="220" class="text-center">Actions</th>
+                                <th width="200" class="text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php if(count($pending_trips) > 0): ?>
+                                <?php foreach($pending_trips as $row): ?>
+                                <tr class="pending-dr-row">
+                                    <td><span class="badge badge-warning">No DR Yet</span></td>
+                                    <td><span class="badge badge-primary"><?=$row['trip_code'];?></span></td>
+                                    <td><?=$row['customer_name'] ?? '—';?></td>
+                                    <td><?=$row['truck'] ?? '—';?></td>
+                                    <td><?=$row['driver'] ?? '—';?></td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td><span class="badge badge-warning">Pending DR</span></td>
+                                    <td class="text-center">
+                                        <div class="action-group">
+                                            <button class="btn-icon btn-icon-dispatch" 
+                                                    onclick="__DR.__openDRModalFromTrip(<?=$row['trip_id'];?>, <?=$row['dispatch_id'];?>)" 
+                                                    title="Create Delivery Receipt">
+                                                <i class="bi bi-plus-circle"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
                             <?php if(count($drs) > 0): ?>
                                 <?php foreach($drs as $row): ?>
                                 <tr>
@@ -515,19 +554,6 @@ echo view('templates/myheader.php');
                                     <td><?=$row['received_by'] ?? '—';?></td>
                                     <td>
                                         <?php
-                                        $crStatus = $row['container_return_status'] ?? 'NOT_APPLICABLE';
-                                        $crClass = 'badge-secondary';
-                                        $crLabel = 'N/A';
-                                        if($crStatus == 'FOR_RETURN') { $crClass = 'badge-warning'; $crLabel = 'For Return'; }
-                                        elseif($crStatus == 'RETURNED') { $crClass = 'badge-success'; $crLabel = 'Returned'; }
-                                        elseif($crStatus == 'OVERDUE') { $crClass = 'badge-danger'; $crLabel = 'Overdue'; }
-                                        elseif($crStatus == 'DAMAGED') { $crClass = 'badge-danger'; $crLabel = 'Damaged'; }
-                                        elseif($crStatus == 'LOST') { $crClass = 'badge-danger'; $crLabel = 'Lost'; }
-                                        ?>
-                                        <span class="badge <?=$crClass;?>"><?=$crLabel;?></span>
-                                    </td>
-                                    <td>
-                                        <?php
                                         $statusClass = 'badge-secondary';
                                         $statusLabel = 'Pending';
                                         if($row['dr_status'] == 'PENDING') { $statusClass = 'badge-secondary'; $statusLabel = 'Pending'; }
@@ -535,8 +561,6 @@ echo view('templates/myheader.php');
                                         elseif($row['dr_status'] == 'ARRIVED') { $statusClass = 'badge-primary'; $statusLabel = 'Arrived'; }
                                         elseif($row['dr_status'] == 'DELIVERED') { $statusClass = 'badge-success'; $statusLabel = 'Delivered'; }
                                         elseif($row['dr_status'] == 'PARTIALLY_DELIVERED') { $statusClass = 'badge-warning'; $statusLabel = 'Partial'; }
-                                        elseif($row['dr_status'] == 'CONTAINER_FOR_RETURN') { $statusClass = 'badge-warning'; $statusLabel = 'Container For Return'; }
-                                        elseif($row['dr_status'] == 'CONTAINER_RETURNED') { $statusClass = 'badge-success'; $statusLabel = 'Container Returned'; }
                                         elseif($row['dr_status'] == 'FAILED_DELIVERY') { $statusClass = 'badge-danger'; $statusLabel = 'Failed'; }
                                         elseif($row['dr_status'] == 'CANCELLED') { $statusClass = 'badge-danger'; $statusLabel = 'Cancelled'; }
                                         ?>
@@ -573,55 +597,13 @@ echo view('templates/myheader.php');
                     </table>
                 </div>
 
-                <?php if(count($drs) == 0): ?>
+                <?php if(count($drs) == 0 && count($pending_trips) == 0): ?>
                 <div class="empty-state">
                     <i class="bi bi-receipt"></i>
                     <h5>No delivery receipts</h5>
-                    <p>Click <strong>New Delivery Receipt</strong> to create one from a dispatched trip.</p>
+                    <p>Dispatch a trip first to enable DR creation.</p>
                 </div>
                 <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ============================================ -->
-<!-- SELECT TRIP MODAL -->
-<!-- ============================================ -->
-<div class="modal fade" id="selectTripModal" tabindex="-1" data-bs-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-truck me-2"></i>Select Dispatched Trip
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted" style="font-size:12px;">
-                    <i class="bi bi-info-circle"></i> Only dispatched trips without an existing DR are shown.
-                </p>
-                <div class="table-responsive">
-                    <table class="table table-hover" id="selectTripTable">
-                        <thead>
-                            <tr>
-                                <th>Trip #</th>
-                                <th>Customer</th>
-                                <th>Destination</th>
-                                <th>Dispatch Date</th>
-                                <th width="80" class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="selectTripBody">
-                            <tr><td colspan="5" class="text-center text-muted">Loading trips...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x"></i> Close
-                </button>
             </div>
         </div>
     </div>
@@ -686,8 +668,6 @@ echo view('templates/myheader.php');
                                     <option value="ARRIVED">Arrived</option>
                                     <option value="DELIVERED">Delivered</option>
                                     <option value="PARTIALLY_DELIVERED">Partially Delivered</option>
-                                    <option value="CONTAINER_FOR_RETURN">Container For Return</option>
-                                    <option value="CONTAINER_RETURNED">Container Returned</option>
                                     <option value="FAILED_DELIVERY">Failed Delivery</option>
                                     <option value="CANCELLED">Cancelled</option>
                                 </select>
@@ -711,34 +691,6 @@ echo view('templates/myheader.php');
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Destination</label>
                                 <input type="text" class="form-control" id="dr_destination">
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <div class="col-md-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="dr_container_required">
-                                    <label class="form-check-label" for="dr_container_required">
-                                        <strong>Container Required</strong>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="dr_container_fields" style="display:none;" class="container-fields">
-                            <div class="row">
-                                <div class="col-md-4 mb-2">
-                                    <label class="form-label">Container Number</label>
-                                    <input type="text" class="form-control" id="dr_container_number">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label class="form-label">Container Type</label>
-                                    <input type="text" class="form-control" id="dr_container_type">
-                                </div>
-                                <div class="col-md-4 mb-2">
-                                    <label class="form-label">Container Reference</label>
-                                    <input type="text" class="form-control" id="dr_container_reference">
-                                </div>
                             </div>
                         </div>
 
@@ -836,63 +788,6 @@ echo view('templates/myheader.php');
                         </div>
                     </div>
                 </div>
-
-                <div class="card mt-3" id="containerReturnCard" style="display:none;">
-                    <div class="card-header bg-light">
-                        <h6 class="mb-0"><i class="bi bi-arrow-return-left me-2"></i>Container Return</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-2">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="cr_required">
-                                    <label class="form-check-label" for="cr_required">
-                                        <strong>Container Return Required</strong>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Port</label>
-                                <input type="text" class="form-control" id="cr_port">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Date</label>
-                                <input type="date" class="form-control" id="cr_date">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Time</label>
-                                <input type="time" class="form-control" id="cr_time">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Status</label>
-                                <select class="form-control" id="cr_status">
-                                    <option value="NOT_APPLICABLE">Not Applicable</option>
-                                    <option value="FOR_RETURN">For Return</option>
-                                    <option value="RETURNED">Returned</option>
-                                    <option value="OVERDUE">Overdue</option>
-                                    <option value="DAMAGED">Damaged</option>
-                                    <option value="LOST">Lost</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Odometer (km)</label>
-                                <input type="number" class="form-control" id="cr_odometer" step="0.01">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Distance (km)</label>
-                                <input type="number" class="form-control" id="cr_distance" step="0.01">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Return Proof</label>
-                                <input type="text" class="form-control" id="cr_proof">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Remarks</label>
-                                <input type="text" class="form-control" id="cr_remarks">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -953,7 +848,6 @@ echo view('templates/myheader.php');
                         </select>
                     </div>
 
-                    <!-- Customer Signature (Draw or Upload) -->
                     <div class="col-md-12 mb-2">
                         <label class="form-label">Customer Signature</label>
                         <input type="hidden" id="pod_signature">
@@ -1001,7 +895,6 @@ echo view('templates/myheader.php');
                         </div>
                     </div>
 
-                    <!-- Delivery Photo Upload -->
                     <div class="col-md-6 mb-2">
                         <label class="form-label">Delivery Photo</label>
                         <input type="hidden" id="pod_photo">
@@ -1019,7 +912,6 @@ echo view('templates/myheader.php');
                         </div>
                     </div>
 
-                    <!-- Signed DR Upload -->
                     <div class="col-md-6 mb-2">
                         <label class="form-label">Signed DR</label>
                         <input type="hidden" id="pod_signed_dr">
@@ -1037,7 +929,6 @@ echo view('templates/myheader.php');
                         </div>
                     </div>
 
-                    <!-- Supporting Documents Upload -->
                     <div class="col-md-6 mb-2">
                         <label class="form-label">Supporting Documents</label>
                         <input type="hidden" id="pod_supporting">
@@ -1108,13 +999,13 @@ $(document).ready(function () {
     drTable = $('#drTable').DataTable({
         pageLength: 10,
         lengthChange: false,
-        order: [[0, 'desc']],
+        order: [],
         language: {
             search: "Search:",
             emptyTable: "No delivery receipts found"
         },
         columnDefs: [
-            { orderable: false, targets: [9] }
+            { orderable: false, targets: [8] }
         ]
     });
 });
@@ -1124,18 +1015,17 @@ function filterDRTable(status) {
     $('.stat-card[data-filter="' + status + '"]').addClass('active');
 
     currentDRFilter = status;
-    var columnIndex = 8;
+    var columnIndex = 7;
 
     if (status === 'all') {
         drTable.column(columnIndex).search('', true, false).draw();
         $('#drClearFilterBtn').hide();
-        $('#drRecordCount').text('<?=count($drs);?> records');
+        $('#drRecordCount').text('<?=count($drs) + count($pending_trips);?> records');
     } else {
         var labelMap = {
+            'PENDING_DR'             : 'Pending DR',
             'DELIVERED'              : '^Delivered$',
-            'PARTIALLY_DELIVERED'    : 'Partial',
-            'CONTAINER_FOR_RETURN'   : 'Container For Return',
-            'CONTAINER_RETURNED'     : 'Container Returned'
+            'PARTIALLY_DELIVERED'    : 'Partial'
         };
         var searchTerm = labelMap[status] || status;
 

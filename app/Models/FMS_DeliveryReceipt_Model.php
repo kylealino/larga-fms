@@ -27,7 +27,7 @@ class FMS_DeliveryReceipt_Model extends Model
     }
 
     // ==============================
-    // GET ALL DELIVERY RECEIPTS
+    // GET ALL DELIVERY RECEIPTS (latest POD only)
     // ==============================
     public function getAllDRs()
     {
@@ -38,14 +38,14 @@ class FMS_DeliveryReceipt_Model extends Model
                    dp.dispatch_code,
                    pod.received_by,
                    pod.date_received,
-                   pod.delivery_condition,
-                   cr.container_return_status
+                   pod.delivery_condition
             FROM tbl_delivery_receipts d
             LEFT JOIN tbl_trips t ON d.trip_id = t.trip_id
             LEFT JOIN tbl_customers c ON d.customer_id = c.customer_id
             LEFT JOIN tbl_dispatch dp ON d.dispatch_id = dp.dispatch_id
-            LEFT JOIN tbl_delivery_receipt_pod pod ON d.dr_id = pod.dr_id
-            LEFT JOIN tbl_delivery_receipt_container_return cr ON d.dr_id = cr.dr_id
+            LEFT JOIN tbl_delivery_receipt_pod pod ON pod.pod_id = (
+                SELECT MAX(p2.pod_id) FROM tbl_delivery_receipt_pod p2 WHERE p2.dr_id = d.dr_id
+            )
             ORDER BY d.dr_date DESC, d.dr_id DESC
         ")->getResultArray();
     }
@@ -86,6 +86,47 @@ class FMS_DeliveryReceipt_Model extends Model
     }
 
     // ==============================
+    // GET TRIP + DISPATCH INFO FOR NEW DR
+    // ==============================
+    public function getTripForDR($trip_id)
+    {
+        $query = $this->db->query("
+            SELECT t.trip_id,
+                   t.trip_code,
+                   t.customer_id,
+                   t.origin,
+                   t.destination,
+                   c.customer_name,
+                   d.dispatch_id,
+                   d.truck,
+                   d.driver,
+                   d.helper,
+                   d.container_required,
+                   d.container_number,
+                   d.container_type,
+                   d.container_reference
+            FROM tbl_trips t
+            LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
+            LEFT JOIN tbl_dispatch d ON t.trip_id = d.trip_id
+            WHERE t.trip_id = ?
+            LIMIT 1
+        ", [$trip_id]);
+        return $query->getRowArray();
+    }
+
+    // ==============================
+    // GET TRIP CARGO ITEMS (for DR preview)
+    // ==============================
+    public function getTripCargoItems($trip_id)
+    {
+        return $this->db->query("
+            SELECT * FROM tbl_trip_cargo_items
+            WHERE trip_id = ?
+            ORDER BY item_id ASC
+        ", [$trip_id])->getResultArray();
+    }
+
+    // ==============================
     // CREATE DR FROM TRIP/DISPATCH
     // ==============================
     public function createDRFromTrip()
@@ -97,7 +138,6 @@ class FMS_DeliveryReceipt_Model extends Model
             return ['status' => 'error', 'message' => 'Missing trip or dispatch reference.'];
         }
 
-        // Check existing
         $existing = $this->db->query("
             SELECT dr_id FROM tbl_delivery_receipts WHERE dispatch_id = ? LIMIT 1
         ", [$dispatch_id])->getRow();
@@ -105,7 +145,6 @@ class FMS_DeliveryReceipt_Model extends Model
             return ['status' => 'error', 'message' => 'A Delivery Receipt already exists for this dispatch.'];
         }
 
-        // Get dispatch + trip info
         $info = $this->db->query("
             SELECT t.trip_id, t.customer_id, t.origin, t.destination,
                    d.dispatch_id, d.truck, d.driver, d.helper,
@@ -152,6 +191,34 @@ class FMS_DeliveryReceipt_Model extends Model
 
         if ($query) {
             $dr_id = $this->db->insertID();
+
+            // Auto-copy cargo items from trip
+            $cargoItems = $this->db->query("
+                SELECT * FROM tbl_trip_cargo_items
+                WHERE trip_id = ?
+                ORDER BY item_id ASC
+            ", [$trip_id])->getResultArray();
+
+            foreach ($cargoItems as $ci) {
+                $this->db->query("
+                    INSERT INTO `tbl_delivery_receipt_items`(
+                        `dr_id`, `item_description`, `quantity_dispatched`, `quantity_delivered`,
+                        `quantity_shortage`, `quantity_damaged`, `unit`, `weight`,
+                        `condition_on_arrival`, `remarks`, `created_by`
+                    )
+                    VALUES (?, ?, ?, ?, 0, 0, ?, ?, 'GOOD', ?, ?)
+                ", [
+                    $dr_id,
+                    $ci['item_description'],
+                    $ci['quantity'],
+                    $ci['quantity'],
+                    $ci['unit'],
+                    $ci['weight'],
+                    $ci['remarks'],
+                    $this->cuser
+                ]);
+            }
+
             return ['status' => 'success', 'message' => 'Delivery Receipt Created Successfully!', 'dr_id' => $dr_id];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while creating delivery receipt.'];
@@ -266,6 +333,65 @@ class FMS_DeliveryReceipt_Model extends Model
 
         if ($query) {
             $dr_id = $this->db->insertID();
+
+            $submitted_items = $this->request->getPost('dr_items');
+            $has_submitted_items = false;
+
+            if (!empty($submitted_items) && is_array($submitted_items)) {
+                $has_submitted_items = true;
+
+                foreach ($submitted_items as $item) {
+                    $this->db->query("
+                        INSERT INTO `tbl_delivery_receipt_items`(
+                            `dr_id`, `item_description`, `quantity_dispatched`, `quantity_delivered`,
+                            `quantity_shortage`, `quantity_damaged`, `unit`, `weight`,
+                            `condition_on_arrival`, `remarks`, `created_by`
+                        )
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ", [
+                        $dr_id,
+                        $item['item_description'] ?? '',
+                        $item['quantity_dispatched'] ?? 0,
+                        $item['quantity_delivered'] ?? 0,
+                        $item['quantity_shortage'] ?? 0,
+                        $item['quantity_damaged'] ?? 0,
+                        $item['unit'] ?? '',
+                        $item['weight'] ?? 0,
+                        $item['condition_on_arrival'] ?? 'GOOD',
+                        $item['remarks'] ?? '',
+                        $this->cuser
+                    ]);
+                }
+            }
+
+            if (!$has_submitted_items && !empty($trip_id)) {
+                $cargoItems = $this->db->query("
+                    SELECT * FROM tbl_trip_cargo_items
+                    WHERE trip_id = ?
+                    ORDER BY item_id ASC
+                ", [$trip_id])->getResultArray();
+
+                foreach ($cargoItems as $ci) {
+                    $this->db->query("
+                        INSERT INTO `tbl_delivery_receipt_items`(
+                            `dr_id`, `item_description`, `quantity_dispatched`, `quantity_delivered`,
+                            `quantity_shortage`, `quantity_damaged`, `unit`, `weight`,
+                            `condition_on_arrival`, `remarks`, `created_by`
+                        )
+                        VALUES (?, ?, ?, ?, 0, 0, ?, ?, 'GOOD', ?, ?)
+                    ", [
+                        $dr_id,
+                        $ci['item_description'],
+                        $ci['quantity'],
+                        $ci['quantity'],
+                        $ci['unit'],
+                        $ci['weight'],
+                        $ci['remarks'],
+                        $this->cuser
+                    ]);
+                }
+            }
+
             return ['status' => 'success', 'message' => 'Delivery Receipt Saved Successfully!', 'dr_id' => $dr_id];
         } else {
             $error = $this->db->error();
@@ -334,7 +460,6 @@ class FMS_DeliveryReceipt_Model extends Model
 
         $this->db->query("DELETE FROM `tbl_delivery_receipt_items` WHERE `dr_id` = ?", [$dr_id]);
         $this->db->query("DELETE FROM `tbl_delivery_receipt_pod` WHERE `dr_id` = ?", [$dr_id]);
-        $this->db->query("DELETE FROM `tbl_delivery_receipt_container_return` WHERE `dr_id` = ?", [$dr_id]);
 
         $query = $this->db->query("DELETE FROM `tbl_delivery_receipts` WHERE `dr_id` = ?", [$dr_id]);
 
@@ -450,10 +575,19 @@ class FMS_DeliveryReceipt_Model extends Model
     // ==============================
     public function getPOD($dr_id)
     {
-        $query = $this->db->query("SELECT * FROM tbl_delivery_receipt_pod WHERE dr_id = ?", [$dr_id]);
+        // Fetch the LATEST POD row for this DR
+        $query = $this->db->query("
+            SELECT * FROM tbl_delivery_receipt_pod 
+            WHERE dr_id = ? 
+            ORDER BY pod_id DESC
+            LIMIT 1
+        ", [$dr_id]);
         return $query->getRowArray();
     }
 
+    // ==============================
+    // SAVE POD (UPDATE if exists, INSERT if not)
+    // ==============================
     public function savePOD()
     {
         $dr_id = $this->request->getPost('dr_id');
@@ -469,66 +603,78 @@ class FMS_DeliveryReceipt_Model extends Model
         $supporting_documents = $this->request->getPost('supporting_documents');
         $remarks = $this->request->getPost('remarks');
 
-        $query = $this->db->query("
-            INSERT INTO `tbl_delivery_receipt_pod`(
-                `dr_id`, `received_by`, `received_by_position`, `date_received`,
-                `time_received`, `quantity_received`, `delivery_condition`,
-                `customer_signature`, `delivery_photo`, `signed_dr`,
-                `supporting_documents`, `remarks`, `created_by`
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $dr_id, $received_by, $received_by_position, $date_received,
-                $time_received, $quantity_received, $delivery_condition,
-                $customer_signature, $delivery_photo, $signed_dr,
-                $supporting_documents, $remarks, $this->cuser
-            ]
-        );
+        // Check if a POD row already exists for this DR
+        $existing = $this->db->query("
+            SELECT pod_id FROM tbl_delivery_receipt_pod 
+            WHERE dr_id = ? 
+            ORDER BY pod_id DESC 
+            LIMIT 1
+        ", [$dr_id])->getRow();
 
-        if ($query) {
-            return ['status' => 'success', 'message' => 'Proof of Delivery Saved Successfully!'];
+        if ($existing) {
+            // UPDATE the existing row
+            $query = $this->db->query("
+                UPDATE `tbl_delivery_receipt_pod`
+                SET 
+                    `received_by` = ?, `received_by_position` = ?, `date_received` = ?,
+                    `time_received` = ?, `quantity_received` = ?, `delivery_condition` = ?,
+                    `customer_signature` = COALESCE(NULLIF(?, ''), `customer_signature`),
+                    `delivery_photo` = COALESCE(NULLIF(?, ''), `delivery_photo`),
+                    `signed_dr` = COALESCE(NULLIF(?, ''), `signed_dr`),
+                    `supporting_documents` = COALESCE(NULLIF(?, ''), `supporting_documents`),
+                    `remarks` = ?, `updated_at` = NOW()
+                WHERE `pod_id` = ?
+                ",
+                [
+                    $received_by, $received_by_position, $date_received,
+                    $time_received, $quantity_received, $delivery_condition,
+                    $customer_signature, $delivery_photo, $signed_dr,
+                    $supporting_documents, $remarks, $existing->pod_id
+                ]
+            );
+
+            if ($query) {
+                return ['status' => 'success', 'message' => 'Proof of Delivery Saved Successfully!'];
+            } else {
+                $error = $this->db->error();
+                log_message('error', 'POD Update Error: ' . print_r($error, true));
+                return ['status' => 'error', 'message' => 'An error occurred while saving proof of delivery.'];
+            }
         } else {
-            return ['status' => 'error', 'message' => 'An error occurred while saving proof of delivery.'];
+            // INSERT a new row
+            $query = $this->db->query("
+                INSERT INTO `tbl_delivery_receipt_pod`(
+                    `dr_id`, `received_by`, `received_by_position`, `date_received`,
+                    `time_received`, `quantity_received`, `delivery_condition`,
+                    `customer_signature`, `delivery_photo`, `signed_dr`,
+                    `supporting_documents`, `remarks`, `created_by`
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [
+                    $dr_id, $received_by, $received_by_position, $date_received,
+                    $time_received, $quantity_received, $delivery_condition,
+                    $customer_signature, $delivery_photo, $signed_dr,
+                    $supporting_documents, $remarks, $this->cuser
+                ]
+            );
+
+            if ($query) {
+                return ['status' => 'success', 'message' => 'Proof of Delivery Saved Successfully!'];
+            } else {
+                $error = $this->db->error();
+                log_message('error', 'POD Save Error: ' . print_r($error, true));
+                return ['status' => 'error', 'message' => 'An error occurred while saving proof of delivery.'];
+            }
         }
     }
 
+    // ==============================
+    // UPDATE POD (kept for backward compatibility)
+    // ==============================
     public function updatePOD()
     {
-        $pod_id = $this->request->getPost('pod_id');
-        $received_by = $this->request->getPost('received_by');
-        $received_by_position = $this->request->getPost('received_by_position');
-        $date_received = $this->request->getPost('date_received');
-        $time_received = $this->request->getPost('time_received');
-        $quantity_received = $this->request->getPost('quantity_received');
-        $delivery_condition = $this->request->getPost('delivery_condition') ?: 'GOOD';
-        $customer_signature = $this->request->getPost('customer_signature');
-        $delivery_photo = $this->request->getPost('delivery_photo');
-        $signed_dr = $this->request->getPost('signed_dr');
-        $supporting_documents = $this->request->getPost('supporting_documents');
-        $remarks = $this->request->getPost('remarks');
-
-        $query = $this->db->query("
-            UPDATE `tbl_delivery_receipt_pod`
-            SET 
-                `received_by` = ?, `received_by_position` = ?, `date_received` = ?,
-                `time_received` = ?, `quantity_received` = ?, `delivery_condition` = ?,
-                `customer_signature` = ?, `delivery_photo` = ?, `signed_dr` = ?,
-                `supporting_documents` = ?, `remarks` = ?, `updated_at` = NOW()
-            WHERE `pod_id` = ?
-            ",
-            [
-                $received_by, $received_by_position, $date_received,
-                $time_received, $quantity_received, $delivery_condition,
-                $customer_signature, $delivery_photo, $signed_dr,
-                $supporting_documents, $remarks, $pod_id
-            ]
-        );
-
-        if ($query) {
-            return ['status' => 'success', 'message' => 'Proof of Delivery Updated Successfully!'];
-        } else {
-            return ['status' => 'error', 'message' => 'An error occurred while updating proof of delivery.'];
-        }
+        // Delegate to savePOD — it now handles both update and insert
+        return $this->savePOD();
     }
 
     // ==============================
@@ -573,7 +719,12 @@ class FMS_DeliveryReceipt_Model extends Model
         if ($file->move($uploadPath, $newName)) {
             $relativePath = 'uploads/delivery_receipts/' . $newName;
 
-            $existing = $this->db->query("SELECT pod_id FROM tbl_delivery_receipt_pod WHERE dr_id = ? LIMIT 1", [$dr_id])->getRow();
+            $existing = $this->db->query("
+                SELECT pod_id FROM tbl_delivery_receipt_pod 
+                WHERE dr_id = ? 
+                ORDER BY pod_id DESC 
+                LIMIT 1
+            ", [$dr_id])->getRow();
 
             if ($existing) {
                 $this->db->query("
@@ -641,7 +792,13 @@ class FMS_DeliveryReceipt_Model extends Model
 
         $relativePath = 'uploads/delivery_receipts/' . $newName;
 
-        $existing = $this->db->query("SELECT pod_id FROM tbl_delivery_receipt_pod WHERE dr_id = ? LIMIT 1", [$dr_id])->getRow();
+        $existing = $this->db->query("
+            SELECT pod_id FROM tbl_delivery_receipt_pod 
+            WHERE dr_id = ? 
+            ORDER BY pod_id DESC 
+            LIMIT 1
+        ", [$dr_id])->getRow();
+
         if ($existing) {
             $this->db->query("
                 UPDATE tbl_delivery_receipt_pod 
@@ -660,99 +817,5 @@ class FMS_DeliveryReceipt_Model extends Model
             'message' => 'Signature saved successfully!',
             'path' => $relativePath
         ];
-    }
-
-    // ==============================
-    // CONTAINER RETURN METHODS
-    // ==============================
-    public function getContainerReturn($dr_id)
-    {
-        $query = $this->db->query("SELECT * FROM tbl_delivery_receipt_container_return WHERE dr_id = ?", [$dr_id]);
-        return $query->getRowArray();
-    }
-
-    public function saveContainerReturn()
-    {
-        $dr_id = $this->request->getPost('dr_id');
-        $container_return_required = $this->request->getPost('container_return_required') ?: 0;
-        $container_return_port = $this->request->getPost('container_return_port');
-        $container_return_date = $this->request->getPost('container_return_date');
-        $container_return_time = $this->request->getPost('container_return_time');
-        $container_return_status = $this->request->getPost('container_return_status') ?: 'NOT_APPLICABLE';
-        $container_return_odometer = $this->request->getPost('container_return_odometer') ?: 0;
-        $container_return_distance = $this->request->getPost('container_return_distance') ?: 0;
-        $container_return_proof = $this->request->getPost('container_return_proof');
-        $remarks = $this->request->getPost('remarks');
-
-        $existing = $this->db->query("SELECT return_id FROM tbl_delivery_receipt_container_return WHERE dr_id = ? LIMIT 1", [$dr_id])->getRow();
-        if($existing) {
-            $_POST['return_id'] = $existing->return_id;
-            return $this->updateContainerReturn();
-        }
-
-        $query = $this->db->query("
-            INSERT INTO `tbl_delivery_receipt_container_return`(
-                `dr_id`, `container_return_required`, `container_return_port`,
-                `container_return_date`, `container_return_time`, `container_return_status`,
-                `container_return_odometer`, `container_return_distance`,
-                `container_return_proof`, `remarks`, `created_by`
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            [
-                $dr_id, $container_return_required, $container_return_port,
-                $container_return_date, $container_return_time, $container_return_status,
-                $container_return_odometer, $container_return_distance,
-                $container_return_proof, $remarks, $this->cuser
-            ]
-        );
-
-        if ($query) {
-            return ['status' => 'success', 'message' => 'Container Return Saved Successfully!'];
-        } else {
-            return ['status' => 'error', 'message' => 'An error occurred while saving container return.'];
-        }
-    }
-
-    public function updateContainerReturn()
-    {
-        $return_id = $this->request->getPost('return_id');
-        $container_return_required = $this->request->getPost('container_return_required') ?: 0;
-        $container_return_port = $this->request->getPost('container_return_port');
-        $container_return_date = $this->request->getPost('container_return_date');
-        $container_return_time = $this->request->getPost('container_return_time');
-        $container_return_status = $this->request->getPost('container_return_status') ?: 'NOT_APPLICABLE';
-        $container_return_odometer = $this->request->getPost('container_return_odometer') ?: 0;
-        $container_return_distance = $this->request->getPost('container_return_distance') ?: 0;
-        $container_return_proof = $this->request->getPost('container_return_proof');
-        $remarks = $this->request->getPost('remarks');
-
-        if(!$return_id) {
-            return ['status' => 'error', 'message' => 'Missing container return ID.'];
-        }
-
-        $query = $this->db->query("
-            UPDATE `tbl_delivery_receipt_container_return`
-            SET 
-                `container_return_required` = ?, `container_return_port` = ?,
-                `container_return_date` = ?, `container_return_time` = ?,
-                `container_return_status` = ?, `container_return_odometer` = ?,
-                `container_return_distance` = ?, `container_return_proof` = ?,
-                `remarks` = ?, `updated_at` = NOW()
-            WHERE `return_id` = ?
-            ",
-            [
-                $container_return_required, $container_return_port,
-                $container_return_date, $container_return_time,
-                $container_return_status, $container_return_odometer,
-                $container_return_distance, $container_return_proof,
-                $remarks, $return_id
-            ]
-        );
-
-        if ($query) {
-            return ['status' => 'success', 'message' => 'Container Return Updated Successfully!'];
-        } else {
-            return ['status' => 'error', 'message' => 'An error occurred while updating container return.'];
-        }
     }
 }
