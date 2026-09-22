@@ -942,11 +942,13 @@ echo view('templates/myheader.php');
                                                 <i class="bi bi-printer"></i>
                                             </button>
                                             <?php endif; ?>
-                                            <button class="btn-icon btn-icon-view" 
-                                                    onclick="__Dispatch.__openWaypointTracking(<?=$row['trip_id'];?>, '<?=addslashes($row['trip_code']);?>')" 
+                                            <?php if($hasDispatch): ?>
+                                            <button class="btn-icon btn-icon-view"
+                                                    onclick="__Dispatch.__openWaypointTracking(<?=$row['trip_id'];?>, '<?=addslashes($row['trip_code']);?>')"
                                                     title="Track Waypoints">
                                                 <i class="bi bi-geo-alt"></i>
                                             </button>
+                                            <?php endif; ?>
                                             <?php if($hasDispatch && isset($row['dispatch_id']) && $row['dispatch_id']): ?>
                                             <button class="btn-icon btn-icon-delete" 
                                                     onclick="__Dispatch.__deleteDispatch(<?=$row['dispatch_id'];?>, <?=$row['trip_id'];?>)" 

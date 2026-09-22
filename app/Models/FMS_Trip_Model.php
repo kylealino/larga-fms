@@ -31,12 +31,14 @@ class FMS_Trip_Model extends Model
     // ==============================
     public function getAvailableTrucks()
     {
+        $trip_id = $this->request->getPost('trip_id');
         return $this->db->query("
-            SELECT truck_id, plate_number, vehicle_config, vehicle_type 
-            FROM tbl_trucks 
-            WHERE truck_status = 'AVAILABLE' AND vehicle_config = 'RIGID'
+            SELECT truck_id, plate_number, vehicle_config, vehicle_type
+            FROM tbl_trucks
+            WHERE vehicle_config = 'RIGID'
+              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT truck_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
-        ")->getResultArray();
+        ", [$trip_id])->getResultArray();
     }
 
     // ==============================
@@ -44,12 +46,14 @@ class FMS_Trip_Model extends Model
     // ==============================
     public function getAvailableTractors()
     {
+        $trip_id = $this->request->getPost('trip_id');
         return $this->db->query("
-            SELECT truck_id, plate_number, vehicle_config, vehicle_type 
-            FROM tbl_trucks 
-            WHERE truck_status = 'AVAILABLE' AND vehicle_config = 'TRACTOR'
+            SELECT truck_id, plate_number, vehicle_config, vehicle_type
+            FROM tbl_trucks
+            WHERE vehicle_config = 'TRACTOR'
+              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT tractor_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
-        ")->getResultArray();
+        ", [$trip_id])->getResultArray();
     }
 
     // ==============================
@@ -57,12 +61,14 @@ class FMS_Trip_Model extends Model
     // ==============================
     public function getAvailableChassis()
     {
+        $trip_id = $this->request->getPost('trip_id');
         return $this->db->query("
             SELECT truck_id, plate_number, vehicle_config, vehicle_type, body_type
-            FROM tbl_trucks 
-            WHERE truck_status = 'AVAILABLE' AND vehicle_config = 'TRAILER'
+            FROM tbl_trucks
+            WHERE vehicle_config = 'TRAILER'
+              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT chassis_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
-        ")->getResultArray();
+        ", [$trip_id])->getResultArray();
     }
 
     // ==============================
@@ -70,12 +76,13 @@ class FMS_Trip_Model extends Model
     // ==============================
     public function getAvailableDrivers()
     {
+        $trip_id = $this->request->getPost('trip_id');
         return $this->db->query("
-            SELECT driver_id, driver_name 
-            FROM tbl_drivers 
-            WHERE driver_status = 'AVAILABLE' 
+            SELECT driver_id, driver_name
+            FROM tbl_drivers
+            WHERE driver_status = 'AVAILABLE' OR driver_name = (SELECT driver_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
             ORDER BY driver_name
-        ")->getResultArray();
+        ", [$trip_id])->getResultArray();
     }
 
     // ==============================
@@ -83,12 +90,13 @@ class FMS_Trip_Model extends Model
     // ==============================
     public function getAvailableHelpers()
     {
+        $trip_id = $this->request->getPost('trip_id');
         return $this->db->query("
-            SELECT helper_id, helper_name 
-            FROM tbl_helpers 
-            WHERE helper_status = 'AVAILABLE' 
+            SELECT helper_id, helper_name
+            FROM tbl_helpers
+            WHERE helper_status = 'AVAILABLE' OR helper_name = (SELECT helper_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
             ORDER BY helper_name
-        ")->getResultArray();
+        ", [$trip_id])->getResultArray();
     }
 
     // ==============================
@@ -305,6 +313,19 @@ class FMS_Trip_Model extends Model
 
         if ($query) {
             $this->db->query("UPDATE tbl_trips SET has_assignment = 1, trip_status = 'ASSIGNED' WHERE trip_id = ?", [$trip_id]);
+
+            foreach ([$truck_plate, $tractor_plate, $chassis_plate] as $plate) {
+                if (!empty($plate)) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'ASSIGNED' WHERE plate_number = ?", [$plate]);
+                }
+            }
+            if (!empty($driver_name)) {
+                $this->db->query("UPDATE tbl_drivers SET driver_status = 'ASSIGNED' WHERE driver_name = ?", [$driver_name]);
+            }
+            if (!empty($helper_name)) {
+                $this->db->query("UPDATE tbl_helpers SET helper_status = 'ASSIGNED' WHERE helper_name = ?", [$helper_name]);
+            }
+
             return ['status' => 'success', 'message' => 'Assignment Saved Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while saving assignment.'];
@@ -341,9 +362,14 @@ class FMS_Trip_Model extends Model
             $chassis_type = 'RENTED';
         }
 
+        $old = $this->db->query("
+            SELECT truck_plate, tractor_plate, chassis_plate, driver_name, helper_name
+            FROM tbl_trip_assignments WHERE assignment_id = ?
+        ", [$assignment_id])->getRow();
+
         $query = $this->db->query("
             UPDATE `tbl_trip_assignments`
-            SET 
+            SET
                 `vehicle_type` = ?, `truck_plate` = ?, `tractor_plate` = ?, `chassis_plate` = ?,
                 `chassis_type` = ?, `vendor_name` = ?, `rental_rate` = ?,
                 `rental_start_date` = ?, `rental_end_date` = ?, `rental_agreement_no` = ?,
@@ -368,6 +394,39 @@ class FMS_Trip_Model extends Model
 
         if ($query) {
             $this->db->query("UPDATE tbl_trips SET has_assignment = 1, trip_status = 'ASSIGNED' WHERE trip_id = ?", [$trip_id]);
+
+            // Release resources swapped out during this update
+            if ($old) {
+                if (!empty($old->truck_plate) && $old->truck_plate !== $truck_plate) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->truck_plate]);
+                }
+                if (!empty($old->tractor_plate) && $old->tractor_plate !== $tractor_plate) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->tractor_plate]);
+                }
+                if (!empty($old->chassis_plate) && $old->chassis_plate !== $chassis_plate) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->chassis_plate]);
+                }
+                if (!empty($old->driver_name) && $old->driver_name !== $driver_name) {
+                    $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_name = ?", [$old->driver_name]);
+                }
+                if (!empty($old->helper_name) && $old->helper_name !== $helper_name) {
+                    $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_name = ?", [$old->helper_name]);
+                }
+            }
+
+            // Mark newly/still assigned resources
+            foreach ([$truck_plate, $tractor_plate, $chassis_plate] as $plate) {
+                if (!empty($plate)) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'ASSIGNED' WHERE plate_number = ?", [$plate]);
+                }
+            }
+            if (!empty($driver_name)) {
+                $this->db->query("UPDATE tbl_drivers SET driver_status = 'ASSIGNED' WHERE driver_name = ?", [$driver_name]);
+            }
+            if (!empty($helper_name)) {
+                $this->db->query("UPDATE tbl_helpers SET helper_status = 'ASSIGNED' WHERE helper_name = ?", [$helper_name]);
+            }
+
             return ['status' => 'success', 'message' => 'Assignment Updated Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while updating assignment.'];

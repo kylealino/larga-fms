@@ -417,9 +417,10 @@ function __Trips() {
                     $('#assignment_rental_fields').hide();
                     $('#assignment_rented_section').hide();
                     
-                    __Trips.__loadResources();
-                    __Trips.__loadAssignment(trip_id);
-                    
+                    __Trips.__loadResources(trip_id).done(function() {
+                        __Trips.__loadAssignment(trip_id);
+                    });
+
                     var modal = new bootstrap.Modal(document.getElementById('assignmentModal'));
                     modal.show();
                 }
@@ -778,18 +779,20 @@ function __Trips() {
     // ==============================
     // LOAD RESOURCES
     // ==============================
-    this.__loadResources = function() {
-        this.__loadTrucks();
-        this.__loadTractors();
-        this.__loadChassis();
-        this.__loadDrivers();
-        this.__loadHelpers();
-        this.__loadVendors();
+    this.__loadResources = function(trip_id) {
+        return jQuery.when(
+            this.__loadTrucks(trip_id),
+            this.__loadTractors(trip_id),
+            this.__loadChassis(trip_id),
+            this.__loadDrivers(trip_id),
+            this.__loadHelpers(trip_id),
+            this.__loadVendors()
+        );
     };
 
-    this.__loadTrucks = function() {
-        var mparam = { meaction: 'GET_AVAILABLE_TRUCKS' };
-        jQuery.ajax({
+    this.__loadTrucks = function(trip_id) {
+        var mparam = { meaction: 'GET_AVAILABLE_TRUCKS', trip_id: trip_id || '' };
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
@@ -806,9 +809,9 @@ function __Trips() {
         });
     };
 
-    this.__loadTractors = function() {
-        var mparam = { meaction: 'GET_AVAILABLE_TRACTORS' };
-        jQuery.ajax({
+    this.__loadTractors = function(trip_id) {
+        var mparam = { meaction: 'GET_AVAILABLE_TRACTORS', trip_id: trip_id || '' };
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
@@ -825,9 +828,9 @@ function __Trips() {
         });
     };
 
-    this.__loadChassis = function() {
-        var mparam = { meaction: 'GET_AVAILABLE_CHASSIS' };
-        jQuery.ajax({
+    this.__loadChassis = function(trip_id) {
+        var mparam = { meaction: 'GET_AVAILABLE_CHASSIS', trip_id: trip_id || '' };
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
@@ -844,9 +847,9 @@ function __Trips() {
         });
     };
 
-    this.__loadDrivers = function() {
-        var mparam = { meaction: 'GET_AVAILABLE_DRIVERS' };
-        jQuery.ajax({
+    this.__loadDrivers = function(trip_id) {
+        var mparam = { meaction: 'GET_AVAILABLE_DRIVERS', trip_id: trip_id || '' };
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
@@ -863,9 +866,9 @@ function __Trips() {
         });
     };
 
-    this.__loadHelpers = function() {
-        var mparam = { meaction: 'GET_AVAILABLE_HELPERS' };
-        jQuery.ajax({
+    this.__loadHelpers = function(trip_id) {
+        var mparam = { meaction: 'GET_AVAILABLE_HELPERS', trip_id: trip_id || '' };
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';
@@ -884,7 +887,7 @@ function __Trips() {
 
     this.__loadVendors = function() {
         var mparam = { meaction: 'GET_ACTIVE_VENDORS' };
-        jQuery.ajax({
+        return jQuery.ajax({
             type: "POST", url: mesiteurl + 'fms-trips', data: mparam, dataType: 'json',
             success: function(data) {
                 var opts = '<option value="">— Select —</option>';

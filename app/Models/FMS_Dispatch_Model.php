@@ -582,25 +582,82 @@ class FMS_Dispatch_Model extends Model
         $waypoint_id = $this->request->getPost('waypoint_id');
         $actual_arrival = $this->request->getPost('actual_arrival');
         $arrival_remarks = $this->request->getPost('arrival_remarks');
-        
+
         if(!$actual_arrival) {
             return ['status' => 'error', 'message' => 'Please select arrival date/time'];
         }
-        
+
+        $waypoint = $this->db->query("SELECT trip_id, sequence FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id])->getRow();
+
+        $isLastWaypoint = false;
+        if ($waypoint) {
+            $lastSeq = $this->db->query("SELECT MAX(sequence) as max_seq FROM tbl_trip_waypoints WHERE trip_id = ?", [$waypoint->trip_id])->getRow();
+            $isLastWaypoint = $lastSeq && (int) $waypoint->sequence === (int) $lastSeq->max_seq;
+        }
+
+        $waypoint_status = $isLastWaypoint ? 'COMPLETED' : 'ARRIVED';
+
         $query = $this->db->query("
             UPDATE `tbl_trip_waypoints`
-            SET 
+            SET
                 `actual_arrival` = ?,
-                `waypoint_status` = 'ARRIVED',
+                `waypoint_status` = ?,
                 `arrival_remarks` = ?,
                 `updated_at` = NOW()
             WHERE `waypoint_id` = ?
-        ", [$actual_arrival, $arrival_remarks, $waypoint_id]);
-        
+        ", [$actual_arrival, $waypoint_status, $arrival_remarks, $waypoint_id]);
+
         if ($query) {
+            if ($isLastWaypoint) {
+                $this->completeTripResources($waypoint->trip_id, $actual_arrival);
+                return ['status' => 'success', 'message' => 'Last waypoint reached — trip completed, truck/driver/helper are now available.'];
+            }
             return ['status' => 'success', 'message' => 'Arrival recorded successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while recording arrival.'];
+        }
+    }
+
+    // ==============================
+    // COMPLETE TRIP: sync trip/dispatch status and free up resources
+    // ==============================
+    private function completeTripResources($trip_id, $actual_arrival)
+    {
+        $this->db->query("UPDATE tbl_trips SET trip_status = 'COMPLETED' WHERE trip_id = ?", [$trip_id]);
+
+        $ts = strtotime(str_replace('T', ' ', $actual_arrival));
+        $arrivalDate = date('Y-m-d', $ts);
+        $arrivalTime = date('H:i:s', $ts);
+
+        $dispatch = $this->db->query("SELECT dispatch_id FROM tbl_dispatch WHERE trip_id = ?", [$trip_id])->getRow();
+        if ($dispatch) {
+            $this->db->query("
+                UPDATE tbl_dispatch
+                SET dispatch_status = 'COMPLETED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
+                WHERE dispatch_id = ?
+            ", [$arrivalDate, $arrivalTime, $dispatch->dispatch_id]);
+        }
+
+        $assignment = $this->db->query("
+            SELECT truck_plate, tractor_plate, chassis_plate, driver_name, helper_name
+            FROM tbl_trip_assignments
+            WHERE trip_id = ?
+            ORDER BY assignment_id DESC
+            LIMIT 1
+        ", [$trip_id])->getRow();
+
+        if ($assignment) {
+            foreach ([$assignment->truck_plate, $assignment->tractor_plate, $assignment->chassis_plate] as $plate) {
+                if (!empty($plate)) {
+                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$plate]);
+                }
+            }
+            if (!empty($assignment->driver_name)) {
+                $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_name = ?", [$assignment->driver_name]);
+            }
+            if (!empty($assignment->helper_name)) {
+                $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_name = ?", [$assignment->helper_name]);
+            }
         }
     }
 

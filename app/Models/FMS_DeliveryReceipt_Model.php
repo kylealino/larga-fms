@@ -443,6 +443,20 @@ class FMS_DeliveryReceipt_Model extends Model
         );
 
         if ($query) {
+            // Sync dispatch/trip status when delivery is completed
+            if ($dr_status === 'DELIVERED') {
+                $dr = $this->db->query("SELECT dispatch_id, trip_id FROM tbl_delivery_receipts WHERE dr_id = ?", [$dr_id])->getRow();
+                if ($dr && $dr->dispatch_id) {
+                    $this->db->query("
+                        UPDATE tbl_dispatch
+                        SET dispatch_status = 'COMPLETED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
+                        WHERE dispatch_id = ?
+                    ", [$dr_date, $dr_time, $dr->dispatch_id]);
+
+                    $this->db->query("UPDATE tbl_trips SET trip_status = 'COMPLETED' WHERE trip_id = ?", [$dr->trip_id]);
+                }
+            }
+
             return ['status' => 'success', 'message' => 'Delivery Receipt Updated Successfully!'];
         } else {
             $error = $this->db->error();

@@ -141,6 +141,8 @@ function __Dispatch() {
                                             $('#dispatch_helper').val(helperValue);
                                             $('#dispatch_origin').val(originValue);
                                             $('#dispatch_destination').val(destinationValue);
+                                            $('#odometer_out').val(assignData.odometer_before_trip || 0);
+                                            $('#fuel_level_out').val(assignData.fuel_level || 100);
                                         }
                                     } else {
                                         $('#dispatch_vehicle_type_display').text('No assignment');
