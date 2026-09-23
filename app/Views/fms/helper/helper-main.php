@@ -606,6 +606,33 @@ echo view('templates/myheader.php');
     }
     .btn-icon-delete:hover { background: #fee2e2; border-color: #fca5a5; }
 
+    .btn-icon-time { color: #8b5cf6; } .btn-icon-time:hover { background: #ede9fe; border-color: #c4b5fd; }
+
+    /* Delivery history timeline */
+    .journey-timeline { position: relative; padding-left: 40px; margin-top: 12px; }
+    .journey-timeline::before {
+        content: ''; position: absolute; left: 15px; top: 8px; bottom: 8px;
+        width: 2px; background: var(--gray-200);
+    }
+    .journey-item {
+        position: relative; padding: 12px 16px; background: #ffffff;
+        border: 1px solid var(--gray-200); border-radius: 10px;
+        margin-bottom: 12px; box-shadow: var(--shadow);
+    }
+    .journey-item::before {
+        content: ''; position: absolute; left: -32px; top: 20px;
+        width: 14px; height: 14px; border-radius: 50%;
+        background: #ffffff; border: 3px solid var(--primary);
+    }
+    .journey-item.j-delivered::before { border-color: var(--success); }
+    .journey-item.j-partial::before { border-color: var(--warning); }
+    .journey-item.j-failed::before { border-color: var(--danger); }
+    .journey-item .j-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .journey-item .j-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); }
+    .journey-item .j-date { font-size: 11px; color: var(--gray-400); }
+    .journey-item .j-description { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+    .journey-item .j-details { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
     /* ============================================ */
     /* PROFILE PICTURE */
     /* ============================================ */
@@ -1145,12 +1172,17 @@ echo view('templates/myheader.php');
                                     </td>
                                     <td class="text-center">
                                         <div class="action-group">
-                                            <button class="btn-icon btn-icon-view" 
-                                                    onclick="viewHelper(<?=$row['helper_id'];?>)" 
+                                            <button class="btn-icon btn-icon-view"
+                                                    onclick="viewHelper(<?=$row['helper_id'];?>)"
                                                     title="View Helper">
                                                 <i class="bi bi-eye"></i>
                                             </button>
-                                            <button class="btn-icon btn-icon-edit" 
+                                            <button class="btn-icon btn-icon-time"
+                                                    onclick="__Helpers.__openHistoryModal(<?=$row['helper_id'];?>, '<?=addslashes($row['helper_name']);?>')"
+                                                    title="Delivery History">
+                                                <i class="bi bi-clock-history"></i>
+                                            </button>
+                                            <button class="btn-icon btn-icon-edit"
                                                     onclick="editHelper(<?=$row['helper_id'];?>)" 
                                                     title="Edit Helper">
                                                 <i class="bi bi-pencil"></i>
@@ -1411,6 +1443,35 @@ echo view('templates/myheader.php');
                 </button>
                 <button type="button" class="btn btn-danger" id="confirmDeleteBtn">
                     <i class="bi bi-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- DELIVERY HISTORY MODAL -->
+<!-- ============================================ -->
+<div class="modal fade" id="historyModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-clock-history me-2"></i>Delivery History — <span id="history_helper_name"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="history_helper_id">
+                <div id="historyContent">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x"></i> Close
                 </button>
             </div>
         </div>

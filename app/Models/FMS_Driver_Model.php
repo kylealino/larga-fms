@@ -596,7 +596,30 @@ class FMS_Driver_Model extends Model
         $overall_rating = $avg ? round($avg, 1) : 0;
         
         $this->db->query("UPDATE tbl_drivers SET overall_rating = ? WHERE driver_id = ?", [$overall_rating, $driver_id]);
-        
+
         return $overall_rating;
+    }
+
+    // ==============================
+    // GET DRIVER DELIVERY HISTORY
+    // ==============================
+    public function getDriverHistory($driver_id)
+    {
+        $driver = $this->db->query("SELECT driver_name FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRow();
+        if (!$driver || !$driver->driver_name) return [];
+
+        return $this->db->query("
+            SELECT t.trip_code, t.origin, t.destination, t.actual_delivery_date,
+                   c.customer_name,
+                   a.truck_plate, a.tractor_plate, a.chassis_plate, a.helper_name, a.assignment_date,
+                   dr.dr_code, dr.dr_status, dr.dr_date
+            FROM tbl_trip_assignments a
+            JOIN tbl_trips t ON a.trip_id = t.trip_id
+            LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
+            LEFT JOIN tbl_delivery_receipts dr ON dr.trip_id = t.trip_id
+            WHERE a.driver_name = ?
+              AND t.trip_status = 'COMPLETED'
+            ORDER BY t.actual_delivery_date DESC, a.assignment_id DESC
+        ", [$driver->driver_name])->getResultArray();
     }
 }

@@ -1086,13 +1086,14 @@ function __Dispatch() {
                 console.log('Waypoints tracking data:', data);
                 var html = '';
                 if(data && data.length > 0) {
+                    html += '<div class="journey-timeline">';
                     $.each(data, function(index, row) {
                         var statusBadge = getWaypointStatusBadge(row.waypoint_status);
                         var expectedArrival = row.expected_arrival ? formatDateTime(row.expected_arrival) : '—';
                         var expectedDeparture = row.expected_departure ? formatDateTime(row.expected_departure) : '—';
                         var actualArrival = row.actual_arrival ? formatDateTime(row.actual_arrival) : '—';
                         var actualDeparture = row.actual_departure ? formatDateTime(row.actual_departure) : '—';
-                        
+
                         var typeLabels = {
                             'GARAGE': 'Garage',
                             'EMPTY_CONTAINER_PICKUP': 'Empty Container Pickup',
@@ -1104,53 +1105,62 @@ function __Dispatch() {
                             'OTHER': 'Other'
                         };
                         var typeDisplay = typeLabels[row.waypoint_type] || row.waypoint_type || '—';
-                        
+
                         // Escape single quotes in waypoint name to prevent breaking inline JS
                         var safeName = (row.waypoint_name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-                        
+
+                        var itemCls = '';
                         var arrivalBtn = '';
                         var departureBtn = '';
-                        
+
                         if(row.waypoint_status == 'PENDING' || row.waypoint_status == '') {
-                            arrivalBtn = `<button class="btn btn-sm btn-success me-1" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'arrival', '${safeName}')" title="Record Arrival">
+                            arrivalBtn = `<button class="btn btn-sm btn-success" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'arrival', '${safeName}')" title="Record Arrival">
                                 <i class="bi bi-arrow-down-circle"></i> Arrive
                             </button>`;
                         } else if(row.waypoint_status == 'ARRIVED') {
-                            arrivalBtn = `<span class="badge badge-success me-1">Arrived</span>`;
+                            itemCls = 'wp-arrived';
                             departureBtn = `<button class="btn btn-sm btn-warning" onclick="__Dispatch.__openTrackingUpdate(${row.waypoint_id}, 'departure', '${safeName}')" title="Record Departure">
                                 <i class="bi bi-arrow-up-circle"></i> Depart
                             </button>`;
-                        } else if(row.waypoint_status == 'DEPARTED' || row.waypoint_status == 'COMPLETED') {
-                            arrivalBtn = `<span class="badge badge-success me-1">Arrived</span>`;
-                            departureBtn = `<span class="badge badge-warning">Departed</span>`;
+                        } else if(row.waypoint_status == 'DEPARTED') {
+                            itemCls = 'wp-departed';
+                        } else if(row.waypoint_status == 'COMPLETED') {
+                            itemCls = 'wp-completed';
                         }
-                        
-                        html += '<tr>';
-                        html += '<td>' + row.sequence + '</td>';
-                        html += '<td><strong>' + (row.waypoint_name || '—') + '</strong></td>';
-                        html += '<td>' + typeDisplay + '</td>';
-                        html += '<td>' + expectedArrival + '</td>';
-                        html += '<td>' + expectedDeparture + '</td>';
-                        html += '<td>' + actualArrival + '</td>';
-                        html += '<td>' + actualDeparture + '</td>';
-                        html += '<td>' + statusBadge + '</td>';
-                        html += '<td class="text-center">';
-                        html += '<div class="d-flex justify-content-center">';
-                        html += arrivalBtn;
-                        html += departureBtn;
+
+                        html += '<div class="journey-item ' + itemCls + '">';
+                        html += '<div class="wp-dot">' + row.sequence + '</div>';
+                        html += '<div class="j-header">';
+                        html += '<span class="j-type">' + typeDisplay + '</span>';
+                        html += statusBadge;
                         html += '</div>';
-                        html += '</td>';
-                        html += '</tr>';
+                        html += '<div class="j-description">' + (row.waypoint_name || '—') + '</div>';
+                        html += '<div class="j-details">';
+                        html += 'Expected Arrival: ' + expectedArrival + ' &nbsp;|&nbsp; Expected Departure: ' + expectedDeparture + '<br>';
+                        html += 'Actual Arrival: ' + actualArrival + ' &nbsp;|&nbsp; Actual Departure: ' + actualDeparture;
+                        html += '</div>';
+                        if(arrivalBtn || departureBtn) {
+                            html += '<div class="wp-actions">' + arrivalBtn + departureBtn + '</div>';
+                        }
+                        html += '</div>';
                     });
+                    html += '</div>';
                 } else {
-                    html = '<tr><td colspan="9" class="text-center text-muted">No waypoints found for this trip</td></tr>';
+                    html = '<div class="text-center py-4 text-muted">' +
+                           '<i class="bi bi-inbox" style="font-size:48px;opacity:0.3;"></i>' +
+                           '<h5 class="mt-3">No waypoints found</h5>' +
+                           '<p>This trip has no route waypoints defined.</p></div>';
                 }
                 $('#trackingWaypointsBody').html(html);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading waypoints: " + error);
                 console.error('Error loading waypoints:', error);
-                $('#trackingWaypointsBody').html('<tr><td colspan="9" class="text-center text-danger">Error loading waypoints</td></tr>');
+                $('#trackingWaypointsBody').html(
+                    '<div class="text-center py-4 text-danger">' +
+                    '<i class="bi bi-exclamation-triangle" style="font-size:48px;opacity:0.5;"></i>' +
+                    '<h5 class="mt-3">Failed to load waypoints</h5></div>'
+                );
             }
         });
     };

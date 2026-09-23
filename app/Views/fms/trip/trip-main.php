@@ -14,8 +14,9 @@ $trips = $query->getResultArray();
 $total_trips = count($trips);
 $total_scheduled = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status = 'SCHEDULED'")->getRow()->total;
 $total_assigned = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status = 'ASSIGNED'")->getRow()->total;
-$total_in_transit = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status IN ('DISPATCHED', 'IN_TRANSIT')")->getRow()->total;
-$total_completed = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status IN ('DELIVERED', 'COMPLETED')")->getRow()->total;
+$total_in_transit = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status IN ('IN_TRANSIT')")->getRow()->total;
+$total_dispatched = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status = 'DISPATCHED'")->getRow()->total;
+$total_completed = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE trip_status = 'COMPLETED'")->getRow()->total;
 
 echo view('templates/myheader.php');
 ?>
@@ -142,7 +143,7 @@ echo view('templates/myheader.php');
 
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 16px;
         margin-bottom: 24px;
     }
@@ -723,6 +724,14 @@ echo view('templates/myheader.php');
         </div>
         <div class="stat-right"><i class="bi bi-person-check"></i></div>
     </div>
+    <div class="stat-card" data-filter="DISPATCHED" onclick="filterTable('DISPATCHED')">
+        <div class="stat-left">
+            <div class="stat-label">Dispatched</div>
+            <div class="stat-value"><?=$total_dispatched;?></div>
+            <div class="stat-sub">Out for delivery</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-send"></i></div>
+    </div>
     <div class="stat-card" data-filter="IN_TRANSIT" onclick="filterTable('IN_TRANSIT')">
         <div class="stat-left">
             <div class="stat-label">In Transit</div>
@@ -730,6 +739,14 @@ echo view('templates/myheader.php');
             <div class="stat-sub">On the road</div>
         </div>
         <div class="stat-right"><i class="bi bi-arrow-right"></i></div>
+    </div>
+    <div class="stat-card" data-filter="COMPLETED" onclick="filterTable('COMPLETED')">
+        <div class="stat-left">
+            <div class="stat-label">Completed</div>
+            <div class="stat-value"><?=$total_completed;?></div>
+            <div class="stat-sub">Crew back, trip closed</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-check-circle"></i></div>
     </div>
 </div>
 
@@ -1511,6 +1528,12 @@ function filterTable(status) {
     } else if(status === 'IN_TRANSIT') {
         tripTable.column(columnIndex).search('Dispatched|In Transit', true, false).draw();
         $('.stat-card[data-filter="IN_TRANSIT"]').addClass('active');
+    } else if(status === 'DISPATCHED') {
+        tripTable.column(columnIndex).search('^Dispatched$', true, false).draw();
+        $('.stat-card[data-filter="DISPATCHED"]').addClass('active');
+    } else if(status === 'COMPLETED') {
+        tripTable.column(columnIndex).search('^Completed$', true, false).draw();
+        $('.stat-card[data-filter="COMPLETED"]').addClass('active');
     }
 }
 </script>

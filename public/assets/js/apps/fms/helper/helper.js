@@ -177,6 +177,74 @@ function __Helpers() {
         var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
     };
+
+    // ==========================================
+    // DELIVERY HISTORY
+    // ==========================================
+    this.__openHistoryModal = function(helper_id, helper_name) {
+        $('#history_helper_id').val(helper_id);
+        $('#history_helper_name').text(helper_name);
+        $('#historyContent').html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div></div>');
+
+        var modal = new bootstrap.Modal(document.getElementById('historyModal'));
+        modal.show();
+
+        var mparam = { helper_id: helper_id, meaction: 'GET_HELPER_HISTORY' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-helpers',
+            data: mparam,
+            dataType: 'json',
+            timeout: 30000,
+            success: function(data) {
+                var html = '';
+
+                if (data && data.length > 0) {
+                    html += '<div class="journey-timeline">';
+                    $.each(data, function(i, item) {
+                        var cls = '';
+                        var status = (item.dr_status || '').toUpperCase();
+                        if (status === 'DELIVERED') cls = 'j-delivered';
+                        else if (status === 'PARTIALLY_DELIVERED') cls = 'j-partial';
+                        else if (status === 'FAILED_DELIVERY' || status === 'CANCELLED') cls = 'j-failed';
+
+                        var dateStr = item.actual_delivery_date ? new Date(item.actual_delivery_date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—';
+                        var vehicle = item.truck_plate || (item.tractor_plate && item.chassis_plate ? item.tractor_plate + ' + ' + item.chassis_plate : (item.tractor_plate || item.chassis_plate)) || '—';
+
+                        html += '<div class="journey-item ' + cls + '">';
+                        html += '<div class="j-header">';
+                        html += '<span class="j-type">' + (item.trip_code || '') + '</span>';
+                        html += '<span class="j-date">' + dateStr + '</span>';
+                        html += '</div>';
+                        html += '<div class="j-description">' + (item.origin || '—') + ' &rarr; ' + (item.destination || '—') + '</div>';
+                        html += '<div class="j-details">Customer: ' + (item.customer_name || '—') +
+                                ' | Vehicle: ' + vehicle +
+                                ' | Driver: ' + (item.driver_name || '—') +
+                                (item.dr_code ? ' | DR: ' + item.dr_code + ' (' + (item.dr_status || '—') + ')' : '') + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    html = '<div class="text-center py-4 text-muted">' +
+                           '<i class="bi bi-inbox" style="font-size:48px;opacity:0.3;"></i>' +
+                           '<h5 class="mt-3">No delivery history yet</h5>' +
+                           '<p>This helper has no completed trips.</p></div>';
+                }
+
+                $('#historyContent').html(html);
+            },
+            error: function(xhr, status, error) {
+                console.error('Helper History Error:', status, error, xhr.responseText);
+                $('#historyContent').html(
+                    '<div class="text-center py-4 text-danger">' +
+                    '<i class="bi bi-exclamation-triangle" style="font-size:48px;opacity:0.5;"></i>' +
+                    '<h5 class="mt-3">Failed to load history</h5>' +
+                    '<p style="font-size:12px;">' + error + '</p></div>'
+                );
+            }
+        });
+    };
 }
 
 var deleteId = null;

@@ -123,7 +123,8 @@ class FMS_Tool_Model extends Model
         $serial_number = $this->request->getPost('serial_number');
         $purchase_date = $this->request->getPost('purchase_date') ?: null;
         $purchase_cost = $this->request->getPost('purchase_cost') ?: 0;
-        $quantity = intval($this->request->getPost('quantity')) ?: 1;
+        $quantity_post = $this->request->getPost('quantity');
+        $quantity = ($quantity_post === null || $quantity_post === '') ? 1 : intval($quantity_post);
         $quantity_on_hand = $quantity;
         $current_location = $this->request->getPost('current_location');
         $tool_condition = $this->request->getPost('tool_condition') ?: 'GOOD';
@@ -135,6 +136,13 @@ class FMS_Tool_Model extends Model
 
         if (in_array($availability, ['RETIRED','LOST'])) {
             $quantity_on_hand = 0;
+        }
+
+        if (!empty($serial_number)) {
+            $dup = $this->db->query("SELECT tool_id FROM tbl_tools WHERE serial_number = ? LIMIT 1", [$serial_number])->getRow();
+            if ($dup) {
+                return ['status' => 'error', 'message' => 'A tool with this serial number already exists.'];
+            }
         }
 
         $query = $this->db->query("
@@ -181,6 +189,13 @@ class FMS_Tool_Model extends Model
         $existing = $this->db->query("SELECT quantity, quantity_on_hand FROM tbl_tools WHERE tool_id = ?", [$tool_id])->getRow();
         if (!$existing) {
             return ['status' => 'error', 'message' => 'Tool not found.'];
+        }
+
+        if (!empty($serial_number)) {
+            $dup = $this->db->query("SELECT tool_id FROM tbl_tools WHERE serial_number = ? AND tool_id != ? LIMIT 1", [$serial_number, $tool_id])->getRow();
+            if ($dup) {
+                return ['status' => 'error', 'message' => 'A tool with this serial number already exists.'];
+            }
         }
 
         $old_qty = intval($existing->quantity);
@@ -238,6 +253,17 @@ class FMS_Tool_Model extends Model
     public function deleteTool()
     {
         $tool_id = $this->request->getPost('tool_id');
+
+        $openCount = $this->db->query("
+            SELECT COALESCE(SUM(quantity_pending), 0) as pending
+            FROM tbl_tool_issuances
+            WHERE tool_id = ? AND quantity_pending > 0
+        ", [$tool_id])->getRow()->pending;
+
+        if (intval($openCount) > 0) {
+            return ['status' => 'error', 'message' => 'Cannot delete: ' . intval($openCount) . ' unit(s) of this tool are still issued out.'];
+        }
+
         $query = $this->db->query("DELETE FROM `tbl_tools` WHERE `tool_id` = ?", [$tool_id]);
 
         if ($query) {
@@ -437,7 +463,8 @@ class FMS_Tool_Model extends Model
                             WHERE tool_id = ?
                         ", [$iss->tool_id]);
                     }
-                } else {
+                } elseif ($new_availability !== 'DAMAGED') {
+                    // Other units are still out — reassign, but don't clobber a just-set DAMAGED flag
                     $this->db->query("
                         UPDATE tbl_tools SET availability = 'ASSIGNED' WHERE tool_id = ?
                     ", [$iss->tool_id]);

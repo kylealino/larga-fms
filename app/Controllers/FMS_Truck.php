@@ -72,6 +72,12 @@ class FMS_Truck extends BaseController
                 echo json_encode($document);
                 break;
 
+            case 'GET_TRUCK_HISTORY':
+                $truck_id = $this->request->getPost('truck_id');
+                $history = $this->truckModel->getTruckHistory($truck_id);
+                echo json_encode($history);
+                break;
+
             default:
                 return view('fms/truck/truck-main');
                 break;

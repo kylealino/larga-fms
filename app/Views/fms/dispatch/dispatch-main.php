@@ -4,7 +4,7 @@ $this->db = \Config\Database::connect();
 
 // Fetch assigned trips
 $trips = $this->db->query("
-    SELECT t.*, 
+    SELECT t.*,
            c.customer_name,
            a.driver_name,
            a.helper_name,
@@ -15,6 +15,8 @@ $trips = $this->db->query("
            a.vendor_name,
            d.dispatch_id,
            d.dispatch_status,
+           d.container_return_required,
+           d.container_return_status,
            CASE WHEN d.dispatch_id IS NOT NULL THEN 1 ELSE 0 END as has_dispatch
     FROM tbl_trips t
     LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
@@ -28,12 +30,19 @@ $total_assigned = 0;
 $total_dispatched = 0;
 $total_in_transit = 0;
 $total_delivered = 0;
+$total_container_return = 0;
+$total_dispatch_completed = 0;
 
 foreach($trips as $row) {
     $total_assigned++; // Count all returned rows for "Total Assigned Trips" card
     if($row['dispatch_status'] == 'DISPATCHED') $total_dispatched++;
     elseif($row['dispatch_status'] == 'IN_TRANSIT') $total_in_transit++;
-    elseif($row['dispatch_status'] == 'DELIVERED' || $row['dispatch_status'] == 'COMPLETED') $total_delivered++;
+    elseif($row['dispatch_status'] == 'DELIVERED') $total_delivered++;
+    elseif($row['dispatch_status'] == 'COMPLETED') $total_dispatch_completed++;
+
+    if((int) ($row['container_return_required'] ?? 0) === 1 && $row['container_return_status'] !== 'RETURNED') {
+        $total_container_return++;
+    }
 }
 
 echo view('templates/myheader.php');
@@ -162,7 +171,7 @@ echo view('templates/myheader.php');
 
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 16px;
         margin-bottom: 24px;
     }
@@ -505,6 +514,33 @@ echo view('templates/myheader.php');
     .btn-icon-dispatch { color: var(--success); }
     .btn-icon-dispatch:hover { background: #d1fae5; border-color: #6ee7b7; }
 
+    /* Waypoint journey timeline */
+    .journey-timeline { position: relative; padding-left: 48px; margin-top: 4px; }
+    .journey-timeline::before {
+        content: ''; position: absolute; left: 19px; top: 4px; bottom: 4px;
+        width: 2px; background: var(--gray-200);
+    }
+    .journey-item {
+        position: relative; padding: 14px 16px; background: #ffffff;
+        border: 1px solid var(--gray-200); border-radius: 10px;
+        margin-bottom: 14px; box-shadow: var(--shadow);
+    }
+    .journey-item .wp-dot {
+        position: absolute; left: -48px; top: 12px;
+        width: 34px; height: 34px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        background: #ffffff; border: 3px solid var(--gray-300);
+        font-weight: 700; font-size: 13px; color: var(--gray-500);
+    }
+    .journey-item.wp-arrived .wp-dot { border-color: var(--info); color: var(--info); }
+    .journey-item.wp-departed .wp-dot { border-color: var(--warning); color: var(--warning); }
+    .journey-item.wp-completed .wp-dot { border-color: var(--success); background: var(--success); color: #ffffff; }
+    .journey-item .j-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .journey-item .j-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-500); }
+    .journey-item .j-description { font-size: 14px; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
+    .journey-item .j-details { font-size: 11px; color: var(--gray-500); line-height: 1.7; }
+    .journey-item .wp-actions { margin-top: 10px; display: flex; gap: 6px; }
+
     .btn-toolbar {
         padding: 5px 12px;
         border-radius: 6px;
@@ -804,9 +840,25 @@ echo view('templates/myheader.php');
         <div class="stat-left">
             <div class="stat-label">Delivered</div>
             <div class="stat-value"><?=$total_delivered;?></div>
-            <div class="stat-sub">Completed trips</div>
+            <div class="stat-sub">Cargo dropped off</div>
         </div>
         <div class="stat-right"><i class="bi bi-check-circle"></i></div>
+    </div>
+    <div class="stat-card" data-filter="CONTAINER_RETURN" onclick="filterTable('CONTAINER_RETURN')">
+        <div class="stat-left">
+            <div class="stat-label">Container Return</div>
+            <div class="stat-value"><?=$total_container_return;?></div>
+            <div class="stat-sub">Pending return to port</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-box-seam"></i></div>
+    </div>
+    <div class="stat-card" data-filter="COMPLETED" onclick="filterTable('COMPLETED')">
+        <div class="stat-left">
+            <div class="stat-label">Completed</div>
+            <div class="stat-value"><?=$total_dispatch_completed;?></div>
+            <div class="stat-sub">Crew back, dispatch closed</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-check2-all"></i></div>
     </div>
 </div>
 
@@ -927,6 +979,9 @@ echo view('templates/myheader.php');
                                         <span class="dispatch-badge <?=$dispatchClass;?>">
                                             <?=$dispatchLabel;?>
                                         </span>
+                                        <?php if((int) ($row['container_return_required'] ?? 0) === 1 && $row['container_return_status'] !== 'RETURNED'): ?>
+                                        <br><span class="badge badge-warning" style="font-size:9px;margin-top:4px;">Container Return</span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-center">
                                         <div class="action-group">
@@ -1402,7 +1457,7 @@ echo view('templates/myheader.php');
 <!-- WAYPOINT TRACKING MODAL -->
 <!-- ============================================ -->
 <div class="modal fade" id="waypointTrackingModal" tabindex="-1" data-bs-backdrop="static">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -1413,33 +1468,16 @@ echo view('templates/myheader.php');
             <div class="modal-body">
                 <input type="hidden" id="tracking_trip_id">
                 <input type="hidden" id="tracking_waypoint_id">
-                
+
                 <div class="card">
                     <div class="card-header bg-light">
                         <h6 class="mb-0"><i class="bi bi-list me-2"></i>Route Waypoints</h6>
                     </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead>
-                                    <tr>
-                                        <th width="50">#</th>
-                                        <th>Waypoint Name</th>
-                                        <th>Type</th>
-                                        <th>Expected Arrival</th>
-                                        <th>Expected Departure</th>
-                                        <th>Actual Arrival</th>
-                                        <th>Actual Departure</th>
-                                        <th width="100">Status</th>
-                                        <th width="150" class="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="trackingWaypointsBody">
-                                    <tr>
-                                        <td colspan="9" class="text-center text-muted">Loading waypoints...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="card-body">
+                        <div id="trackingWaypointsBody">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1553,13 +1591,26 @@ function filterTable(status) {
 
     if (status === 'all') {
         dispatchTable.column(columnIndex).search('', true, false).draw();
+        dispatchTable.column(7).search('', true, false).draw();
         $('#clearFilterBtn').hide();
         $('#recordCount').text('<?=count($trips);?> records');
+    } else if (status === 'CONTAINER_RETURN') {
+        // No dedicated status column for this — filter on the "Container Return" marker
+        // badge rendered in the Dispatch column instead.
+        dispatchTable.column(columnIndex).search('', true, false).draw();
+        dispatchTable.column(7).search('Container Return', true, false).draw();
+        $('#clearFilterBtn').show();
+
+        var info = dispatchTable.page.info();
+        $('#recordCount').text(info.recordsDisplay + ' records');
     } else {
+        dispatchTable.column(7).search('', true, false);
+
         var labelMap = {
             'DISPATCHED' : 'Dispatched',
             'IN_TRANSIT' : 'In Transit',
-            'DELIVERED'  : 'Delivered|Completed'
+            'DELIVERED'  : '^Delivered$',
+            'COMPLETED'  : '^Completed$'
         };
         var searchTerm = labelMap[status] || status;
 

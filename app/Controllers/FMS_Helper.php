@@ -45,6 +45,12 @@ class FMS_Helper extends BaseController
                 echo json_encode($helper);
                 break;
 
+            case 'GET_HELPER_HISTORY':
+                $helper_id = $this->request->getPost('helper_id');
+                $history = $this->helperModel->getHelperHistory($helper_id);
+                echo json_encode($history);
+                break;
+
             default:
                 return view('fms/helper/helper-main');
                 break;

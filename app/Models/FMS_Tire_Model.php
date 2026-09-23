@@ -100,6 +100,13 @@ class FMS_Tire_Model extends Model
         $tire_status = $this->request->getPost('tire_status') ?: 'IN_STOCK';
         $remarks = $this->request->getPost('remarks');
 
+        if (!empty($serial_number)) {
+            $dup = $this->db->query("SELECT tire_id FROM tbl_tires WHERE serial_number = ? LIMIT 1", [$serial_number])->getRow();
+            if ($dup) {
+                return ['status' => 'error', 'message' => 'A tire with this serial number already exists.'];
+            }
+        }
+
         $query = $this->db->query("
             INSERT INTO `tbl_tires`(
                 `tire_code`, `serial_number`, `model`, `brand`, `size`,
@@ -134,6 +141,13 @@ class FMS_Tire_Model extends Model
         $tire_status = $this->request->getPost('tire_status');
         $remarks = $this->request->getPost('remarks');
 
+        if (!empty($serial_number)) {
+            $dup = $this->db->query("SELECT tire_id FROM tbl_tires WHERE serial_number = ? AND tire_id != ? LIMIT 1", [$serial_number, $tire_id])->getRow();
+            if ($dup) {
+                return ['status' => 'error', 'message' => 'A tire with this serial number already exists.'];
+            }
+        }
+
         $query = $this->db->query("
             UPDATE `tbl_tires` SET
                 `serial_number` = ?, `model` = ?, `brand` = ?, `size` = ?,
@@ -158,6 +172,15 @@ class FMS_Tire_Model extends Model
     public function deleteTire()
     {
         $tire_id = $this->request->getPost('tire_id');
+
+        $activeInstall = $this->db->query("
+            SELECT installation_id FROM tbl_tire_installations WHERE tire_id = ? AND status = 'ACTIVE' LIMIT 1
+        ", [$tire_id])->getRow();
+
+        if ($activeInstall) {
+            return ['status' => 'error', 'message' => 'Cannot delete: this tire is currently installed on a truck.'];
+        }
+
         $query = $this->db->query("DELETE FROM `tbl_tires` WHERE `tire_id` = ?", [$tire_id]);
 
         if ($query) {
@@ -191,7 +214,8 @@ class FMS_Tire_Model extends Model
         $transaction_date = $this->request->getPost('transaction_date') ?: date('Y-m-d');
         $tire_id = $this->request->getPost('tire_id');
         $tire_code = $this->request->getPost('tire_code');
-        $quantity = $this->request->getPost('quantity') ?: 1;
+        $quantity_post = $this->request->getPost('quantity');
+        $quantity = ($quantity_post === null || $quantity_post === '') ? 1 : $quantity_post;
         $price = $this->request->getPost('price') ?: 0;
         $purpose = $this->request->getPost('purpose');
         $truck_id = $this->request->getPost('truck_id') ?: null;

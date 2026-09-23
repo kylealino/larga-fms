@@ -341,4 +341,27 @@ class FMS_Helper_Model extends Model
         $query = $this->db->query("SELECT * FROM tbl_helpers WHERE helper_id = ?", [$helper_id]);
         return $query->getRowArray();
     }
+
+    // ==============================
+    // GET HELPER DELIVERY HISTORY
+    // ==============================
+    public function getHelperHistory($helper_id)
+    {
+        $helper = $this->db->query("SELECT helper_name FROM tbl_helpers WHERE helper_id = ?", [$helper_id])->getRow();
+        if (!$helper || !$helper->helper_name) return [];
+
+        return $this->db->query("
+            SELECT t.trip_code, t.origin, t.destination, t.actual_delivery_date,
+                   c.customer_name,
+                   a.truck_plate, a.tractor_plate, a.chassis_plate, a.driver_name, a.assignment_date,
+                   dr.dr_code, dr.dr_status, dr.dr_date
+            FROM tbl_trip_assignments a
+            JOIN tbl_trips t ON a.trip_id = t.trip_id
+            LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
+            LEFT JOIN tbl_delivery_receipts dr ON dr.trip_id = t.trip_id
+            WHERE a.helper_name = ?
+              AND t.trip_status = 'COMPLETED'
+            ORDER BY t.actual_delivery_date DESC, a.assignment_id DESC
+        ", [$helper->helper_name])->getResultArray();
+    }
 }

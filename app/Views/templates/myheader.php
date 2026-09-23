@@ -718,7 +718,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Billing & AR</span>
           </li>
 
-          <li class="sidebar-item <?= strpos($current_url, 'billing') !== false ? 'active' : ''; ?>">
+          <li class="sidebar-item <?= (strpos($current_url, 'billing') !== false && strpos($current_url, 'billingreports') === false) ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>billing">
               <i class="bi bi-receipt"></i>
               <span>Billing Generation</span>

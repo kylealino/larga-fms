@@ -45,6 +45,12 @@ class FMS_Driver extends BaseController
                 echo json_encode($driver);
                 break;
 
+            case 'GET_DRIVER_HISTORY':
+                $driver_id = $this->request->getPost('driver_id');
+                $history = $this->driverModel->getDriverHistory($driver_id);
+                echo json_encode($history);
+                break;
+
             case 'SAVE_SKILLSET': 
                 $result = $this->driverModel->saveSkillset();
                 echo json_encode($result);

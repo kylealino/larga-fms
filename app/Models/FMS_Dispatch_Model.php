@@ -464,9 +464,17 @@ class FMS_Dispatch_Model extends Model
         $delay_reason = $this->request->getPost('delay_reason');
         $remarks = $this->request->getPost('remarks');
 
+        // Same container-return gate as the last-waypoint-arrival flow: don't let a
+        // manual "Completed" pick skip past a container that hasn't been returned yet.
+        $completionBlocked = false;
+        if ($dispatch_status === 'COMPLETED' && (int) $container_return_required === 1 && $container_return_status !== 'RETURNED') {
+            $dispatch_status = 'DELIVERED';
+            $completionBlocked = true;
+        }
+
         $query = $this->db->query("
             UPDATE `tbl_dispatch`
-            SET 
+            SET
                 `dispatch_date` = ?, `dispatch_time` = ?,
                 `truck` = ?, `driver` = ?, `helper` = ?,
                 `origin` = ?, `destination` = ?,
@@ -512,7 +520,14 @@ class FMS_Dispatch_Model extends Model
         if ($query) {
             // Update trip status
             $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$dispatch_status, $trip_id]);
-            
+
+            if ($dispatch_status === 'COMPLETED') {
+                $this->releaseTripResources($trip_id);
+            }
+
+            if ($completionBlocked) {
+                return ['status' => 'success', 'message' => 'Dispatch Updated — container return is still pending, so it was kept at Delivered instead of Completed.'];
+            }
             return ['status' => 'success', 'message' => 'Dispatch Updated Successfully!'];
         } else {
             $error = $this->db->error();
@@ -587,7 +602,7 @@ class FMS_Dispatch_Model extends Model
             return ['status' => 'error', 'message' => 'Please select arrival date/time'];
         }
 
-        $waypoint = $this->db->query("SELECT trip_id, sequence FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id])->getRow();
+        $waypoint = $this->db->query("SELECT trip_id, sequence, waypoint_type FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id])->getRow();
 
         $isLastWaypoint = false;
         if ($waypoint) {
@@ -608,9 +623,22 @@ class FMS_Dispatch_Model extends Model
         ", [$actual_arrival, $waypoint_status, $arrival_remarks, $waypoint_id]);
 
         if ($query) {
+            // Arriving at the container return stop closes out the container return sub-task
+            if ($waypoint && in_array($waypoint->waypoint_type, ['PORT_TERMINAL', 'RETURN_POINT'])) {
+                $ts = strtotime(str_replace('T', ' ', $actual_arrival));
+                $this->db->query("
+                    UPDATE tbl_dispatch
+                    SET container_return_status = 'RETURNED', container_return_date = ?, container_return_time = ?, updated_at = NOW()
+                    WHERE trip_id = ? AND container_return_required = 1 AND container_return_status != 'RETURNED'
+                ", [date('Y-m-d', $ts), date('H:i:s', $ts), $waypoint->trip_id]);
+            }
+
             if ($isLastWaypoint) {
-                $this->completeTripResources($waypoint->trip_id, $actual_arrival);
-                return ['status' => 'success', 'message' => 'Last waypoint reached — trip completed, truck/driver/helper are now available.'];
+                $completed = $this->completeTripResources($waypoint->trip_id, $actual_arrival);
+                if ($completed) {
+                    return ['status' => 'success', 'message' => 'Last waypoint reached — trip completed, truck/driver/helper are now available.'];
+                }
+                return ['status' => 'success', 'message' => 'Last waypoint reached, but container return is still pending — trip stays at Delivered until the container is returned.'];
             }
             return ['status' => 'success', 'message' => 'Arrival recorded successfully!'];
         } else {
@@ -620,16 +648,25 @@ class FMS_Dispatch_Model extends Model
 
     // ==============================
     // COMPLETE TRIP: sync trip/dispatch status and free up resources
+    // (gated on container return, when one is required)
     // ==============================
     private function completeTripResources($trip_id, $actual_arrival)
     {
+        $dispatch = $this->db->query("
+            SELECT dispatch_id, container_return_required, container_return_status
+            FROM tbl_dispatch WHERE trip_id = ?
+        ", [$trip_id])->getRow();
+
+        if ($dispatch && (int) $dispatch->container_return_required === 1 && $dispatch->container_return_status !== 'RETURNED') {
+            return false;
+        }
+
         $this->db->query("UPDATE tbl_trips SET trip_status = 'COMPLETED' WHERE trip_id = ?", [$trip_id]);
 
         $ts = strtotime(str_replace('T', ' ', $actual_arrival));
         $arrivalDate = date('Y-m-d', $ts);
         $arrivalTime = date('H:i:s', $ts);
 
-        $dispatch = $this->db->query("SELECT dispatch_id FROM tbl_dispatch WHERE trip_id = ?", [$trip_id])->getRow();
         if ($dispatch) {
             $this->db->query("
                 UPDATE tbl_dispatch
@@ -638,6 +675,19 @@ class FMS_Dispatch_Model extends Model
             ", [$arrivalDate, $arrivalTime, $dispatch->dispatch_id]);
         }
 
+        $this->releaseTripResources($trip_id);
+
+        return true;
+    }
+
+    // ==============================
+    // RELEASE TRIP RESOURCES: free the truck/tractor/chassis/driver/helper
+    // assigned to a trip back to AVAILABLE. Called whenever a trip/dispatch
+    // is marked COMPLETED, whether via last-waypoint-arrival or a manual
+    // dispatch edit.
+    // ==============================
+    private function releaseTripResources($trip_id)
+    {
         $assignment = $this->db->query("
             SELECT truck_plate, tractor_plate, chassis_plate, driver_name, helper_name
             FROM tbl_trip_assignments

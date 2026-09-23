@@ -443,17 +443,20 @@ class FMS_DeliveryReceipt_Model extends Model
         );
 
         if ($query) {
-            // Sync dispatch/trip status when delivery is completed
+            // Cargo delivered — mark dispatch/trip as DELIVERED. Actual COMPLETED (and
+            // freeing the truck/driver/helper) happens once the crew is back, via the
+            // last-waypoint-arrival flow in FMS_Dispatch_Model, so a tractor still en
+            // route to return a container isn't marked done early.
             if ($dr_status === 'DELIVERED') {
                 $dr = $this->db->query("SELECT dispatch_id, trip_id FROM tbl_delivery_receipts WHERE dr_id = ?", [$dr_id])->getRow();
                 if ($dr && $dr->dispatch_id) {
                     $this->db->query("
                         UPDATE tbl_dispatch
-                        SET dispatch_status = 'COMPLETED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
+                        SET dispatch_status = 'DELIVERED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
                         WHERE dispatch_id = ?
                     ", [$dr_date, $dr_time, $dr->dispatch_id]);
 
-                    $this->db->query("UPDATE tbl_trips SET trip_status = 'COMPLETED' WHERE trip_id = ?", [$dr->trip_id]);
+                    $this->db->query("UPDATE tbl_trips SET trip_status = 'DELIVERED' WHERE trip_id = ?", [$dr->trip_id]);
                 }
             }
 

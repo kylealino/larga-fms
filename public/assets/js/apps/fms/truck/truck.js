@@ -560,6 +560,73 @@ function __Trucks() {
             });
         }
     };
+
+    // ==========================================
+    // DELIVERY HISTORY
+    // ==========================================
+    this.__openHistoryModal = function(truck_id, plate_number) {
+        $('#history_truck_id').val(truck_id);
+        $('#history_truck_name').text(plate_number);
+        $('#historyContent').html('<div class="text-center py-4"><div class="spinner-border text-primary" role="status"></div></div>');
+
+        var modal = new bootstrap.Modal(document.getElementById('historyModal'));
+        modal.show();
+
+        var mparam = { truck_id: truck_id, meaction: 'GET_TRUCK_HISTORY' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-trucks',
+            data: mparam,
+            dataType: 'json',
+            timeout: 30000,
+            success: function(data) {
+                var html = '';
+
+                if (data && data.length > 0) {
+                    html += '<div class="journey-timeline">';
+                    $.each(data, function(i, item) {
+                        var cls = '';
+                        var status = (item.dr_status || '').toUpperCase();
+                        if (status === 'DELIVERED') cls = 'j-delivered';
+                        else if (status === 'PARTIALLY_DELIVERED') cls = 'j-partial';
+                        else if (status === 'FAILED_DELIVERY' || status === 'CANCELLED') cls = 'j-failed';
+
+                        var dateStr = item.actual_delivery_date ? new Date(item.actual_delivery_date).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : '—';
+
+                        html += '<div class="journey-item ' + cls + '">';
+                        html += '<div class="j-header">';
+                        html += '<span class="j-type">' + (item.trip_code || '') + '</span>';
+                        html += '<span class="j-date">' + dateStr + '</span>';
+                        html += '</div>';
+                        html += '<div class="j-description">' + (item.origin || '—') + ' &rarr; ' + (item.destination || '—') + '</div>';
+                        html += '<div class="j-details">Customer: ' + (item.customer_name || '—') +
+                                ' | Driver: ' + (item.driver_name || '—') +
+                                ' | Helper: ' + (item.helper_name || '—') +
+                                (item.dr_code ? ' | DR: ' + item.dr_code + ' (' + (item.dr_status || '—') + ')' : '') + '</div>';
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                } else {
+                    html = '<div class="text-center py-4 text-muted">' +
+                           '<i class="bi bi-inbox" style="font-size:48px;opacity:0.3;"></i>' +
+                           '<h5 class="mt-3">No delivery history yet</h5>' +
+                           '<p>This truck has no completed trips.</p></div>';
+                }
+
+                $('#historyContent').html(html);
+            },
+            error: function(xhr, status, error) {
+                console.error('Truck History Error:', status, error, xhr.responseText);
+                $('#historyContent').html(
+                    '<div class="text-center py-4 text-danger">' +
+                    '<i class="bi bi-exclamation-triangle" style="font-size:48px;opacity:0.5;"></i>' +
+                    '<h5 class="mt-3">Failed to load history</h5>' +
+                    '<p style="font-size:12px;">' + error + '</p></div>'
+                );
+            }
+        });
+    };
 }
 
 var deleteId = null;

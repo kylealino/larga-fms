@@ -145,6 +145,12 @@ class FMS_Supply_Model extends Model
     public function deleteSupply()
     {
         $supply_id = $this->request->getPost('supply_id');
+
+        $hasTransactions = $this->db->query("SELECT transaction_id FROM tbl_supply_transactions WHERE supply_id = ? LIMIT 1", [$supply_id])->getRow();
+        if ($hasTransactions) {
+            return ['status' => 'error', 'message' => 'Cannot delete: this supply has transaction history.'];
+        }
+
         $query = $this->db->query("DELETE FROM `tbl_supplies` WHERE `supply_id` = ?", [$supply_id]);
 
         if ($query) {
@@ -216,7 +222,13 @@ class FMS_Supply_Model extends Model
             $new_stock = floatval($quantity);
         }
 
-        $total_cost = floatval($quantity) * floatval($unit_cost);
+        // For ADJUSTMENT, `quantity` is an absolute stock value, not a delta — cost
+        // must reflect only the change in stock, not the full new value times unit cost.
+        if ($transaction_type == 'ADJUSTMENT') {
+            $total_cost = ($new_stock - $previous_stock) * floatval($unit_cost);
+        } else {
+            $total_cost = floatval($quantity) * floatval($unit_cost);
+        }
 
         $query = $this->db->query("
             INSERT INTO `tbl_supply_transactions`(
@@ -261,11 +273,29 @@ class FMS_Supply_Model extends Model
             return ['status' => 'error', 'message' => 'Transaction not found.'];
         }
 
+        // If a newer transaction exists for this supply, a full history replay is the
+        // only correct way to recompute stock (ADJUSTMENT rows set an absolute value,
+        // so later rows may depend on this one). Otherwise this is the latest
+        // transaction, and we can just revert to its own recorded previous_stock.
+        $hasNewerTxn = $this->db->query("
+            SELECT transaction_id FROM tbl_supply_transactions
+            WHERE supply_id = ? AND transaction_id > ?
+            LIMIT 1
+        ", [$txn->supply_id, $transaction_id])->getRow();
+
         $query = $this->db->query("DELETE FROM `tbl_supply_transactions` WHERE `transaction_id` = ?", [$transaction_id]);
 
         if ($query) {
-            // Recompute current stock from all remaining transactions
-            $this->recalcSupplyStock($txn->supply_id);
+            if ($hasNewerTxn) {
+                $this->recalcSupplyStock($txn->supply_id);
+            } else {
+                $supply = $this->db->query("SELECT minimum_stock FROM tbl_supplies WHERE supply_id = ?", [$txn->supply_id])->getRow();
+                $restored_stock = floatval($txn->previous_stock);
+                $new_status = $this->computeStatus($restored_stock, $supply->minimum_stock ?? 0);
+                $this->db->query("
+                    UPDATE tbl_supplies SET current_stock = ?, status = ?, updated_at = NOW() WHERE supply_id = ?
+                ", [$restored_stock, $new_status, $txn->supply_id]);
+            }
             return ['status' => 'success', 'message' => 'Transaction Deleted Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while deleting transaction.'];

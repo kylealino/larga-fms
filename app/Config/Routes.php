@@ -84,3 +84,57 @@ $routes->post('fms-supply', 'FMS_Supply::index', ['filter' => 'myauthuser']);
 // =============================================
 $routes->get('fms-tool', 'FMS_Tool::index', ['filter' => 'myauthuser']);
 $routes->post('fms-tool', 'FMS_Tool::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// BILLING GENERATION
+// =============================================
+$routes->get('billing', 'FMS_Billing::index', ['filter' => 'myauthuser']);
+$routes->post('billing', 'FMS_Billing::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// INVOICE GENERATION
+// =============================================
+$routes->get('invoice', 'FMS_Invoice::index', ['filter' => 'myauthuser']);
+$routes->post('invoice', 'FMS_Invoice::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// PAYMENT RECORDING
+// =============================================
+$routes->get('payment', 'FMS_Payment::index', ['filter' => 'myauthuser']);
+$routes->post('payment', 'FMS_Payment::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// ACCOUNTS RECEIVABLE
+// =============================================
+$routes->get('accountsreceivable', 'FMS_AR::index', ['filter' => 'myauthuser']);
+$routes->post('accountsreceivable', 'FMS_AR::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// STATEMENT OF ACCOUNT
+// =============================================
+$routes->get('statementofaccount', 'FMS_SOA::index', ['filter' => 'myauthuser']);
+$routes->post('statementofaccount', 'FMS_SOA::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// OPERATIONS REPORTS
+// =============================================
+$routes->get('operationsreports', 'FMS_OperationsReports::index', ['filter' => 'myauthuser']);
+$routes->post('operationsreports', 'FMS_OperationsReports::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// DELIVERY REPORTS
+// =============================================
+$routes->get('deliveryreports', 'FMS_DeliveryReports::index', ['filter' => 'myauthuser']);
+$routes->post('deliveryreports', 'FMS_DeliveryReports::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// BILLING REPORTS
+// =============================================
+$routes->get('billingreports', 'FMS_BillingReports::index', ['filter' => 'myauthuser']);
+$routes->post('billingreports', 'FMS_BillingReports::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// MAINTENANCE REPORTS
+// =============================================
+$routes->get('maintenancereports', 'FMS_MaintenanceReports::index', ['filter' => 'myauthuser']);
+$routes->post('maintenancereports', 'FMS_MaintenanceReports::index', ['filter' => 'myauthuser']);

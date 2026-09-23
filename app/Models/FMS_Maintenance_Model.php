@@ -228,6 +228,8 @@ class FMS_Maintenance_Model extends Model
 
         $total_cost = floatval($labor_cost) + $parts_total + floatval($other_cost);
 
+        $this->db->transStart();
+
         $query = $this->db->query("
             INSERT INTO `tbl_maintenance_records`(
                 `record_code`, `schedule_id`, `truck_id`, `truck_plate`, `maintenance_date`,
@@ -281,8 +283,10 @@ class FMS_Maintenance_Model extends Model
                 ", [$schedule_id]);
             }
 
+            $this->db->transComplete();
             return ['status' => 'success', 'message' => 'Maintenance Record Saved Successfully!', 'record_id' => $record_id];
         } else {
+            $this->db->transRollback();
             $error = $this->db->error();
             log_message('error', 'Maintenance Record Save Error: ' . print_r($error, true));
             return ['status' => 'error', 'message' => 'An error occurred while saving record.'];
@@ -348,12 +352,16 @@ class FMS_Maintenance_Model extends Model
     {
         $record_id = $this->request->getPost('record_id');
 
+        $this->db->transStart();
+
         $this->db->query("DELETE FROM `tbl_maintenance_parts` WHERE `record_id` = ?", [$record_id]);
         $query = $this->db->query("DELETE FROM `tbl_maintenance_records` WHERE `record_id` = ?", [$record_id]);
 
         if ($query) {
+            $this->db->transComplete();
             return ['status' => 'success', 'message' => 'Maintenance Record Deleted Successfully!'];
         } else {
+            $this->db->transRollback();
             return ['status' => 'error', 'message' => 'An error occurred while deleting record.'];
         }
     }
@@ -380,7 +388,8 @@ class FMS_Maintenance_Model extends Model
     {
         $record_id = $this->request->getPost('record_id');
         $part_name = $this->request->getPost('part_name');
-        $quantity = $this->request->getPost('quantity') ?: 1;
+        $quantity_post = $this->request->getPost('quantity');
+        $quantity = ($quantity_post === null || $quantity_post === '') ? 1 : $quantity_post;
         $unit_cost = $this->request->getPost('unit_cost') ?: 0;
         $supplier = $this->request->getPost('supplier');
         $warranty = $this->request->getPost('warranty');
@@ -412,7 +421,8 @@ class FMS_Maintenance_Model extends Model
     {
         $part_id = $this->request->getPost('part_id');
         $part_name = $this->request->getPost('part_name');
-        $quantity = $this->request->getPost('quantity') ?: 1;
+        $quantity_post = $this->request->getPost('quantity');
+        $quantity = ($quantity_post === null || $quantity_post === '') ? 1 : $quantity_post;
         $unit_cost = $this->request->getPost('unit_cost') ?: 0;
         $supplier = $this->request->getPost('supplier');
         $warranty = $this->request->getPost('warranty');
