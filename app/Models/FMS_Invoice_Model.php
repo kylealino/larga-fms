@@ -67,7 +67,7 @@ class FMS_Invoice_Model extends Model
                    c.customer_name,
                    b.billing_code,
                    CASE
-                       WHEN i.invoice_status IN ('PAID','CANCELLED','VOID','DRAFT') THEN i.invoice_status
+                       WHEN i.invoice_status IN ('PAID','CANCELLED','VOID') THEN i.invoice_status
                        WHEN i.due_date IS NOT NULL AND i.due_date < CURDATE() AND i.outstanding_balance > 0 THEN 'OVERDUE'
                        ELSE i.invoice_status
                    END as display_status

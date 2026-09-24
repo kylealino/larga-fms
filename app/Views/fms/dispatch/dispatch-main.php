@@ -27,6 +27,7 @@ $trips = $this->db->query("
 ")->getResultArray();
 
 $total_assigned = 0;
+$total_pending = 0;
 $total_dispatched = 0;
 $total_in_transit = 0;
 $total_delivered = 0;
@@ -35,6 +36,7 @@ $total_dispatch_completed = 0;
 
 foreach($trips as $row) {
     $total_assigned++; // Count all returned rows for "Total Assigned Trips" card
+    if(empty($row['dispatch_id'])) $total_pending++; // Assigned but not yet dispatched
     if($row['dispatch_status'] == 'DISPATCHED') $total_dispatched++;
     elseif($row['dispatch_status'] == 'IN_TRANSIT') $total_in_transit++;
     elseif($row['dispatch_status'] == 'DELIVERED') $total_delivered++;
@@ -820,6 +822,14 @@ echo view('templates/myheader.php');
         </div>
         <div class="stat-right"><i class="bi bi-truck"></i></div>
     </div>
+    <div class="stat-card" data-filter="PENDING" onclick="filterTable('PENDING')">
+        <div class="stat-left">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value"><?=$total_pending;?></div>
+            <div class="stat-sub">Awaiting dispatch</div>
+        </div>
+        <div class="stat-right"><i class="bi bi-hourglass-split"></i></div>
+    </div>
     <div class="stat-card" data-filter="DISPATCHED" onclick="filterTable('DISPATCHED')">
         <div class="stat-left">
             <div class="stat-label">Dispatched</div>
@@ -1594,6 +1604,16 @@ function filterTable(status) {
         dispatchTable.column(7).search('', true, false).draw();
         $('#clearFilterBtn').hide();
         $('#recordCount').text('<?=count($trips);?> records');
+    } else if (status === 'PENDING') {
+        // "Pending" lives in the Dispatch column (assigned but no dispatch record yet) —
+        // keep it separate from the Status column filters below so it doesn't get
+        // merged into Assigned/Dispatched/Completed trip_status rows.
+        dispatchTable.column(columnIndex).search('', true, false).draw();
+        dispatchTable.column(7).search('Pending', true, false).draw();
+        $('#clearFilterBtn').show();
+
+        var info = dispatchTable.page.info();
+        $('#recordCount').text(info.recordsDisplay + ' records');
     } else if (status === 'CONTAINER_RETURN') {
         // No dedicated status column for this — filter on the "Container Return" marker
         // badge rendered in the Dispatch column instead.

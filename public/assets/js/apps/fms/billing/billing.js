@@ -121,7 +121,30 @@ function __Billing() {
         $('#calc_subtotal').text('₱' + parseFloat(data.subtotal || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }));
         $('#calc_vat').text('₱' + parseFloat(data.vat || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }));
         $('#calc_other').text('₱' + parseFloat(data.other_charges || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }));
+        $('#calc_other').data('value', parseFloat(data.other_charges || 0));
         $('#calc_total').html('<strong>₱' + parseFloat(data.total || 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) + '</strong>');
+    };
+
+    // ==============================
+    // LIVE PREVIEW — recompute subtotal/VAT/total client-side as Rate/Quantity/
+    // Discount are typed, instead of waiting for a save round-trip. Other Charges
+    // itself only changes via SAVE_CHARGE/DELETE_CHARGE (server-computed there),
+    // so it's read from the value __updateCalcDisplay last stashed, not retyped here.
+    // ==============================
+    this.__recalcLive = function() {
+        var rate = parseFloat($('#billing_rate').val()) || 0;
+        var quantity = parseFloat($('#billing_quantity').val()) || 0;
+        var discount = parseFloat($('#billing_discount').val()) || 0;
+        var otherCharges = parseFloat($('#calc_other').data('value')) || 0;
+
+        var subtotal = rate * quantity;
+        var taxable = subtotal - discount;
+        var vat = taxable * 0.12;
+        var total = taxable + vat + otherCharges;
+
+        $('#calc_subtotal').text('₱' + subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 }));
+        $('#calc_vat').text('₱' + vat.toLocaleString('en-US', { minimumFractionDigits: 2 }));
+        $('#calc_total').html('<strong>₱' + total.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '</strong>');
     };
 
     this.__refreshBillingCalc = function() {
@@ -130,7 +153,15 @@ function __Billing() {
         jQuery.ajax({
             type: "POST", url: mesiteurl + 'billing', data: mparam, dataType: 'json',
             success: function(data) {
-                if (data) __Billing.__updateCalcDisplay(data);
+                if (!data) return;
+                // Only Other Charges is authoritative from the server here — Rate/Quantity/
+                // Discount in the form may still be unsaved edits, so don't let the server's
+                // last-saved subtotal/VAT/total clobber what's currently typed. Recompute
+                // those from the live form values instead, same as __recalcLive().
+                var otherCharges = parseFloat(data.other_charges || 0);
+                $('#calc_other').text('₱' + otherCharges.toLocaleString('en-US', { minimumFractionDigits: 2 }));
+                $('#calc_other').data('value', otherCharges);
+                __Billing.__recalcLive();
             }
         });
     };

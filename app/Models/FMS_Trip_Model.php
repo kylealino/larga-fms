@@ -156,6 +156,43 @@ class FMS_Trip_Model extends Model
 
         if ($query) {
             $trip_id = $this->db->insertID();
+
+            // Cargo items added in the New Trip modal are staged client-side (no trip_id
+            // exists yet to save them against) and sent together with the trip in one
+            // request, so they land in the same "Save Trip" click instead of a separate
+            // step afterward. Falls back to auto-creating a single item from the summary
+            // fields above when none were explicitly staged (e.g. an older/simpler caller).
+            $cargo_items_json = $this->request->getPost('cargo_items_json');
+            $cargoItems = $cargo_items_json ? json_decode($cargo_items_json, true) : null;
+
+            if (is_array($cargoItems) && count($cargoItems) > 0) {
+                foreach ($cargoItems as $item) {
+                    $item_description = trim($item['item_description'] ?? '');
+                    if ($item_description === '') {
+                        continue;
+                    }
+                    $this->db->query("
+                        INSERT INTO `tbl_trip_cargo_items`(
+                            `trip_id`, `item_description`, `quantity`, `unit`, `weight`, `remarks`, `created_by`
+                        )
+                        VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        [
+                            $trip_id, $item_description,
+                            $item['quantity'] ?? 0, $item['unit'] ?? '', $item['weight'] ?? 0,
+                            $item['remarks'] ?? '', $this->cuser
+                        ]
+                    );
+                }
+            } elseif (!empty($cargo_description)) {
+                $this->db->query("
+                    INSERT INTO `tbl_trip_cargo_items`(
+                        `trip_id`, `item_description`, `quantity`, `unit`, `weight`, `created_by`
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)",
+                    [$trip_id, $cargo_description, $quantity, $unit, $estimated_weight, $this->cuser]
+                );
+            }
+
             return ['status' => 'success', 'message' => 'Trip Saved Successfully!', 'trip_id' => $trip_id];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while saving.'];

@@ -89,9 +89,13 @@ class FMS_Payment_Model extends Model
             return ['status' => 'error', 'message' => 'Please select an invoice and enter a valid amount.'];
         }
 
-        $invoice = $this->db->query("SELECT customer_id FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
+        $invoice = $this->db->query("SELECT customer_id, outstanding_balance FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
         if (!$invoice) {
             return ['status' => 'error', 'message' => 'Invoice not found.'];
+        }
+
+        if ($payment_status === 'CLEARED' && $amount_paid > $invoice->outstanding_balance) {
+            return ['status' => 'error', 'message' => 'Payment amount (₱' . number_format($amount_paid, 2) . ') exceeds the outstanding balance (₱' . number_format($invoice->outstanding_balance, 2) . ').'];
         }
 
         $receipt_number = $this->generateReceiptNumber();
@@ -131,9 +135,22 @@ class FMS_Payment_Model extends Model
         $payment_status = $this->request->getPost('payment_status') ?: 'CLEARED';
         $remarks = $this->request->getPost('remarks');
 
-        $existing = $this->db->query("SELECT invoice_id FROM tbl_payments WHERE payment_id = ?", [$payment_id])->getRow();
+        $existing = $this->db->query("SELECT invoice_id, amount_paid, payment_status FROM tbl_payments WHERE payment_id = ?", [$payment_id])->getRow();
         if (!$existing) {
             return ['status' => 'error', 'message' => 'Payment not found.'];
+        }
+
+        if ($payment_status === 'CLEARED') {
+            $invoice = $this->db->query("SELECT total_amount FROM tbl_invoices WHERE invoice_id = ?", [$existing->invoice_id])->getRow();
+            $otherPaid = $this->db->query("
+                SELECT COALESCE(SUM(amount_paid),0) as total FROM tbl_payments
+                WHERE invoice_id = ? AND payment_id != ? AND payment_status = 'CLEARED'
+            ", [$existing->invoice_id, $payment_id])->getRow()->total;
+            $maxAllowed = $invoice->total_amount - $otherPaid;
+
+            if ($amount_paid > $maxAllowed) {
+                return ['status' => 'error', 'message' => 'Payment amount (₱' . number_format($amount_paid, 2) . ') would exceed the invoice total. Maximum allowed: ₱' . number_format(max(0, $maxAllowed), 2) . '.'];
+            }
         }
 
         $query = $this->db->query("
@@ -237,7 +254,7 @@ class FMS_Payment_Model extends Model
             WHERE invoice_id = ? AND payment_status = 'CLEARED'
         ", [$invoice_id])->getRow()->total;
 
-        $balance = $invoice->total_amount - $paid;
+        $balance = max(0, $invoice->total_amount - $paid);
 
         if ($balance <= 0) {
             $status = 'PAID';

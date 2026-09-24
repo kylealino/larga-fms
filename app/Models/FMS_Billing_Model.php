@@ -37,7 +37,7 @@ class FMS_Billing_Model extends Model
             FROM tbl_delivery_receipts dr
             LEFT JOIN tbl_trips t ON dr.trip_id = t.trip_id
             LEFT JOIN tbl_customers c ON dr.customer_id = c.customer_id
-            WHERE dr.dr_status = 'DELIVERED'
+            WHERE dr.dr_status IN ('DELIVERED', 'PARTIALLY_DELIVERED')
               AND NOT EXISTS (
                   SELECT 1 FROM tbl_billing b WHERE b.dr_id = dr.dr_id
               )

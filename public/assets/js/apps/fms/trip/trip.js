@@ -1,9 +1,14 @@
 var __Trips = new __Trips();
 
-function __Trips() {  
+function __Trips() {
     const mesiteurl = $('#__siteurl').attr('data-mesiteurl');
 
     console.log('Trips initialized, URL: ' + mesiteurl);
+
+    // Cargo items staged in the New Trip modal (no trip_id yet) — sent together
+    // with the trip on save instead of requiring a separate step afterward.
+    var stagedCargoItems = [];
+    var stagedCargoItemSeq = 0;
 
     // ==============================
     // TOGGLE VEHICLE FIELDS
@@ -140,6 +145,18 @@ function __Trips() {
             remarks: $('#form_remarks').val(),
             meaction: 'SAVE'
         };
+
+        if (stagedCargoItems.length > 0) {
+            mparam.cargo_items_json = JSON.stringify(stagedCargoItems.map(function(i) {
+                return {
+                    item_description: i.item_description,
+                    quantity: i.quantity,
+                    unit: i.unit,
+                    weight: i.weight,
+                    remarks: i.remarks
+                };
+            }));
+        }
 
         jQuery.ajax({
             type: "POST",
@@ -930,10 +947,15 @@ function __Trips() {
         $('#form_special_instructions').val('');
         $('#form_trip_status').val('SCHEDULED');
         $('#form_remarks').val('');
-        
-        // Hide cargo items card in New Trip mode
-        $('#cargoItemsCard').hide();
-        
+
+        // Cargo items can be added right away here — they're staged locally and
+        // saved together with the trip (no trip_id exists yet to save them against).
+        stagedCargoItems = [];
+        stagedCargoItemSeq = 0;
+        __Trips.__resetCargoItemForm();
+        $('#cargoItemsCard').show();
+        __Trips.__renderStagedCargoItems();
+
         $('#tripForm').removeClass('was-validated');
         var modal = new bootstrap.Modal(document.getElementById('tripModal'));
         modal.show();
@@ -978,7 +1000,9 @@ function __Trips() {
                     $('#form_trip_status').val(data.trip_status);
                     $('#form_remarks').val(data.remarks);
                     
-                    // Show cargo items section
+                    // Show cargo items section (existing trip — items save immediately via AJAX)
+                    stagedCargoItems = [];
+                    __Trips.__resetCargoItemForm();
                     $('#cargoItemsCard').show();
                     __Trips.__loadCargoItems(data.trip_id);
                     
@@ -1040,19 +1064,124 @@ function __Trips() {
     };
 
     // ==============================
+    // CARGO ITEMS — RESET MINI-FORM
+    // ==============================
+    this.__resetCargoItemForm = function() {
+        $('#cargo_item_description').val('');
+        $('#cargo_quantity').val('');
+        $('#cargo_unit').val('');
+        $('#cargo_weight').val('');
+        $('#cargo_remarks').val('');
+        $('#cargo_editing_id').val('');
+        var btn = $('#cargoActionBtn');
+        btn.html('<i class="bi bi-plus"></i> Add');
+        btn.attr('onclick', '__Trips.__saveCargoItem()');
+        btn.removeClass('btn-warning').addClass('btn-primary');
+    };
+
+    // ==============================
+    // CARGO ITEMS (STAGED — New Trip mode, no trip_id yet) — RENDER
+    // ==============================
+    this.__renderStagedCargoItems = function() {
+        var html = '';
+        if (stagedCargoItems.length > 0) {
+            $.each(stagedCargoItems, function(index, row) {
+                html += '<tr>';
+                html += '<td>' + (index + 1) + '</td>';
+                html += '<td><strong>' + row.item_description + '</strong></td>';
+                html += '<td>' + parseFloat(row.quantity || 0).toFixed(2) + '</td>';
+                html += '<td>' + (row.unit || '—') + '</td>';
+                html += '<td>' + parseFloat(row.weight || 0).toFixed(2) + '</td>';
+                html += '<td>' + (row.remarks || '—') + '</td>';
+                html += '<td class="text-center">';
+                html += '<div class="action-group">';
+                html += '<button type="button" class="btn-icon btn-icon-edit" onclick="__Trips.__editStagedCargoItem(' + row.localId + ')" title="Edit"><i class="bi bi-pencil"></i></button>';
+                html += '<button type="button" class="btn-icon btn-icon-delete" onclick="__Trips.__deleteStagedCargoItem(' + row.localId + ')" title="Delete"><i class="bi bi-trash"></i></button>';
+                html += '</div>';
+                html += '</td>';
+                html += '</tr>';
+            });
+        } else {
+            html = '<tr><td colspan="7" class="text-center text-muted">No cargo items added yet</td></tr>';
+        }
+        $('#cargoItemsBody').html(html);
+    };
+
+    // ==============================
+    // CARGO ITEMS (STAGED) — EDIT / UPDATE / DELETE
+    // ==============================
+    this.__editStagedCargoItem = function(localId) {
+        var item = stagedCargoItems.find(function(i) { return i.localId === localId; });
+        if (!item) return;
+
+        $('#cargo_editing_id').val('staged-' + localId);
+        $('#cargo_item_description').val(item.item_description);
+        $('#cargo_quantity').val(item.quantity);
+        $('#cargo_unit').val(item.unit);
+        $('#cargo_weight').val(item.weight);
+        $('#cargo_remarks').val(item.remarks);
+
+        var btn = $('#cargoActionBtn');
+        btn.html('<i class="bi bi-pencil"></i> Update');
+        btn.attr('onclick', '__Trips.__updateStagedCargoItem(' + localId + ')');
+        btn.removeClass('btn-primary').addClass('btn-warning');
+    };
+
+    this.__updateStagedCargoItem = function(localId) {
+        var item_description = $('#cargo_item_description').val().trim();
+        if(!item_description) {
+            toastr.warning('Please enter item description');
+            return;
+        }
+
+        var item = stagedCargoItems.find(function(i) { return i.localId === localId; });
+        if (item) {
+            item.item_description = item_description;
+            item.quantity = $('#cargo_quantity').val() || 0;
+            item.unit = $('#cargo_unit').val();
+            item.weight = $('#cargo_weight').val() || 0;
+            item.remarks = $('#cargo_remarks').val();
+        }
+
+        __Trips.__resetCargoItemForm();
+        __Trips.__renderStagedCargoItems();
+        toastr.success('Cargo item updated.');
+    };
+
+    this.__deleteStagedCargoItem = function(localId) {
+        if(confirm('Remove this cargo item?')) {
+            stagedCargoItems = stagedCargoItems.filter(function(i) { return i.localId !== localId; });
+            __Trips.__renderStagedCargoItems();
+        }
+    };
+
+    // ==============================
     // CARGO ITEMS — SAVE
     // ==============================
     this.__saveCargoItem = function() {
         var trip_id = $('#form_trip_id').val();
         var item_description = $('#cargo_item_description').val().trim();
 
-        if(!trip_id) {
-            toastr.warning('Please save the trip first');
-            return;
-        }
         if(!item_description) {
             toastr.warning('Please enter item description', 'Missing field');
             $('#cargo_item_description').focus();
+            return;
+        }
+
+        if(!trip_id) {
+            // New Trip mode — no trip_id yet, so stage the item locally instead of
+            // saving it to the database now. It's sent together with the trip on Save.
+            stagedCargoItems.push({
+                localId: ++stagedCargoItemSeq,
+                item_description: item_description,
+                quantity: $('#cargo_quantity').val() || 0,
+                unit: $('#cargo_unit').val(),
+                weight: $('#cargo_weight').val() || 0,
+                remarks: $('#cargo_remarks').val()
+            });
+            __Trips.__resetCargoItemForm();
+            __Trips.__renderStagedCargoItems();
+            toastr.success('Cargo item added — will be saved together with the trip.');
             return;
         }
 

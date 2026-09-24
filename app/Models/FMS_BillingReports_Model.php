@@ -108,7 +108,7 @@ class FMS_BillingReports_Model extends Model
                    i.total_amount, i.outstanding_balance,
                    c.customer_id, c.customer_name,
                    CASE
-                       WHEN i.invoice_status IN ('PAID','CANCELLED','VOID','DRAFT') THEN i.invoice_status
+                       WHEN i.invoice_status IN ('PAID','CANCELLED','VOID') THEN i.invoice_status
                        WHEN i.due_date IS NOT NULL AND i.due_date < CURDATE() AND i.outstanding_balance > 0 THEN 'OVERDUE'
                        ELSE i.invoice_status
                    END as display_status

@@ -2,6 +2,7 @@ var __Invoice = new __Invoice();
 
 function __Invoice() {
     const mesiteurl = $('#__siteurl').attr('data-mesiteurl');
+    var isCreatingInvoice = false;
 
     // ==============================
     // NEW INVOICE — PICK A BILLING
@@ -47,16 +48,121 @@ function __Invoice() {
         });
     };
 
+    // Selecting a billing does NOT create the invoice right away — it opens the
+    // Invoice Details modal pre-filled for review (invoice date, payment terms,
+    // remarks are all editable). The invoice is only actually generated, with its
+    // success toast, when "Generate Invoice" is clicked inside that modal.
     this.__pickBilling = function(billing_id) {
-        var modal = new bootstrap.Modal(document.getElementById('pickBillingModal'));
+        var pickModal = bootstrap.Modal.getInstance(document.getElementById('pickBillingModal'));
+        if (pickModal) pickModal.hide();
+
+        var mparam = { billing_id: billing_id, meaction: 'GET_BILLING' };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'billing',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                if (!data || !data.billing_id) {
+                    toastr.error('Billing not found.');
+                    return;
+                }
+                __Invoice.__openCreateInvoice(data);
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error loading billing: " + error);
+            }
+        });
+    };
+
+    this.__openCreateInvoice = function(billing) {
+        isCreatingInvoice = true;
+
+        $('#invoice_id').val('');
+        $('#invoice_pending_billing_id').val(billing.billing_id);
+        $('#invoiceModalTitle').html('<i class="bi bi-plus-circle me-2"></i>Generate Invoice');
+        $('#invoiceSubmitBtnText').text('Generate Invoice');
+
+        $('#invoice_code_display').text('Auto-generated');
+        $('#invoice_customer_display').text(billing.customer_name || '—');
+        $('#invoice_billing_display').text(billing.billing_code || '—');
+
+        var now = new Date();
+        var today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+        $('#invoice_date').val(today);
+        $('#invoice_payment_terms').val(billing.customer_payment_terms || '30 Days');
+        __Invoice.__previewDueDate();
+
+        // Discount/Status aren't accepted as overrides when generating from a billing
+        // (discount is fixed from the billing itself, status always starts DRAFT) —
+        // disable them here so the form doesn't imply they can be changed at this step.
+        $('#invoice_discount').val(parseFloat(billing.discount || 0).toFixed(2)).prop('disabled', true);
+        $('#invoice_status').val('DRAFT').prop('disabled', true);
+        $('#invoice_amount_paid').val('₱0.00');
+        $('#invoice_remarks').val('');
+
+        __Invoice.__updateCalcDisplay({
+            taxable_amount: (parseFloat(billing.subtotal) || 0) - (parseFloat(billing.discount) || 0),
+            vat: billing.vat,
+            total_amount: billing.total,
+            outstanding_balance: billing.total
+        });
+
+        var modal = new bootstrap.Modal(document.getElementById('invoiceModal'));
         modal.show();
-        this.__loadInvoiceableBillings();
+    };
+
+    // Live due-date preview while generating — mirrors the server's own
+    // computeDueDate() (first number found in Payment Terms, or 0 for COD, else 30).
+    this.__previewDueDate = function() {
+        if (!isCreatingInvoice) return;
+
+        var invoice_date = $('#invoice_date').val();
+        if (!invoice_date) return;
+
+        var payment_terms = $('#invoice_payment_terms').val() || '';
+        var days = 30;
+        var match = payment_terms.match(/(\d+)/);
+        if (match) {
+            days = parseInt(match[1], 10);
+        } else if (payment_terms.toUpperCase() === 'COD') {
+            days = 0;
+        }
+
+        // Build/format using local Y-M-D components (not toISOString(), which
+        // converts through UTC and can roll the date back a day in +UTC zones).
+        var parts = invoice_date.split('-');
+        var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        d.setDate(d.getDate() + days);
+
+        var y = d.getFullYear();
+        var m = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        $('#invoice_due_date').val(y + '-' + m + '-' + day);
+    };
+
+    this.__createInvoice = function() {
+        var billing_id = $('#invoice_pending_billing_id').val();
+        var invoice_date = $('#invoice_date').val();
+
+        if (!invoice_date) {
+            toastr.warning('Please select invoice date', 'Missing field');
+            $('#invoice_date').focus();
+            return;
+        }
 
         var mparam = {
             billing_id: billing_id,
-            invoice_date: new Date().toISOString().split('T')[0],
+            invoice_date: invoice_date,
+            payment_terms: $('#invoice_payment_terms').val(),
+            remarks: $('#invoice_remarks').val(),
             meaction: 'CREATE_INVOICE_FROM_BILLING'
         };
+
+        var btn = $('#invoiceSubmitBtn');
+        btn.prop('disabled', true);
+        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Generating...');
 
         jQuery.ajax({
             type: "POST",
@@ -64,21 +170,37 @@ function __Invoice() {
             data: mparam,
             dataType: 'json',
             success: function(data) {
+                btn.prop('disabled', false);
+                btn.html('<i class="bi bi-save"></i> <span id="invoiceSubmitBtnText">Generate Invoice</span>');
                 if (data.status == 'success') {
                     toastr.success(data.message);
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('pickBillingModal'));
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('invoiceModal'));
                     if (modal) modal.hide();
-                    __Invoice.__openViewInvoice(data.invoice_id);
+                    // Navigate to a clean URL (not location.reload()) — arriving here via
+                    // Billing's "Create Invoice" action leaves ?from_billing=X in the address
+                    // bar, and reloading that same URL would re-trigger the auto-open-modal
+                    // logic below for the billing that's now already invoiced.
+                    setTimeout(function() { window.location.href = mesiteurl + 'invoice'; }, 1200);
                 } else {
                     toastr.error(data.message);
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('pickBillingModal'));
-                    if (modal) modal.hide();
                 }
             },
             error: function(xhr, status, error) {
+                btn.prop('disabled', false);
+                btn.html('<i class="bi bi-save"></i> <span id="invoiceSubmitBtnText">Generate Invoice</span>');
                 toastr.error("Error: " + error);
             }
         });
+    };
+
+    // Dispatches to invoice creation (from a billing, not yet saved) or updating
+    // an existing invoice, depending on which the modal is currently showing.
+    this.__saveInvoiceModal = function() {
+        if (!$('#invoice_id').val()) {
+            __Invoice.__createInvoice();
+        } else {
+            __Invoice.__updateInvoice();
+        }
     };
 
     // ==============================
@@ -97,6 +219,13 @@ function __Invoice() {
                     toastr.error('Invoice not found.');
                     return;
                 }
+                isCreatingInvoice = false;
+                $('#invoice_pending_billing_id').val('');
+                $('#invoiceModalTitle').html('<i class="bi bi-file-earmark-text me-2"></i>Invoice Details');
+                $('#invoiceSubmitBtnText').text('Save Invoice');
+                $('#invoice_discount').prop('disabled', false);
+                $('#invoice_status').prop('disabled', false);
+
                 $('#invoice_id').val(data.invoice_id);
                 $('#invoice_code_display').text(data.invoice_code);
                 $('#invoice_customer_display').text(data.customer_name || '—');

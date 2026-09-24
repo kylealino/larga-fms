@@ -138,17 +138,27 @@ class FMS_OperationsReports_Model extends Model
     // ==============================
     public function getTruckUtilizationReport($filters)
     {
+        // tbl_dispatch.truck is free text — a single plate for RIGID trucks, or a composite
+        // "TRACTOR + CHASSIS" string for tractor/trailer combos. Match on either the whole
+        // string or either side of the " + " so combo vehicles get their activity counted too
+        // (a plain substring match would false-positive on plates like ABC-1234 vs ABC-12345).
         $rows = $this->db->query("
             SELECT tk.truck_id, tk.truck_code, tk.plate_number, tk.vehicle_type, tk.truck_status,
                    COALESCE(dsub.dispatch_count, 0) as dispatch_count,
                    COALESCE(dsub.total_distance, 0) as total_distance
             FROM tbl_trucks tk
             LEFT JOIN (
-                SELECT truck, COUNT(*) as dispatch_count, COALESCE(SUM(total_distance),0) as total_distance
-                FROM tbl_dispatch
-                WHERE dispatch_date BETWEEN ? AND ?
-                GROUP BY truck
-            ) dsub ON dsub.truck = tk.plate_number
+                SELECT tk2.truck_id,
+                       COUNT(d.dispatch_id) as dispatch_count,
+                       COALESCE(SUM(d.total_distance),0) as total_distance
+                FROM tbl_trucks tk2
+                LEFT JOIN tbl_dispatch d
+                    ON (d.truck = tk2.plate_number
+                        OR d.truck LIKE CONCAT(tk2.plate_number, ' + %')
+                        OR d.truck LIKE CONCAT('% + ', tk2.plate_number))
+                   AND d.dispatch_date BETWEEN ? AND ?
+                GROUP BY tk2.truck_id
+            ) dsub ON dsub.truck_id = tk.truck_id
             ORDER BY dispatch_count DESC, tk.truck_code ASC
         ", [$filters['date_from'], $filters['date_to']])->getResultArray();
 

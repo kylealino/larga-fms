@@ -1033,16 +1033,12 @@ echo view('templates/myheader.php');
                                     <textarea id="form_remarks" class="form-control" rows="2" placeholder="Additional notes"></textarea>
                                 </div>
                             </div>
-                            
-                            <div class="alert alert-info mt-3 mb-0">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <small>You can assign resources (driver, truck, etc.) after creating the trip using the <strong>Assign</strong> button.</small>
-                            </div>
                         </div>
                     </div>
 
                     <!-- ============================================ -->
-                    <!-- CARGO ITEMS SECTION (Edit mode only) -->
+                    <!-- CARGO ITEMS SECTION (New Trip: staged locally and saved -->
+                    <!-- together with the trip. Edit Trip: saved immediately.) -->
                     <!-- ============================================ -->
                     <div class="card mb-3" id="cargoItemsCard" style="display:none;">
                         <div class="card-header bg-light">
@@ -1098,12 +1094,17 @@ echo view('templates/myheader.php');
                                     </thead>
                                     <tbody id="cargoItemsBody">
                                         <tr>
-                                            <td colspan="7" class="text-center text-muted">Save trip first to add cargo items</td>
+                                            <td colspan="7" class="text-center text-muted">No cargo items added yet</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3 mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <small>You can assign resources (driver, truck, etc.) after creating the trip using the <strong>Assign</strong> button.</small>
                     </div>
                 </div>
                 <div class="modal-footer">

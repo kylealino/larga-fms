@@ -458,15 +458,15 @@ echo view('templates/myheader.php');
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Rate (&#8369;) <span class="required">*</span></label>
-                        <input type="number" class="form-control" id="billing_rate" step="0.01" placeholder="0.00">
+                        <input type="number" class="form-control" id="billing_rate" step="0.01" placeholder="0.00" oninput="__Billing.__recalcLive()">
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="billing_quantity" step="0.01" value="1">
+                        <input type="number" class="form-control" id="billing_quantity" step="0.01" value="1" oninput="__Billing.__recalcLive()">
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Discount (&#8369;)</label>
-                        <input type="number" class="form-control" id="billing_discount" step="0.01" placeholder="0.00">
+                        <input type="number" class="form-control" id="billing_discount" step="0.01" placeholder="0.00" oninput="__Billing.__recalcLive()">
                     </div>
                 </div>
 

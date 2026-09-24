@@ -1228,9 +1228,17 @@ function __Dispatch() {
                     toastr.success(data.message);
                     var modal = bootstrap.Modal.getInstance(document.getElementById('trackingUpdateModal'));
                     modal.hide();
-                    
-                    var trip_id = $('#tracking_trip_id').val();
-                    __Dispatch.__loadWaypointsTracking(trip_id);
+
+                    if (type === 'arrival') {
+                        // Recording an arrival can cascade to dispatch/trip status, container
+                        // return, and (on the last waypoint) freeing the truck/driver/helper —
+                        // none of which live-update elsewhere on the page (stat cards, the main
+                        // table row), so reload to reflect it everywhere instead of just here.
+                        setTimeout(function() { location.reload(); }, 1200);
+                    } else {
+                        var trip_id = $('#tracking_trip_id').val();
+                        __Dispatch.__loadWaypointsTracking(trip_id);
+                    }
                 } else {
                     toastr.error(data.message);
                 }

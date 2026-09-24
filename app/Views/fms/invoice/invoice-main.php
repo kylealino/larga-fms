@@ -385,11 +385,12 @@ echo view('templates/myheader.php');
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-file-earmark-text me-2"></i>Invoice Details</h5>
+                <h5 class="modal-title" id="invoiceModalTitle"><i class="bi bi-file-earmark-text me-2"></i>Invoice Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="invoice_id">
+                <input type="hidden" id="invoice_pending_billing_id">
 
                 <div class="invoice-info-box">
                     <div class="row">
@@ -402,7 +403,7 @@ echo view('templates/myheader.php');
                 <div class="row">
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Invoice Date <span class="required">*</span></label>
-                        <input type="date" class="form-control" id="invoice_date">
+                        <input type="date" class="form-control" id="invoice_date" oninput="__Invoice.__previewDueDate()">
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Due Date</label>
@@ -410,7 +411,7 @@ echo view('templates/myheader.php');
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Payment Terms</label>
-                        <input type="text" class="form-control" id="invoice_payment_terms" placeholder="e.g. 30 Days">
+                        <input type="text" class="form-control" id="invoice_payment_terms" placeholder="e.g. 30 Days" oninput="__Invoice.__previewDueDate()">
                     </div>
                     <div class="col-md-4 mb-2">
                         <label class="form-label">Discount (&#8369;)</label>
@@ -453,8 +454,8 @@ echo view('templates/myheader.php');
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x"></i> Close
                 </button>
-                <button type="button" class="btn btn-primary" id="invoiceSubmitBtn" onclick="__Invoice.__updateInvoice()">
-                    <i class="bi bi-save"></i> Save Invoice
+                <button type="button" class="btn btn-primary" id="invoiceSubmitBtn" onclick="__Invoice.__saveInvoiceModal()">
+                    <i class="bi bi-save"></i> <span id="invoiceSubmitBtnText">Save Invoice</span>
                 </button>
             </div>
         </div>

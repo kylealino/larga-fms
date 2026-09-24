@@ -420,6 +420,16 @@ class FMS_DeliveryReceipt_Model extends Model
         $dr_status = $this->request->getPost('dr_status');
         $remarks = $this->request->getPost('remarks');
 
+        if ($dr_status === 'DELIVERED') {
+            $hasShortfall = $this->db->query("
+                SELECT COUNT(*) as cnt FROM tbl_delivery_receipt_items
+                WHERE dr_id = ? AND (quantity_shortage > 0 OR quantity_damaged > 0)
+            ", [$dr_id])->getRow()->cnt;
+            if ($hasShortfall > 0) {
+                $dr_status = 'PARTIALLY_DELIVERED';
+            }
+        }
+
         $query = $this->db->query("
             UPDATE `tbl_delivery_receipts`
             SET 
@@ -447,7 +457,10 @@ class FMS_DeliveryReceipt_Model extends Model
             // freeing the truck/driver/helper) happens once the crew is back, via the
             // last-waypoint-arrival flow in FMS_Dispatch_Model, so a tractor still en
             // route to return a container isn't marked done early.
-            if ($dr_status === 'DELIVERED') {
+            if ($dr_status === 'DELIVERED' || $dr_status === 'PARTIALLY_DELIVERED') {
+                // dispatch/trip status track the truck's journey (which completed either way);
+                // tbl_dispatch.dispatch_status and tbl_trips.trip_status have no PARTIALLY_DELIVERED
+                // value of their own — the shortage/damage outcome lives on the DR record itself.
                 $dr = $this->db->query("SELECT dispatch_id, trip_id FROM tbl_delivery_receipts WHERE dr_id = ?", [$dr_id])->getRow();
                 if ($dr && $dr->dispatch_id) {
                     $this->db->query("
@@ -460,7 +473,11 @@ class FMS_DeliveryReceipt_Model extends Model
                 }
             }
 
-            return ['status' => 'success', 'message' => 'Delivery Receipt Updated Successfully!'];
+            $message = $dr_status === 'PARTIALLY_DELIVERED'
+                ? 'Delivery Receipt Updated — marked as Partially Delivered due to recorded shortage/damage.'
+                : 'Delivery Receipt Updated Successfully!';
+
+            return ['status' => 'success', 'message' => $message];
         } else {
             $error = $this->db->error();
             log_message('error', 'DR Update Error: ' . print_r($error, true));
