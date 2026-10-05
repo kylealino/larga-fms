@@ -7,6 +7,7 @@ use CodeIgniter\Router\RouteCollection;
  */
 
 $routes->get('/', 'Home::index');
+$routes->get('landing-page', 'Landing::index');
 $routes->get('myclientlogin', 'ClientHome::index');
 $routes->add('mylogin-auth', 'MyLogIn::auth');
 $routes->add('mylogout', 'MyLogIn::logout');
@@ -138,3 +139,9 @@ $routes->post('billingreports', 'FMS_BillingReports::index', ['filter' => 'myaut
 // =============================================
 $routes->get('maintenancereports', 'FMS_MaintenanceReports::index', ['filter' => 'myauthuser']);
 $routes->post('maintenancereports', 'FMS_MaintenanceReports::index', ['filter' => 'myauthuser']);
+
+// =============================================
+// USER MANAGEMENT (Users, Roles & Permissions)
+// =============================================
+$routes->get('usermanagement', 'FMS_UserManagement::index', ['filter' => 'myauthuser']);
+$routes->post('usermanagement', 'FMS_UserManagement::index', ['filter' => 'myauthuser']);

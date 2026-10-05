@@ -2,6 +2,44 @@
 // =============================================
 // FLEET MANAGEMENT - OPERATIONS DASHBOARD
 // =============================================
+helper('permission');
+$this->request = \Config\Services::request();
+$this->db = \Config\Database::connect();
+$this->session = session();
+$this->cuser = $this->session->get('__xsys_myuserzicas__');
+$role_name = $this->session->get('__xsys_myuserrolename__');
+
+$meUser = $this->db->query("SELECT full_name, position FROM myua_user WHERE username = ?", [$this->cuser])->getRowArray();
+$full_name = $meUser['full_name'] ?? $this->cuser;
+$position = $meUser['position'] ?? '';
+
+// ==============================
+// FILTERS (Month + Year — KPI cards are current-state snapshots and are not
+// affected by these; the Analytics widgets below are)
+// ==============================
+$filter_year = (int) ($this->request->getGet('filter_year') ?: date('Y'));
+$filter_month = $this->request->getGet('filter_month') ?: 'all';
+if ($filter_month !== 'all') { $filter_month = (int) $filter_month; }
+
+// ==============================
+// LIVE DATA
+// ==============================
+$dashboardModel = model('App\Models\FMS_Dashboard_Model');
+
+$fleet = $dashboardModel->getFleetStats($filter_year, $filter_month);
+$personnel = $dashboardModel->getPersonnelStats($filter_year, $filter_month);
+$trips = $dashboardModel->getTripStats($filter_year, $filter_month);
+$billing = $dashboardModel->getBillingStats($filter_year, $filter_month);
+$monthlyFuel = $dashboardModel->getMonthlyFuelExpense($filter_year);
+$fuelEfficiency = $dashboardModel->getFuelEfficiency($filter_year, $filter_month);
+$routes = $dashboardModel->getFrequentRoutes($filter_year, $filter_month);
+$services = $dashboardModel->getServiceTypeAnalysis($filter_year, $filter_month);
+$customers = $dashboardModel->getCustomerActivity($filter_year, $filter_month);
+$insights = $dashboardModel->getInsights($filter_year, $filter_month);
+
+$maxRouteCount = $routes ? max(array_column($routes, 'total')) : 0;
+$totalServiceRevenue = array_sum(array_column($services, 'revenue'));
+$periodLabel = $filter_month === 'all' ? (string) $filter_year : date('M', mktime(0,0,0,$filter_month,1)) . ' ' . $filter_year;
 
 echo view('templates/myheader.php');
 ?>
@@ -552,6 +590,13 @@ echo view('templates/myheader.php');
         font-family: var(--mono);
     }
 
+    .empty-note {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-align: center;
+        padding: 16px 8px;
+    }
+
     /* ============================================ */
     /* RESPONSIVE - KEEP HEADER FULL WIDTH */
     /* ============================================ */
@@ -751,139 +796,140 @@ echo view('templates/myheader.php');
                 <h2>
                     <i class="bi bi-truck"></i>
                     Fleet Operations Dashboard
-                    <span class="real-time-badge">Real-time</span>
+                    <span class="real-time-badge">Live Data</span>
                 </h2>
                 <div class="user-meta">
-                    <span><i class="bi bi-person-circle"></i> Juan Dela Cruz</span>
-                    <span><i class="bi bi-building"></i> Operations Manager</span>
+                    <span><i class="bi bi-person-circle"></i> <?= esc($full_name) ?></span>
+                    <?php if ($position): ?><span><i class="bi bi-building"></i> <?= esc($position) ?></span><?php endif; ?>
+                    <?php if ($role_name): ?><span><i class="bi bi-shield-lock"></i> <?= esc($role_name) ?></span><?php endif; ?>
                     <span><i class="bi bi-calendar3"></i> <?= date('M d, Y') ?></span>
                     <span class="live-clock"><i class="bi bi-clock"></i> <span id="liveClock"><?= date('h:i A') ?></span></span>
                 </div>
             </div>
         </div>
 
-        <!-- FILTER -->
+        <!-- FILTER (drives the Analytics widgets below; KPI cards are current-state) -->
         <form method="GET" action="" class="header-filter" id="filterForm">
-            <div class="filter-group">
-                <label for="filter_date">Date</label>
-                <input type="date" name="filter_date" id="filter_date" value="<?= date('Y-m-d') ?>">
-            </div>
             <div class="filter-group">
                 <label for="filter_month">Month</label>
                 <select name="filter_month" id="filter_month">
-                    <option value="all">All</option>
-                    <option value="01">Jan</option><option value="02">Feb</option>
-                    <option value="03">Mar</option><option value="04">Apr</option>
-                    <option value="05">May</option><option value="06">Jun</option>
-                    <option value="07" selected>Jul</option>
-                    <option value="08">Aug</option><option value="09">Sep</option>
-                    <option value="10">Oct</option><option value="11">Nov</option>
-                    <option value="12">Dec</option>
+                    <option value="all" <?= $filter_month === 'all' ? 'selected' : '' ?>>All</option>
+                    <?php for ($m = 1; $m <= 12; $m++): ?>
+                    <option value="<?= $m ?>" <?= $filter_month === $m ? 'selected' : '' ?>><?= date('M', mktime(0,0,0,$m,1)) ?></option>
+                    <?php endfor; ?>
                 </select>
             </div>
             <div class="filter-group">
                 <label for="filter_year">Year</label>
                 <select name="filter_year" id="filter_year">
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
+                    <?php for ($y = (int) date('Y') + 1; $y >= (int) date('Y') - 3; $y--): ?>
+                    <option value="<?= $y ?>" <?= $filter_year === $y ? 'selected' : '' ?>><?= $y ?></option>
+                    <?php endfor; ?>
                 </select>
             </div>
             <button type="submit" class="btn-filter-header"><i class="bi bi-check2"></i> Apply</button>
-            <a href="#" class="btn-reset-header" onclick="document.getElementById('filterForm').reset(); return false;"><i class="bi bi-arrow-counterclockwise"></i> Reset</a>
+            <a href="<?= current_url() ?>" class="btn-reset-header"><i class="bi bi-arrow-counterclockwise"></i> Reset</a>
         </form>
     </div>
 
+    <?php if (widget_visible('fleet_stats')): ?>
     <!-- ============================================ -->
-    <!-- OPERATIONAL KPI SUMMARY - COMPACT -->
+    <!-- FLEET STATS -->
     <!-- ============================================ -->
     <div class="row g-2 mb-2">
-        <!-- Row 1: Fleet Stats -->
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-truck"></i></div>
                 <div class="stat-label"><i class="bi bi-truck"></i> Total Trucks</div>
-                <div class="stat-value">25</div>
-                <div class="stat-sub">Fleet size</div>
+                <div class="stat-value"><?= $fleet['total_trucks'] ?></div>
+                <div class="stat-sub">Added in <?= esc($periodLabel) ?></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
                 <div class="stat-label"><i class="bi bi-check-circle"></i> Available Trucks</div>
-                <div class="stat-value">14 <span class="trend up">↑2</span></div>
-                <div class="stat-sub"><span class="highlight">56%</span> of fleet</div>
+                <div class="stat-value"><?= $fleet['available'] ?></div>
+                <div class="stat-sub"><span class="highlight"><?= $fleet['total_trucks'] > 0 ? round($fleet['available'] / $fleet['total_trucks'] * 100) : 0 ?>%</span> of fleet</div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-arrow-right"></i></div>
                 <div class="stat-label"><i class="bi bi-arrow-right"></i> In Transit</div>
-                <div class="stat-value">5 <span class="trend down">↓1</span></div>
-                <div class="stat-sub"><span class="highlight">20%</span> on road</div>
+                <div class="stat-value"><?= $fleet['in_transit'] ?></div>
+                <div class="stat-sub"><span class="highlight"><?= $fleet['total_trucks'] > 0 ? round($fleet['in_transit'] / $fleet['total_trucks'] * 100) : 0 ?>%</span> on road</div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-tools"></i></div>
                 <div class="stat-label"><i class="bi bi-tools"></i> Maintenance</div>
-                <div class="stat-value">2</div>
-                <div class="stat-sub"><span class="highlight">8%</span> of fleet</div>
+                <div class="stat-value"><?= $fleet['maintenance'] ?></div>
+                <div class="stat-sub"><span class="highlight"><?= $fleet['total_trucks'] > 0 ? round($fleet['maintenance'] / $fleet['total_trucks'] * 100) : 0 ?>%</span> of fleet</div>
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
-    <!-- Row 2: Personnel Stats -->
+    <?php if (widget_visible('personnel_stats')): ?>
+    <!-- ============================================ -->
+    <!-- PERSONNEL STATS -->
+    <!-- ============================================ -->
     <div class="row g-2 mb-2">
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-person-badge"></i></div>
                 <div class="stat-label"><i class="bi bi-person-badge"></i> Total Drivers</div>
-                <div class="stat-value">30</div>
-                <div class="stat-sub">Active drivers</div>
+                <div class="stat-value"><?= $personnel['total_drivers'] ?></div>
+                <div class="stat-sub">Hired in <?= esc($periodLabel) ?></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-person-check"></i></div>
                 <div class="stat-label"><i class="bi bi-person-check"></i> Available Drivers</div>
-                <div class="stat-value">18 <span class="trend up">↑3</span></div>
-                <div class="stat-sub"><span class="highlight">60%</span> available</div>
+                <div class="stat-value"><?= $personnel['available_drivers'] ?></div>
+                <div class="stat-sub"><span class="highlight"><?= $personnel['total_drivers'] > 0 ? round($personnel['available_drivers'] / $personnel['total_drivers'] * 100) : 0 ?>%</span> available</div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-person-plus"></i></div>
                 <div class="stat-label"><i class="bi bi-person-plus"></i> Total Helpers</div>
-                <div class="stat-value">25</div>
-                <div class="stat-sub">Active helpers</div>
+                <div class="stat-value"><?= $personnel['total_helpers'] ?></div>
+                <div class="stat-sub">Hired in <?= esc($periodLabel) ?></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-person-check"></i></div>
                 <div class="stat-label"><i class="bi bi-person-check"></i> Available Helpers</div>
-                <div class="stat-value">15</div>
-                <div class="stat-sub"><span class="highlight">60%</span> available</div>
+                <div class="stat-value"><?= $personnel['available_helpers'] ?></div>
+                <div class="stat-sub"><span class="highlight"><?= $personnel['total_helpers'] > 0 ? round($personnel['available_helpers'] / $personnel['total_helpers'] * 100) : 0 ?>%</span> available</div>
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
-    <!-- Row 3: Trip Stats -->
+    <?php if (widget_visible('trip_stats')): ?>
+    <!-- ============================================ -->
+    <!-- TRIP STATS -->
+    <!-- ============================================ -->
     <div class="row g-2 mb-2">
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-calendar-event"></i></div>
-                <div class="stat-label"><i class="bi bi-calendar-event"></i> Trips Today</div>
-                <div class="stat-value">12 <span class="trend up">↑3</span></div>
-                <div class="stat-sub">vs <span class="highlight">9</span> yesterday</div>
+                <div class="stat-label"><i class="bi bi-calendar-event"></i> Total Trips</div>
+                <div class="stat-value"><?= $trips['total_trips'] ?></div>
+                <div class="stat-sub"><?= esc($periodLabel) ?></div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-clock-history"></i></div>
                 <div class="stat-label"><i class="bi bi-clock-history"></i> Pending Dispatch</div>
-                <div class="stat-value">4</div>
+                <div class="stat-value"><?= $trips['pending_dispatch'] ?></div>
                 <div class="stat-sub">Awaiting assignment</div>
             </div>
         </div>
@@ -891,7 +937,7 @@ echo view('templates/myheader.php');
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-play-circle"></i></div>
                 <div class="stat-label"><i class="bi bi-play-circle"></i> Active Trips</div>
-                <div class="stat-value">6</div>
+                <div class="stat-value"><?= $trips['active_trips'] ?></div>
                 <div class="stat-sub">Currently on road</div>
             </div>
         </div>
@@ -899,27 +945,31 @@ echo view('templates/myheader.php');
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
                 <div class="stat-label"><i class="bi bi-check-circle-fill"></i> Completed Trips</div>
-                <div class="stat-value">8 <span class="trend up">↑2</span></div>
-                <div class="stat-sub">Today's completions</div>
+                <div class="stat-value"><?= $trips['completed_trips'] ?></div>
+                <div class="stat-sub"><?= esc($periodLabel) ?></div>
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
-    <!-- Row 4: Billing & Maintenance -->
+    <?php if (widget_visible('billing_stats')): ?>
+    <!-- ============================================ -->
+    <!-- BILLING & DELIVERIES -->
+    <!-- ============================================ -->
     <div class="row g-2 mb-3">
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-box-seam"></i></div>
-                <div class="stat-label"><i class="bi bi-box-seam"></i> Pending Deliveries</div>
-                <div class="stat-value">5</div>
-                <div class="stat-sub">Awaiting delivery</div>
+                <div class="stat-label"><i class="bi bi-box-seam"></i> Ongoing Trips</div>
+                <div class="stat-value"><?= $billing['ongoing_trips'] ?></div>
+                <div class="stat-sub">Not yet completed</div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-file-earmark-text"></i></div>
                 <div class="stat-label"><i class="bi bi-file-earmark-text"></i> Pending DRs</div>
-                <div class="stat-value">3</div>
+                <div class="stat-value"><?= $billing['pending_drs'] ?></div>
                 <div class="stat-sub">Delivery receipts</div>
             </div>
         </div>
@@ -927,7 +977,7 @@ echo view('templates/myheader.php');
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-file-earmark-arrow-up"></i></div>
                 <div class="stat-label"><i class="bi bi-file-earmark-arrow-up"></i> Pending Billing</div>
-                <div class="stat-value">7</div>
+                <div class="stat-value"><?= $billing['pending_billing'] ?></div>
                 <div class="stat-sub">Invoices to generate</div>
             </div>
         </div>
@@ -935,249 +985,178 @@ echo view('templates/myheader.php');
             <div class="stat-card">
                 <div class="stat-icon"><i class="bi bi-cash-stack"></i></div>
                 <div class="stat-label"><i class="bi bi-cash-stack"></i> Outstanding Receivables</div>
-                <div class="stat-value" style="font-size: 18px;">₱485,000</div>
+                <div class="stat-value" style="font-size: 18px;">₱<?= number_format($billing['outstanding_ar'], 0) ?></div>
                 <div class="stat-sub">Total AR balance</div>
             </div>
         </div>
     </div>
+    <?php endif; ?>
 
+    <?php if (widget_visible('fuel_chart') || widget_visible('fuel_efficiency')): ?>
     <!-- ============================================ -->
-    <!-- MONTHLY FUEL CONSUMPTION & ANALYSIS -->
+    <!-- FUEL EXPENSE & EFFICIENCY -->
     <!-- ============================================ -->
     <div class="row g-3 mb-3">
+        <?php if (widget_visible('fuel_chart')): ?>
         <div class="col-xl-8 col-lg-7">
             <div class="card-container">
                 <div class="section-title">
-                    <i class="bi bi-fuel-pump"></i> Monthly Fuel Consumption
-                    <span class="badge-count primary">2026</span>
-                    <span class="badge-count success">8,700 L</span>
+                    <i class="bi bi-fuel-pump"></i> Monthly Fuel Expense
+                    <span class="badge-count primary"><?= $filter_year ?></span>
+                    <span class="badge-count success">₱<?= number_format(array_sum($monthlyFuel), 0) ?></span>
                 </div>
                 <div class="chart-wrapper">
                     <canvas id="fuelChart"></canvas>
                 </div>
                 <div class="row g-1 mt-2">
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Total Fuel</div>
-                        <div style="font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">8,700 L</div>
+                    <div class="col-6">
+                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Total Fuel Cost (<?= $filter_year ?>)</div>
+                        <div style="font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">₱<?= number_format(array_sum($monthlyFuel), 2) ?></div>
                     </div>
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Total Cost</div>
-                        <div style="font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">₱539,400</div>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Avg KM/L</div>
-                        <div style="font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">4.8</div>
+                    <div class="col-6">
+                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Avg Monthly Cost</div>
+                        <div style="font-size: 14px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">₱<?= number_format(array_sum($monthlyFuel) / 12, 2) ?></div>
                     </div>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
+        <?php if (widget_visible('fuel_efficiency')): ?>
         <div class="col-xl-4 col-lg-5">
             <div class="card-container">
                 <div class="section-title">
                     <i class="bi bi-speedometer2"></i> Fuel Efficiency
-                    <span class="badge-count success">Monthly</span>
+                    <span class="badge-count success"><?= esc($periodLabel) ?></span>
                 </div>
                 <div class="mb-2">
                     <div class="fuel-stat">
                         <span class="fuel-label">Fuel Cost per KM</span>
-                        <span class="fuel-value">₱2.15</span>
+                        <span class="fuel-value"><?= $fuelEfficiency['cost_per_km'] !== null ? '₱' . number_format($fuelEfficiency['cost_per_km'], 2) : 'No data yet' ?></span>
                     </div>
                     <div class="fuel-stat">
                         <span class="fuel-label">Avg Fuel Consumption</span>
-                        <span class="fuel-value">2.8 L/km</span>
+                        <span class="fuel-value"><?= $fuelEfficiency['consumption_rate'] !== null ? number_format($fuelEfficiency['consumption_rate'], 2) . ' L/km' : 'No data yet' ?></span>
                     </div>
                 </div>
 
                 <div style="font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
-                    <i class="bi bi-truck"></i> Fuel by Truck
+                    <i class="bi bi-truck"></i> Fuel Cost by Truck
                 </div>
                 <div style="font-size: 10px;">
-                    <div class="fuel-stat">
-                        <span class="fuel-label">TRK-001</span>
-                        <span class="fuel-value">1,450 L</span>
-                    </div>
-                    <div class="fuel-stat">
-                        <span class="fuel-label">TRK-002</span>
-                        <span class="fuel-value">1,280 L</span>
-                    </div>
-                    <div class="fuel-stat">
-                        <span class="fuel-label">TRK-003</span>
-                        <span class="fuel-value">1,190 L</span>
-                    </div>
-                    <div class="fuel-stat">
-                        <span class="fuel-label">TRK-004</span>
-                        <span class="fuel-value">980 L</span>
-                    </div>
-                    <div class="fuel-stat">
-                        <span class="fuel-label">TRK-005</span>
-                        <span class="fuel-value">750 L</span>
-                    </div>
+                    <?php if ($fuelEfficiency['by_truck']): ?>
+                        <?php foreach ($fuelEfficiency['by_truck'] as $t): ?>
+                        <div class="fuel-stat">
+                            <span class="fuel-label"><?= esc($t['truck']) ?></span>
+                            <span class="fuel-value">₱<?= number_format($t['total_cost'], 2) ?></span>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="empty-note">No fuel expenses logged yet</div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
+    <?php endif; ?>
 
+    <?php if (widget_visible('route_analysis') || widget_visible('service_analysis')): ?>
     <!-- ============================================ -->
-    <!-- COMMON ROUTE ANALYSIS -->
+    <!-- ROUTE & SERVICE TYPE ANALYSIS -->
     <!-- ============================================ -->
     <div class="row g-3 mb-3">
+        <?php if (widget_visible('route_analysis')): ?>
         <div class="col-xl-6">
             <div class="card-container">
                 <div class="section-title">
                     <i class="bi bi-signpost-2"></i> Most Frequent Routes
                     <span class="badge-count primary">Top 5</span>
                 </div>
-                <div class="route-bar">
-                    <span class="route-label">Laguna → Manila</span>
-                    <div class="route-track">
-                        <div class="route-fill" style="width: 85%;">45</div>
+                <?php if ($routes): ?>
+                    <?php foreach ($routes as $r): ?>
+                    <div class="route-bar">
+                        <span class="route-label"><?= esc($r['origin']) ?> → <?= esc($r['destination']) ?></span>
+                        <div class="route-track">
+                            <div class="route-fill" style="width: <?= $maxRouteCount > 0 ? round($r['total'] / $maxRouteCount * 100) : 0 ?>%;"><?= $r['total'] ?></div>
+                        </div>
+                        <span class="route-count"><?= $r['total'] ?></span>
                     </div>
-                    <span class="route-count">45</span>
-                </div>
-                <div class="route-bar">
-                    <span class="route-label">Cavite → Manila</span>
-                    <div class="route-track">
-                        <div class="route-fill" style="width: 70%;">32</div>
-                    </div>
-                    <span class="route-count">32</span>
-                </div>
-                <div class="route-bar">
-                    <span class="route-label">Manila → Batangas</span>
-                    <div class="route-track">
-                        <div class="route-fill" style="width: 55%;">28</div>
-                    </div>
-                    <span class="route-count">28</span>
-                </div>
-                <div class="route-bar">
-                    <span class="route-label">Laguna → Cavite</span>
-                    <div class="route-track">
-                        <div class="route-fill" style="width: 40%;">21</div>
-                    </div>
-                    <span class="route-count">21</span>
-                </div>
-                <div class="route-bar">
-                    <span class="route-label">Batangas → Manila</span>
-                    <div class="route-track">
-                        <div class="route-fill" style="width: 30%;">18</div>
-                    </div>
-                    <span class="route-count">18</span>
-                </div>
-
-                <div class="row g-1 mt-2">
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Most Frequent Origin</div>
-                        <div style="font-size: 12px; font-weight: 700; color: var(--text-primary);">Laguna</div>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Most Frequent Destination</div>
-                        <div style="font-size: 12px; font-weight: 700; color: var(--text-primary);">Manila</div>
-                    </div>
-                    <div class="col-4">
-                        <div style="font-size: 9px; font-weight: 600; color: var(--text-muted);">Avg Distance</div>
-                        <div style="font-size: 12px; font-weight: 700; font-family: var(--mono); color: var(--text-primary);">85 km</div>
-                    </div>
-                </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="empty-note">No trips recorded for this period</div>
+                <?php endif; ?>
             </div>
         </div>
+        <?php endif; ?>
 
+        <?php if (widget_visible('service_analysis')): ?>
         <div class="col-xl-6">
             <div class="card-container">
                 <div class="section-title">
-                    <i class="bi bi-bar-chart-steps"></i> Shipment & Cargo Analysis
-                    <span class="badge-count primary">YTD</span>
+                    <i class="bi bi-bar-chart-steps"></i> Service Type Analysis
+                    <span class="badge-count primary"><?= $filter_month === 'all' ? $filter_year : date('M', mktime(0,0,0,$filter_month,1)) . ' ' . $filter_year ?></span>
                 </div>
+                <?php if ($services): ?>
                 <div class="table-responsive">
                     <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>Shipment Type</th>
+                                <th>Service Type</th>
                                 <th>Trips</th>
                                 <th>%</th>
                                 <th style="text-align: right;">Revenue</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach ($services as $s): ?>
                             <tr>
-                                <td><strong>FTL</strong></td>
-                                <td>85</td>
+                                <td><strong><?= esc($s['service_type']) ?></strong></td>
+                                <td><?= $s['trips'] ?></td>
                                 <td>
                                     <div style="display: flex; align-items: center; gap: 4px;">
                                         <div style="flex: 1; height: 6px; background: var(--bg-primary); border-radius: 3px; overflow: hidden;">
-                                            <div style="width: 42%; height: 100%; background: var(--accent); border-radius: 3px;"></div>
+                                            <div style="width: <?= $s['percent'] ?>%; height: 100%; background: var(--accent); border-radius: 3px;"></div>
                                         </div>
-                                        <span style="font-size: 10px; font-weight: 700; min-width: 35px; color: var(--text-primary);">42%</span>
+                                        <span style="font-size: 10px; font-weight: 700; min-width: 35px; color: var(--text-primary);"><?= $s['percent'] ?>%</span>
                                     </div>
                                 </td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱675K</td>
+                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱<?= number_format($s['revenue'], 0) ?></td>
                             </tr>
-                            <tr>
-                                <td><strong>Containerized</strong></td>
-                                <td>60</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 4px;">
-                                        <div style="flex: 1; height: 6px; background: var(--bg-primary); border-radius: 3px; overflow: hidden;">
-                                            <div style="width: 30%; height: 100%; background: #60a5fa; border-radius: 3px;"></div>
-                                        </div>
-                                        <span style="font-size: 10px; font-weight: 700; min-width: 35px; color: var(--text-primary);">30%</span>
-                                    </div>
-                                </td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱480K</td>
-                            </tr>
-                            <tr>
-                                <td><strong>General Cargo</strong></td>
-                                <td>35</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 4px;">
-                                        <div style="flex: 1; height: 6px; background: var(--bg-primary); border-radius: 3px; overflow: hidden;">
-                                            <div style="width: 17%; height: 100%; background: #f59e0b; border-radius: 3px;"></div>
-                                        </div>
-                                        <span style="font-size: 10px; font-weight: 700; min-width: 35px; color: var(--text-primary);">17%</span>
-                                    </div>
-                                </td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱280K</td>
-                            </tr>
-                            <tr>
-                                <td><strong>LTL</strong></td>
-                                <td>22</td>
-                                <td>
-                                    <div style="display: flex; align-items: center; gap: 4px;">
-                                        <div style="flex: 1; height: 6px; background: var(--bg-primary); border-radius: 3px; overflow: hidden;">
-                                            <div style="width: 11%; height: 100%; background: #10b981; border-radius: 3px;"></div>
-                                        </div>
-                                        <span style="font-size: 10px; font-weight: 700; min-width: 35px; color: var(--text-primary);">11%</span>
-                                    </div>
-                                </td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱176K</td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                             <tr style="background: var(--bg-primary); font-weight: 700; border-top: 2px solid var(--border-color);">
                                 <td style="color: var(--text-primary);">Total</td>
-                                <td style="color: var(--text-primary);">202</td>
+                                <td style="color: var(--text-primary);"><?= array_sum(array_column($services, 'trips')) ?></td>
                                 <td style="color: var(--text-primary);">100%</td>
-                                <td style="font-family: var(--mono); text-align: right; color: var(--success); font-size: 12px;">₱1,611K</td>
+                                <td style="font-family: var(--mono); text-align: right; color: var(--success); font-size: 12px;">₱<?= number_format($totalServiceRevenue, 0) ?></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                <div style="font-size: 9px; color: var(--text-muted); margin-top: 4px; font-weight: 500;">
-                    <i class="bi bi-info-circle"></i> Most Used: 40ft Container · Most Common: FTL
-                </div>
+                <?php else: ?>
+                    <div class="empty-note">No trips recorded for this period</div>
+                <?php endif; ?>
             </div>
         </div>
+        <?php endif; ?>
     </div>
+    <?php endif; ?>
 
+    <?php if (widget_visible('customer_activity') || widget_visible('dashboard_insights')): ?>
     <!-- ============================================ -->
-    <!-- CUSTOMER ACTIVITY & PERFORMANCE -->
+    <!-- CUSTOMER ACTIVITY & INSIGHTS -->
     <!-- ============================================ -->
     <div class="row g-3 mb-3">
+        <?php if (widget_visible('customer_activity')): ?>
         <div class="col-xl-8">
             <div class="card-container">
                 <div class="section-title">
                     <i class="bi bi-building"></i> Customer Activity & Performance
                     <span class="badge-count primary">Top 5</span>
                 </div>
+                <?php if ($customers): ?>
                 <div class="table-responsive">
                     <table class="table table-sm">
                         <thead>
@@ -1185,64 +1164,34 @@ echo view('templates/myheader.php');
                                 <th style="width:30px;">#</th>
                                 <th>Customer</th>
                                 <th style="text-align:center;">Trips</th>
-                                <th style="text-align:center;">Growth</th>
                                 <th style="text-align:right;">Billed</th>
                                 <th style="text-align:right;">Collected</th>
                                 <th style="text-align:right;">Outstanding</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php $rankColors = ['var(--accent)', '#60a5fa', '#f59e0b', '#10b981', '#8b5cf6']; ?>
+                            <?php foreach ($customers as $i => $c): ?>
                             <tr>
-                                <td><span style="display: inline-block; width: 22px; height: 22px; background: var(--accent); color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;">1</span></td>
-                                <td><strong style="color: var(--text-primary);">ABC Manufacturing</strong></td>
-                                <td style="text-align:center; font-weight:600;">45</td>
-                                <td style="text-align:center;"><span class="trend up" style="font-size: 10px; font-weight: 700;">↑25%</span></td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱675K</td>
-                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱600K</td>
-                                <td style="font-family: var(--mono); font-weight: 700; color: var(--warning); text-align: right; font-size: 11px;">₱75K</td>
+                                <td><span style="display: inline-block; width: 22px; height: 22px; background: <?= $rankColors[$i] ?? 'var(--accent)' ?>; color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;"><?= $i + 1 ?></span></td>
+                                <td><strong style="color: var(--text-primary);"><?= esc($c['customer_name']) ?></strong></td>
+                                <td style="text-align:center; font-weight:600;"><?= $c['trips'] ?></td>
+                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱<?= number_format($c['billed'], 0) ?></td>
+                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱<?= number_format($c['collected'], 0) ?></td>
+                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: <?= $c['outstanding'] > 0 ? 'var(--warning)' : 'var(--success)' ?>;">₱<?= number_format($c['outstanding'], 0) ?></td>
                             </tr>
-                            <tr>
-                                <td><span style="display: inline-block; width: 22px; height: 22px; background: #60a5fa; color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;">2</span></td>
-                                <td><strong style="color: var(--text-primary);">XYZ Trading</strong></td>
-                                <td style="text-align:center; font-weight:600;">38</td>
-                                <td style="text-align:center;"><span class="trend up" style="font-size: 10px; font-weight: 700;">↑11%</span></td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱570K</td>
-                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱570K</td>
-                                <td style="font-family: var(--mono); font-weight: 700; color: var(--success); text-align: right; font-size: 11px;">₱0</td>
-                            </tr>
-                            <tr>
-                                <td><span style="display: inline-block; width: 22px; height: 22px; background: #f59e0b; color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;">3</span></td>
-                                <td><strong style="color: var(--text-primary);">DEF Logistics</strong></td>
-                                <td style="text-align:center; font-weight:600;">31</td>
-                                <td style="text-align:center;"><span style="font-size: 10px; font-weight: 700; color: var(--success);">⭐+70%</span></td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱465K</td>
-                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱300K</td>
-                                <td style="font-family: var(--mono); font-weight: 700; color: var(--danger); text-align: right; font-size: 11px;">₱165K</td>
-                            </tr>
-                            <tr>
-                                <td><span style="display: inline-block; width: 22px; height: 22px; background: #10b981; color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;">4</span></td>
-                                <td><strong style="color: var(--text-primary);">GHI Enterprises</strong></td>
-                                <td style="text-align:center; font-weight:600;">25</td>
-                                <td style="text-align:center;"><span class="trend down" style="font-size: 10px; font-weight: 700;">↓5%</span></td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱375K</td>
-                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱350K</td>
-                                <td style="font-family: var(--mono); font-weight: 700; color: var(--warning); text-align: right; font-size: 11px;">₱25K</td>
-                            </tr>
-                            <tr>
-                                <td><span style="display: inline-block; width: 22px; height: 22px; background: #8b5cf6; color: #fff; border-radius: 50%; text-align: center; line-height: 22px; font-size: 10px; font-weight: 700;">5</span></td>
-                                <td><strong style="color: var(--text-primary);">JKL Solutions</strong></td>
-                                <td style="text-align:center; font-weight:600;">18</td>
-                                <td style="text-align:center;"><span class="trend up" style="font-size: 10px; font-weight: 700;">↑8%</span></td>
-                                <td style="font-family: var(--mono); font-weight: 700; text-align: right; font-size: 11px; color: var(--text-primary);">₱270K</td>
-                                <td style="font-family: var(--mono); text-align: right; font-size: 11px; color: var(--text-secondary);">₱220K</td>
-                                <td style="font-family: var(--mono); font-weight: 700; color: var(--warning); text-align: right; font-size: 11px;">₱50K</td>
-                            </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
+                <?php else: ?>
+                    <div class="empty-note">No customer billing activity for this period</div>
+                <?php endif; ?>
             </div>
         </div>
+        <?php endif; ?>
 
+        <?php if (widget_visible('dashboard_insights')): ?>
         <div class="col-xl-4">
             <div class="card-container">
                 <div class="section-title">
@@ -1252,40 +1201,38 @@ echo view('templates/myheader.php');
                 <div style="display: flex; flex-direction: column; gap: 3px;">
                     <div class="insight-item">
                         <span class="label">🏆 Top Customer</span>
-                        <span class="value">ABC Manufacturing</span>
-                    </div>
-                    <div class="insight-item success">
-                        <span class="label">⭐ Promising Client</span>
-                        <span class="value">DEF Logistics</span>
+                        <span class="value"><?= esc($insights['top_customer'] ?? '—') ?></span>
                     </div>
                     <div class="insight-item">
                         <span class="label">📍 Most Frequent Route</span>
-                        <span class="value">Laguna → Manila</span>
+                        <span class="value"><?= $insights['most_frequent_route'] ? esc($insights['most_frequent_route']['origin']) . ' → ' . esc($insights['most_frequent_route']['destination']) : '—' ?></span>
                     </div>
                     <div class="insight-item info">
-                        <span class="label">📦 Most Common Shipment</span>
-                        <span class="value">Full Truckload</span>
+                        <span class="label">📦 Most Common Service</span>
+                        <span class="value"><?= esc($insights['most_common_service'] ?? '—') ?></span>
                     </div>
                     <div class="insight-item">
-                        <span class="label">⛽ Monthly Fuel</span>
-                        <span class="value">8,700 L</span>
+                        <span class="label">⛽ Fuel Cost</span>
+                        <span class="value">₱<?= number_format($insights['period_fuel_cost'], 0) ?></span>
                     </div>
                     <div class="insight-item warning">
                         <span class="label">💰 Outstanding Receivables</span>
-                        <span class="value">₱485,000</span>
+                        <span class="value">₱<?= number_format($insights['outstanding_ar'], 0) ?></span>
                     </div>
                     <div class="insight-item danger">
                         <span class="label">⚠️ Upcoming Maintenance</span>
-                        <span class="value">5 Trucks</span>
+                        <span class="value"><?= $insights['upcoming_maintenance'] ?> Scheduled</span>
                     </div>
                     <div class="insight-item">
                         <span class="label">📄 Expiring Documents</span>
-                        <span class="value">3</span>
+                        <span class="value"><?= $insights['expiring_documents'] ?></span>
                     </div>
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
+    <?php endif; ?>
 
 </div>
 
@@ -1294,38 +1241,23 @@ echo view('templates/myheader.php');
 <!-- ============================================ -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
+    <?php if (widget_visible('fuel_chart')): ?>
     // =============================================
-    // FUEL CONSUMPTION CHART
+    // FUEL EXPENSE CHART (live data)
     // =============================================
     const fuelCtx = document.getElementById('fuelChart');
     if (fuelCtx) {
         new Chart(fuelCtx, {
             type: 'bar',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
                 datasets: [{
-                    label: 'Fuel (L)',
-                    data: [8500, 8900, 9200, 8700, 8400, 8800, 9300, 9100, 8600, 8900, 8500, 8700],
+                    label: 'Fuel Cost (₱)',
+                    data: <?= json_encode(array_values($monthlyFuel)) ?>,
                     backgroundColor: 'rgba(26, 107, 176, 0.6)',
                     borderColor: '#1a6bb0',
                     borderWidth: 2,
-                    borderRadius: 3,
-                    order: 1
-                }, {
-                    label: 'Cost (₱K)',
-                    data: [527, 552, 570, 539, 521, 546, 577, 564, 533, 552, 527, 539],
-                    type: 'line',
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245, 158, 11, 0.04)',
-                    borderWidth: 2,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#f59e0b',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 1,
-                    tension: 0.3,
-                    fill: true,
-                    order: 0,
-                    yAxisID: 'y1'
+                    borderRadius: 3
                 }]
             },
             options: {
@@ -1334,58 +1266,27 @@ echo view('templates/myheader.php');
                 plugins: {
                     legend: {
                         position: 'top',
-                        labels: {
-                            boxWidth: 10,
-                            padding: 6,
-                            font: { size: 9, weight: '600' },
-                            color: '#4a5568',
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
+                        labels: { boxWidth: 10, padding: 6, font: { size: 9, weight: '600' }, color: '#4a5568', usePointStyle: true, pointStyle: 'circle' }
                     },
                     tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                if (context.dataset.label === 'Fuel (L)') {
-                                    return context.parsed.y + ' L';
-                                } else {
-                                    return '₱' + context.parsed.y + 'K';
-                                }
-                            }
-                        }
+                        callbacks: { label: function(context) { return '₱' + context.parsed.y.toLocaleString(); } }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         grid: { color: 'rgba(0,0,0,0.03)' },
-                        ticks: {
-                            font: { size: 8 },
-                            color: '#718096',
-                            callback: function(value) { return value + 'L'; }
-                        }
-                    },
-                    y1: {
-                        position: 'right',
-                        beginAtZero: true,
-                        grid: { display: false },
-                        ticks: {
-                            font: { size: 8 },
-                            color: '#f59e0b',
-                            callback: function(value) { return '₱' + value + 'K'; }
-                        }
+                        ticks: { font: { size: 8 }, color: '#718096', callback: function(value) { return '₱' + value; } }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: {
-                            font: { size: 8 },
-                            color: '#718096'
-                        }
+                        ticks: { font: { size: 8 }, color: '#718096' }
                     }
                 }
             }
         });
     }
+    <?php endif; ?>
 
     // =============================================
     // LIVE CLOCK UPDATE

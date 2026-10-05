@@ -3,20 +3,21 @@ $this->request = \Config\Services::request();
 $this->db = \Config\Database::connect();
 $this->session = session();
 $this->cuser = $this->session->get('__xsys_myuserzicas__');
+helper('permission');
 
   $query = $this->db->query("
-  SELECT 
-      `full_name`, 
+  SELECT
+      `full_name`,
       `division`,
-      `section`, 
+      `section`,
       `position`,
-      `username`, 
+      `username`,
       `hash_password`,
       `hash_value`
-  FROM 
-      `myua_user` 
-  WHERE 
-      `username` = '$this->cuser'"
+  FROM
+      `myua_user`
+  WHERE
+      `username` = ?", [$this->cuser]
   );
 
   $data = $query->getRowArray();
@@ -24,6 +25,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
   $position = $data['position'];
   $section = $data['section'];
   $division = $data['division'];
+  $role_name = $this->session->get('__xsys_myuserrolename__');
   
   // Get current URL for active menu highlighting
   $current_url = current_url();
@@ -640,26 +642,32 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Operations</span>
           </li>
 
+          <?php if (user_can('fms-customers')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-customers') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-customers">
               <i class="bi bi-people"></i>
               <span>Customer Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-vendors')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-vendors') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-vendors">
               <i class="bi bi-building"></i>
               <span>Vendor Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-trucks')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-trucks') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-trucks">
               <i class="bi bi-truck"></i>
               <span>Truck Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
           <!-- <li class="sidebar-item <?= strpos($current_url, 'chassis') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>chassis">
@@ -668,19 +676,23 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             </a>
           </li> -->
 
+          <?php if (user_can('fms-drivers')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-drivers') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-drivers">
               <i class="bi bi-person-badge"></i>
               <span>Driver Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-helpers')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-helpers') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-helpers">
               <i class="bi bi-person-plus"></i>
               <span>Helper Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
           <!-- ============================================ -->
           <!-- TRIP & DISPATCH -->
@@ -689,27 +701,32 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Trip & Dispatch</span>
           </li>
 
+          <?php if (user_can('fms-trips')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-trips') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-trips">
               <i class="bi bi-calendar-event"></i>
               <span>Trip Scheduling</span>
             </a>
           </li>
+          <?php endif; ?>
 
-
+          <?php if (user_can('fms-dispatch')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-dispatch') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-dispatch">
               <i class="bi bi-send"></i>
               <span>Dispatch Monitoring</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-delivery-receipt')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-delivery-receipt') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-delivery-receipt">
               <i class="bi bi-receipt"></i>
               <span>Delivery Receipt</span>
             </a>
           </li>
+          <?php endif; ?>
 
           <!-- ============================================ -->
           <!-- BILLING & ACCOUNTS RECEIVABLE -->
@@ -718,40 +735,50 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Billing & AR</span>
           </li>
 
+          <?php if (user_can('billing')): ?>
           <li class="sidebar-item <?= (strpos($current_url, 'billing') !== false && strpos($current_url, 'billingreports') === false) ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>billing">
               <i class="bi bi-receipt"></i>
               <span>Billing Generation</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('invoice')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'invoice') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>invoice">
               <i class="bi bi-file-earmark-text"></i>
               <span>Invoice</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('payment')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'payment') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>payment">
               <i class="bi bi-credit-card"></i>
               <span>Payment Recording</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('accountsreceivable')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'accountsreceivable') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>accountsreceivable">
               <i class="bi bi-pie-chart"></i>
               <span>Accounts Receivable</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('statementofaccount')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'statementofaccount') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>statementofaccount">
               <i class="bi bi-file-earmark-bar-graph"></i>
               <span>Statement of Account</span>
             </a>
           </li>
+          <?php endif; ?>
 
           <!-- ============================================ -->
           <!-- MAINTENANCE MANAGEMENT -->
@@ -760,33 +787,41 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Maintenance</span>
           </li>
 
+          <?php if (user_can('fms-maintenance')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-maintenance') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-maintenance">
               <i class="bi bi-tools"></i>
               <span>Preventive Maintenance</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-tire')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-tire') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-tire">
               <i class="bi bi-circle-square"></i>
               <span>Tire Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-supply')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-supply') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-supply">
               <i class="bi bi-box"></i>
               <span>Supplies Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('fms-tool')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'fms-tool') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>fms-tool">
               <i class="bi bi-wrench"></i>
               <span>Tools Management</span>
             </a>
           </li>
+          <?php endif; ?>
 
           <!-- ============================================ -->
           <!-- REPORTS -->
@@ -795,41 +830,58 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
             <span>Reports</span>
           </li>
 
+          <?php if (user_can('operationsreports')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'operationsreports') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>operationsreports">
               <i class="bi bi-file-earmark-ruled"></i>
               <span>Operations Reports</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('deliveryreports')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'deliveryreports') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>deliveryreports">
               <i class="bi bi-file-earmark-check"></i>
               <span>Delivery Reports</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('billingreports')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'billingreports') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>billingreports">
               <i class="bi bi-bar-chart"></i>
               <span>Billing Reports</span>
             </a>
           </li>
+          <?php endif; ?>
 
+          <?php if (user_can('maintenancereports')): ?>
           <li class="sidebar-item <?= strpos($current_url, 'maintenancereports') !== false ? 'active' : ''; ?>">
             <a class="sidebar-link" href="<?=site_url();?>maintenancereports">
               <i class="bi bi-graph-up"></i>
               <span>Maintenance Reports</span>
             </a>
           </li>
+          <?php endif; ?>
 
-          <li class="sidebar-item <?= strpos($current_url, 'fleetanalysis') !== false ? 'active' : ''; ?>">
-            <a class="sidebar-link" href="<?=site_url();?>fleetanalysis">
-              <i class="bi bi-bar-chart-fill"></i>
-              <span>Fleet Analysis</span>
+          <!-- ============================================ -->
+          <!-- ADMINISTRATION -->
+          <!-- ============================================ -->
+          <?php if (user_can('usermanagement')): ?>
+          <li class="nav-small-cap">
+            <span>Administration</span>
+          </li>
+
+          <li class="sidebar-item <?= strpos($current_url, 'usermanagement') !== false ? 'active' : ''; ?>">
+            <a class="sidebar-link" href="<?=site_url();?>usermanagement">
+              <i class="bi bi-person-gear"></i>
+              <span>User Management</span>
             </a>
           </li>
-          
+          <?php endif; ?>
+
         </ul>
       </nav>
 
@@ -881,6 +933,7 @@ $this->cuser = $this->session->get('__xsys_myuserzicas__');
                         <h6><?=$full_name;?></h6>
                         <span><?=$position;?></span>
                         <span class="d-block"><?=$division . ' - ' . $section;?></span>
+                        <?php if ($role_name): ?><span class="d-block"><strong><?=$role_name;?></strong></span><?php endif; ?>
                       </div>
                     </div>
                     <div class="d-grid py-3 px-4">
