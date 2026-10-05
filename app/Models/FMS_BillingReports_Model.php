@@ -21,7 +21,7 @@ class FMS_BillingReports_Model extends Model
     {
         return $this->db->query("
             SELECT customer_id, customer_code, customer_name FROM tbl_customers
-            WHERE status = 'ACTIVE'
+            WHERE customer_status = 'ACTIVE'
             ORDER BY customer_name ASC
         ")->getResultArray();
     }

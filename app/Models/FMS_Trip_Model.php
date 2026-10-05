@@ -20,7 +20,7 @@ class FMS_Trip_Model extends Model
     private function generateTripCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_trips WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(trip_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_trips WHERE trip_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'TRP-' . $year . '-';
         return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -36,7 +36,7 @@ class FMS_Trip_Model extends Model
             SELECT truck_id, plate_number, vehicle_config, vehicle_type
             FROM tbl_trucks
             WHERE vehicle_config = 'RIGID'
-              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT truck_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
+              AND (truck_status = 'AVAILABLE' OR truck_id = (SELECT truck_id FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
         ", [$trip_id])->getResultArray();
     }
@@ -51,7 +51,7 @@ class FMS_Trip_Model extends Model
             SELECT truck_id, plate_number, vehicle_config, vehicle_type
             FROM tbl_trucks
             WHERE vehicle_config = 'TRACTOR'
-              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT tractor_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
+              AND (truck_status = 'AVAILABLE' OR truck_id = (SELECT tractor_id FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
         ", [$trip_id])->getResultArray();
     }
@@ -66,7 +66,7 @@ class FMS_Trip_Model extends Model
             SELECT truck_id, plate_number, vehicle_config, vehicle_type, body_type
             FROM tbl_trucks
             WHERE vehicle_config = 'TRAILER'
-              AND (truck_status = 'AVAILABLE' OR plate_number = (SELECT chassis_plate FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
+              AND (truck_status = 'AVAILABLE' OR truck_id = (SELECT chassis_id FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1))
             ORDER BY plate_number
         ", [$trip_id])->getResultArray();
     }
@@ -80,7 +80,7 @@ class FMS_Trip_Model extends Model
         return $this->db->query("
             SELECT driver_id, driver_name
             FROM tbl_drivers
-            WHERE driver_status = 'AVAILABLE' OR driver_name = (SELECT driver_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
+            WHERE driver_status = 'AVAILABLE' OR driver_id = (SELECT driver_id FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
             ORDER BY driver_name
         ", [$trip_id])->getResultArray();
     }
@@ -94,7 +94,7 @@ class FMS_Trip_Model extends Model
         return $this->db->query("
             SELECT helper_id, helper_name
             FROM tbl_helpers
-            WHERE helper_status = 'AVAILABLE' OR helper_name = (SELECT helper_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
+            WHERE helper_status = 'AVAILABLE' OR helper_id = (SELECT helper_id FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1)
             ORDER BY helper_name
         ", [$trip_id])->getResultArray();
     }
@@ -258,6 +258,21 @@ class FMS_Trip_Model extends Model
     {
         $trip_id = $this->request->getPost('trip_id');
 
+        // Dispatch/DR/billing hang off the trip — don't orphan them
+        $dispatched = $this->db->query("SELECT COUNT(*) as total FROM tbl_dispatch WHERE trip_id = ?", [$trip_id])->getRow()->total;
+        if ($dispatched > 0) {
+            return ['status' => 'error', 'message' => 'Cannot delete a trip that has already been dispatched. Delete its dispatch first.'];
+        }
+
+        // Free the assigned truck/driver/helper before the assignment goes
+        $old = $this->db->query("
+            SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
+            FROM tbl_trip_assignments WHERE trip_id = ?
+        ", [$trip_id])->getRow();
+        if ($old) {
+            $this->setResourceStatus([$old->truck_id, $old->tractor_id, $old->chassis_id], $old->driver_id, $old->helper_id, 'AVAILABLE');
+        }
+
         // Delete assignment, waypoints, and cargo items first
         $this->db->query("DELETE FROM `tbl_trip_assignments` WHERE `trip_id` = ?", [$trip_id]);
         $this->db->query("DELETE FROM `tbl_trip_waypoints` WHERE `trip_id` = ?", [$trip_id]);
@@ -278,7 +293,8 @@ class FMS_Trip_Model extends Model
     public function getTrip($trip_id)
     {
         $query = $this->db->query("
-            SELECT t.*, c.customer_name
+            SELECT t.*, c.customer_name,
+                   EXISTS(SELECT 1 FROM tbl_trip_assignments a WHERE a.trip_id = t.trip_id) AS has_assignment
             FROM tbl_trips t
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
             WHERE t.trip_id = ?
@@ -303,65 +319,58 @@ class FMS_Trip_Model extends Model
     {
         $trip_id = $this->request->getPost('trip_id');
         $vehicle_type = $this->request->getPost('vehicle_type');
-        $truck_plate = $this->request->getPost('truck_plate');
-        $tractor_plate = $this->request->getPost('tractor_plate');
-        $chassis_plate = $this->request->getPost('chassis_plate');
+        $truck_id = $this->request->getPost('truck_id') ?: null;
+        $tractor_id = $this->request->getPost('tractor_id') ?: null;
+        $chassis_id = $this->request->getPost('chassis_id') ?: null;
         $chassis_type = $this->request->getPost('chassis_type') ?: 'OWNED';
-        $vendor_name = $this->request->getPost('vendor_name');
+        $vendor_id = $this->request->getPost('vendor_id') ?: null;
         $rental_rate = $this->request->getPost('rental_rate') ?: 0;
         $rental_start_date = $this->request->getPost('rental_start_date');
         $rental_end_date = $this->request->getPost('rental_end_date');
         $rental_agreement_no = $this->request->getPost('rental_agreement_no');
         $vendor_contact_person = $this->request->getPost('vendor_contact_person');
         $vendor_contact_number = $this->request->getPost('vendor_contact_number');
-        $driver_name = $this->request->getPost('driver_name');
-        $helper_name = $this->request->getPost('helper_name');
+        $driver_id = $this->request->getPost('driver_id') ?: null;
+        $helper_id = $this->request->getPost('helper_id') ?: null;
         $assignment_date = $this->request->getPost('assignment_date') ?: date('Y-m-d');
         $dispatch_time = $this->request->getPost('dispatch_time');
         $dispatch_location = $this->request->getPost('dispatch_location');
         $odometer_before_trip = $this->request->getPost('odometer_before_trip') ?: 0;
         $fuel_level = $this->request->getPost('fuel_level') ?: 0;
-        $assignment_status = $this->request->getPost('assignment_status') ?: 'ASSIGNED';
         $remarks = $this->request->getPost('remarks');
 
         if($vehicle_type == 'RENTED_ALL') {
             $chassis_type = 'RENTED';
         }
 
+        // Name/plate snapshots kept for history
+        $snap = $this->getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id);
+
         $query = $this->db->query("
             INSERT INTO `tbl_trip_assignments`(
-                `trip_id`, `vehicle_type`, `truck_plate`, `tractor_plate`, `chassis_plate`,
-                `chassis_type`, `vendor_name`, `rental_rate`, `rental_start_date`,
-                `rental_end_date`, `rental_agreement_no`, `vendor_contact_person`,
-                `vendor_contact_number`, `driver_name`, `helper_name`, `assignment_date`,
+                `trip_id`, `vehicle_type`, `truck_id`, `truck_plate`, `tractor_id`, `tractor_plate`,
+                `chassis_id`, `chassis_plate`, `chassis_type`, `vendor_id`, `vendor_name`, `rental_rate`,
+                `rental_start_date`, `rental_end_date`, `rental_agreement_no`, `vendor_contact_person`,
+                `vendor_contact_number`, `driver_id`, `driver_name`, `helper_id`, `helper_name`, `assignment_date`,
                 `dispatch_time`, `dispatch_location`, `odometer_before_trip`,
-                `fuel_level`, `assignment_status`, `remarks`, `created_by`
+                `fuel_level`, `remarks`, `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
-                $trip_id, $vehicle_type, $truck_plate, $tractor_plate, $chassis_plate,
-                $chassis_type, $vendor_name, $rental_rate, $rental_start_date,
-                $rental_end_date, $rental_agreement_no, $vendor_contact_person,
-                $vendor_contact_number, $driver_name, $helper_name, $assignment_date,
+                $trip_id, $vehicle_type, $truck_id, $snap['truck_plate'], $tractor_id, $snap['tractor_plate'],
+                $chassis_id, $snap['chassis_plate'], $chassis_type, $vendor_id, $snap['vendor_name'], $rental_rate,
+                $rental_start_date, $rental_end_date, $rental_agreement_no, $vendor_contact_person,
+                $vendor_contact_number, $driver_id, $snap['driver_name'], $helper_id, $snap['helper_name'], $assignment_date,
                 $dispatch_time, $dispatch_location, $odometer_before_trip,
-                $fuel_level, $assignment_status, $remarks, $this->cuser
+                $fuel_level, $remarks, $this->cuser
             ]
         );
 
         if ($query) {
-            $this->db->query("UPDATE tbl_trips SET has_assignment = 1, trip_status = 'ASSIGNED' WHERE trip_id = ?", [$trip_id]);
+            // Only advance a trip that hasn't started yet — never rewind a dispatched trip
+            $this->db->query("UPDATE tbl_trips SET trip_status = 'ASSIGNED' WHERE trip_id = ? AND trip_status IN ('DRAFT','SCHEDULED')", [$trip_id]);
 
-            foreach ([$truck_plate, $tractor_plate, $chassis_plate] as $plate) {
-                if (!empty($plate)) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'ASSIGNED' WHERE plate_number = ?", [$plate]);
-                }
-            }
-            if (!empty($driver_name)) {
-                $this->db->query("UPDATE tbl_drivers SET driver_status = 'ASSIGNED' WHERE driver_name = ?", [$driver_name]);
-            }
-            if (!empty($helper_name)) {
-                $this->db->query("UPDATE tbl_helpers SET helper_status = 'ASSIGNED' WHERE helper_name = ?", [$helper_name]);
-            }
+            $this->setResourceStatus([$truck_id, $tractor_id, $chassis_id], $driver_id, $helper_id, 'ASSIGNED');
 
             return ['status' => 'success', 'message' => 'Assignment Saved Successfully!'];
         } else {
@@ -374,25 +383,24 @@ class FMS_Trip_Model extends Model
         $assignment_id = $this->request->getPost('assignment_id');
         $trip_id = $this->request->getPost('trip_id');
         $vehicle_type = $this->request->getPost('vehicle_type');
-        $truck_plate = $this->request->getPost('truck_plate');
-        $tractor_plate = $this->request->getPost('tractor_plate');
-        $chassis_plate = $this->request->getPost('chassis_plate');
+        $truck_id = $this->request->getPost('truck_id') ?: null;
+        $tractor_id = $this->request->getPost('tractor_id') ?: null;
+        $chassis_id = $this->request->getPost('chassis_id') ?: null;
         $chassis_type = $this->request->getPost('chassis_type') ?: 'OWNED';
-        $vendor_name = $this->request->getPost('vendor_name');
+        $vendor_id = $this->request->getPost('vendor_id') ?: null;
         $rental_rate = $this->request->getPost('rental_rate') ?: 0;
         $rental_start_date = $this->request->getPost('rental_start_date');
         $rental_end_date = $this->request->getPost('rental_end_date');
         $rental_agreement_no = $this->request->getPost('rental_agreement_no');
         $vendor_contact_person = $this->request->getPost('vendor_contact_person');
         $vendor_contact_number = $this->request->getPost('vendor_contact_number');
-        $driver_name = $this->request->getPost('driver_name');
-        $helper_name = $this->request->getPost('helper_name');
+        $driver_id = $this->request->getPost('driver_id') ?: null;
+        $helper_id = $this->request->getPost('helper_id') ?: null;
         $assignment_date = $this->request->getPost('assignment_date') ?: date('Y-m-d');
         $dispatch_time = $this->request->getPost('dispatch_time');
         $dispatch_location = $this->request->getPost('dispatch_location');
         $odometer_before_trip = $this->request->getPost('odometer_before_trip') ?: 0;
         $fuel_level = $this->request->getPost('fuel_level') ?: 0;
-        $assignment_status = $this->request->getPost('assignment_status') ?: 'ASSIGNED';
         $remarks = $this->request->getPost('remarks');
 
         if($vehicle_type == 'RENTED_ALL') {
@@ -400,69 +408,52 @@ class FMS_Trip_Model extends Model
         }
 
         $old = $this->db->query("
-            SELECT truck_plate, tractor_plate, chassis_plate, driver_name, helper_name
+            SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
             FROM tbl_trip_assignments WHERE assignment_id = ?
         ", [$assignment_id])->getRow();
+
+        $snap = $this->getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id);
 
         $query = $this->db->query("
             UPDATE `tbl_trip_assignments`
             SET
-                `vehicle_type` = ?, `truck_plate` = ?, `tractor_plate` = ?, `chassis_plate` = ?,
-                `chassis_type` = ?, `vendor_name` = ?, `rental_rate` = ?,
-                `rental_start_date` = ?, `rental_end_date` = ?, `rental_agreement_no` = ?,
+                `vehicle_type` = ?, `truck_id` = ?, `truck_plate` = ?, `tractor_id` = ?, `tractor_plate` = ?,
+                `chassis_id` = ?, `chassis_plate` = ?, `chassis_type` = ?, `vendor_id` = ?, `vendor_name` = ?,
+                `rental_rate` = ?, `rental_start_date` = ?, `rental_end_date` = ?, `rental_agreement_no` = ?,
                 `vendor_contact_person` = ?, `vendor_contact_number` = ?,
-                `driver_name` = ?, `helper_name` = ?, `assignment_date` = ?,
+                `driver_id` = ?, `driver_name` = ?, `helper_id` = ?, `helper_name` = ?, `assignment_date` = ?,
                 `dispatch_time` = ?, `dispatch_location` = ?, `odometer_before_trip` = ?,
-                `fuel_level` = ?, `assignment_status` = ?, `remarks` = ?,
+                `fuel_level` = ?, `remarks` = ?,
                 `updated_at` = NOW()
             WHERE `assignment_id` = ?
             ",
             [
-                $vehicle_type, $truck_plate, $tractor_plate, $chassis_plate,
-                $chassis_type, $vendor_name, $rental_rate,
-                $rental_start_date, $rental_end_date, $rental_agreement_no,
+                $vehicle_type, $truck_id, $snap['truck_plate'], $tractor_id, $snap['tractor_plate'],
+                $chassis_id, $snap['chassis_plate'], $chassis_type, $vendor_id, $snap['vendor_name'],
+                $rental_rate, $rental_start_date, $rental_end_date, $rental_agreement_no,
                 $vendor_contact_person, $vendor_contact_number,
-                $driver_name, $helper_name, $assignment_date,
+                $driver_id, $snap['driver_name'], $helper_id, $snap['helper_name'], $assignment_date,
                 $dispatch_time, $dispatch_location, $odometer_before_trip,
-                $fuel_level, $assignment_status, $remarks,
+                $fuel_level, $remarks,
                 $assignment_id
             ]
         );
 
         if ($query) {
-            $this->db->query("UPDATE tbl_trips SET has_assignment = 1, trip_status = 'ASSIGNED' WHERE trip_id = ?", [$trip_id]);
+            $this->db->query("UPDATE tbl_trips SET trip_status = 'ASSIGNED' WHERE trip_id = ? AND trip_status IN ('DRAFT','SCHEDULED')", [$trip_id]);
 
             // Release resources swapped out during this update
             if ($old) {
-                if (!empty($old->truck_plate) && $old->truck_plate !== $truck_plate) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->truck_plate]);
-                }
-                if (!empty($old->tractor_plate) && $old->tractor_plate !== $tractor_plate) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->tractor_plate]);
-                }
-                if (!empty($old->chassis_plate) && $old->chassis_plate !== $chassis_plate) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$old->chassis_plate]);
-                }
-                if (!empty($old->driver_name) && $old->driver_name !== $driver_name) {
-                    $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_name = ?", [$old->driver_name]);
-                }
-                if (!empty($old->helper_name) && $old->helper_name !== $helper_name) {
-                    $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_name = ?", [$old->helper_name]);
-                }
+                $this->setResourceStatus(
+                    array_diff(array_filter([$old->truck_id, $old->tractor_id, $old->chassis_id]), [$truck_id, $tractor_id, $chassis_id]),
+                    $old->driver_id != $driver_id ? $old->driver_id : null,
+                    $old->helper_id != $helper_id ? $old->helper_id : null,
+                    'AVAILABLE'
+                );
             }
 
             // Mark newly/still assigned resources
-            foreach ([$truck_plate, $tractor_plate, $chassis_plate] as $plate) {
-                if (!empty($plate)) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'ASSIGNED' WHERE plate_number = ?", [$plate]);
-                }
-            }
-            if (!empty($driver_name)) {
-                $this->db->query("UPDATE tbl_drivers SET driver_status = 'ASSIGNED' WHERE driver_name = ?", [$driver_name]);
-            }
-            if (!empty($helper_name)) {
-                $this->db->query("UPDATE tbl_helpers SET helper_status = 'ASSIGNED' WHERE helper_name = ?", [$helper_name]);
-            }
+            $this->setResourceStatus([$truck_id, $tractor_id, $chassis_id], $driver_id, $helper_id, 'ASSIGNED');
 
             return ['status' => 'success', 'message' => 'Assignment Updated Successfully!'];
         } else {
@@ -475,13 +466,57 @@ class FMS_Trip_Model extends Model
         $assignment_id = $this->request->getPost('assignment_id');
         $trip_id = $this->request->getPost('trip_id');
 
+        $old = $this->db->query("
+            SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
+            FROM tbl_trip_assignments WHERE assignment_id = ?
+        ", [$assignment_id])->getRow();
+
         $query = $this->db->query("DELETE FROM `tbl_trip_assignments` WHERE `assignment_id` = ?", [$assignment_id]);
 
         if ($query) {
-            $this->db->query("UPDATE tbl_trips SET has_assignment = 0 WHERE trip_id = ?", [$trip_id]);
+            // Free the resources and step the trip back to SCHEDULED
+            if ($old) {
+                $this->setResourceStatus([$old->truck_id, $old->tractor_id, $old->chassis_id], $old->driver_id, $old->helper_id, 'AVAILABLE');
+            }
+            $this->db->query("UPDATE tbl_trips SET trip_status = 'SCHEDULED' WHERE trip_id = ? AND trip_status = 'ASSIGNED'", [$trip_id]);
             return ['status' => 'success', 'message' => 'Assignment Removed Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while removing assignment.'];
+        }
+    }
+
+    // ==============================
+    // RESOURCE SNAPSHOT: plate/name text stored alongside the IDs
+    // ==============================
+    private function getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id)
+    {
+        $plate = function($id) {
+            return $id ? ($this->db->query("SELECT plate_number FROM tbl_trucks WHERE truck_id = ?", [$id])->getRow()->plate_number ?? null) : null;
+        };
+
+        return [
+            'truck_plate'   => $plate($truck_id),
+            'tractor_plate' => $plate($tractor_id),
+            'chassis_plate' => $plate($chassis_id),
+            'vendor_name'   => $vendor_id ? ($this->db->query("SELECT vendor_name FROM tbl_vendors WHERE vendor_id = ?", [$vendor_id])->getRow()->vendor_name ?? null) : null,
+            'driver_name'   => $driver_id ? ($this->db->query("SELECT driver_name FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRow()->driver_name ?? null) : null,
+            'helper_name'   => $helper_id ? ($this->db->query("SELECT helper_name FROM tbl_helpers WHERE helper_id = ?", [$helper_id])->getRow()->helper_name ?? null) : null,
+        ];
+    }
+
+    // ==============================
+    // SET RESOURCE STATUS: trucks + driver + helper by ID
+    // ==============================
+    private function setResourceStatus($truck_ids, $driver_id, $helper_id, $status)
+    {
+        foreach (array_filter($truck_ids) as $id) {
+            $this->db->query("UPDATE tbl_trucks SET truck_status = ? WHERE truck_id = ?", [$status, $id]);
+        }
+        if (!empty($driver_id)) {
+            $this->db->query("UPDATE tbl_drivers SET driver_status = ? WHERE driver_id = ?", [$status, $driver_id]);
+        }
+        if (!empty($helper_id)) {
+            $this->db->query("UPDATE tbl_helpers SET helper_status = ? WHERE helper_id = ?", [$status, $helper_id]);
         }
     }
 

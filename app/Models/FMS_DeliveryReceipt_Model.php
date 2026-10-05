@@ -20,7 +20,7 @@ class FMS_DeliveryReceipt_Model extends Model
     private function generateDRCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_delivery_receipts WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(dr_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_delivery_receipts WHERE dr_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'DR-' . $year . '-';
         return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -63,7 +63,6 @@ class FMS_DeliveryReceipt_Model extends Model
                    c.customer_name,
                    d.dispatch_id,
                    d.dispatch_date,
-                   d.dispatch_status,
                    d.truck,
                    d.driver,
                    d.helper,
@@ -453,23 +452,23 @@ class FMS_DeliveryReceipt_Model extends Model
         );
 
         if ($query) {
-            // Cargo delivered — mark dispatch/trip as DELIVERED. Actual COMPLETED (and
+            // Cargo delivered — mark trip as DELIVERED. Actual COMPLETED (and
             // freeing the truck/driver/helper) happens once the crew is back, via the
             // last-waypoint-arrival flow in FMS_Dispatch_Model, so a tractor still en
             // route to return a container isn't marked done early.
             if ($dr_status === 'DELIVERED' || $dr_status === 'PARTIALLY_DELIVERED') {
-                // dispatch/trip status track the truck's journey (which completed either way);
-                // tbl_dispatch.dispatch_status and tbl_trips.trip_status have no PARTIALLY_DELIVERED
-                // value of their own — the shortage/damage outcome lives on the DR record itself.
+                // trip_status tracks the truck's journey (which completed either way); it has no
+                // PARTIALLY_DELIVERED value — the shortage/damage outcome lives on the DR record itself.
                 $dr = $this->db->query("SELECT dispatch_id, trip_id FROM tbl_delivery_receipts WHERE dr_id = ?", [$dr_id])->getRow();
                 if ($dr && $dr->dispatch_id) {
                     $this->db->query("
                         UPDATE tbl_dispatch
-                        SET dispatch_status = 'DELIVERED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
+                        SET actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
                         WHERE dispatch_id = ?
                     ", [$dr_date, $dr_time, $dr->dispatch_id]);
 
-                    $this->db->query("UPDATE tbl_trips SET trip_status = 'DELIVERED' WHERE trip_id = ?", [$dr->trip_id]);
+                    // Only move forward — never rewind a trip that's already COMPLETED
+                    $this->db->query("UPDATE tbl_trips SET trip_status = 'DELIVERED' WHERE trip_id = ? AND trip_status IN ('DISPATCHED','IN_TRANSIT')", [$dr->trip_id]);
                 }
             }
 
@@ -491,6 +490,11 @@ class FMS_DeliveryReceipt_Model extends Model
     public function deleteDR()
     {
         $dr_id = $this->request->getPost('dr_id');
+
+        $billed = $this->db->query("SELECT COUNT(*) as total FROM tbl_billing WHERE dr_id = ?", [$dr_id])->getRow()->total;
+        if ($billed > 0) {
+            return ['status' => 'error', 'message' => 'Cannot delete a delivery receipt that has already been billed.'];
+        }
 
         $this->db->query("DELETE FROM `tbl_delivery_receipt_items` WHERE `dr_id` = ?", [$dr_id]);
         $this->db->query("DELETE FROM `tbl_delivery_receipt_pod` WHERE `dr_id` = ?", [$dr_id]);

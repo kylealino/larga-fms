@@ -20,7 +20,7 @@ class FMS_SOA_Model extends Model
     private function generateAdjustmentCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_customer_adjustments WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(adjustment_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_customer_adjustments WHERE adjustment_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return 'ADJ-' . $year . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
     }
@@ -32,7 +32,7 @@ class FMS_SOA_Model extends Model
     {
         return $this->db->query("
             SELECT customer_id, customer_code, customer_name FROM tbl_customers
-            WHERE status = 'ACTIVE'
+            WHERE customer_status = 'ACTIVE'
             ORDER BY customer_name ASC
         ")->getResultArray();
     }

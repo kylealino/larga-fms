@@ -1131,29 +1131,29 @@ echo view('templates/myheader.php');
                         <label class="form-label" style="font-size:9px;color:var(--gray-500);">Service Type *</label>
                         <select id="svc_service_type" class="form-control">
                             <option value="">— Select —</option>
-                            <option value="TRUCK RENTAL">Truck Rental</option>
-                            <option value="TRACTOR RENTAL">Tractor Rental</option>
-                            <option value="CHASSIS RENTAL">Chassis Rental</option>
-                            <option value="DRIVER SERVICE">Driver Service</option>
-                            <option value="HELPER SERVICE">Helper Service</option>
-                            <option value="TRUCK + DRIVER">Truck + Driver</option>
-                            <option value="TRUCK + DRIVER + HELPER">Truck + Driver + Helper</option>
-                            <option value="TRACTOR + CHASSIS">Tractor + Chassis</option>
-                            <option value="TRACTOR + CHASSIS + DRIVER">Tractor + Chassis + Driver</option>
-                            <option value="TRACTOR + CHASSIS + DRIVER + HELPER">Tractor + Chassis + Driver + Helper</option>
-                            <option value="OTHER TRANSPORTATION SERVICE">Other Transportation Service</option>
+                            <option value="TRUCK_RENTAL">Truck Rental</option>
+                            <option value="TRACTOR_RENTAL">Tractor Rental</option>
+                            <option value="CHASSIS_RENTAL">Chassis Rental</option>
+                            <option value="DRIVER_SERVICE">Driver Service</option>
+                            <option value="HELPER_SERVICE">Helper Service</option>
+                            <option value="TRUCK_DRIVER">Truck + Driver</option>
+                            <option value="TRUCK_DRIVER_HELPER">Truck + Driver + Helper</option>
+                            <option value="TRACTOR_CHASSIS">Tractor + Chassis</option>
+                            <option value="TRACTOR_CHASSIS_DRIVER">Tractor + Chassis + Driver</option>
+                            <option value="TRACTOR_CHASSIS_DRIVER_HELPER">Tractor + Chassis + Driver + Helper</option>
+                            <option value="OTHER_TRANSPORTATION_SERVICE">Other Transportation Service</option>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label" style="font-size:9px;color:var(--gray-500);">Rate Type</label>
                         <select id="svc_rate_type" class="form-control">
                             <option value="">— Select —</option>
-                            <option value="PER TRIP">Per Trip</option>
-                            <option value="PER DAY">Per Day</option>
-                            <option value="PER KILOMETER">Per Kilometer</option>
-                            <option value="PER HOUR">Per Hour</option>
+                            <option value="PER_TRIP">Per Trip</option>
+                            <option value="PER_DAY">Per Day</option>
+                            <option value="PER_KILOMETER">Per Kilometer</option>
+                            <option value="PER_HOUR">Per Hour</option>
                             <option value="MONTHLY">Monthly</option>
-                            <option value="FIXED RATE">Fixed Rate</option>
+                            <option value="FIXED_RATE">Fixed Rate</option>
                         </select>
                     </div>
                     <div class="col-md-2">

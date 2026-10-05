@@ -20,7 +20,7 @@ class FMS_Vendor_Model extends Model
     private function generateVendorCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_vendors WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(vendor_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_vendors WHERE vendor_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'VND-' . $year . '-';
         return $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);

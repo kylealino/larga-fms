@@ -27,7 +27,7 @@ class FMS_Truck_Model extends Model
             case 'TRAILER': $prefix = 'CHS'; break;
             default: $prefix = 'TRK';
         }
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE vehicle_config = ? AND YEAR(created_at) = ?", [$config, $year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(truck_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_trucks WHERE truck_code LIKE ?", [$prefix . '-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return $prefix . '-' . $year . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
     }
@@ -102,7 +102,7 @@ class FMS_Truck_Model extends Model
         $acquired_from = $this->request->getPost('acquired_from');
         $acquired_from_branch = $this->request->getPost('acquired_from_branch');
         $account_manager = $this->request->getPost('account_manager');
-        $ownership = $this->request->getPost('ownership') ?: 'COMPANY-OWNED';
+        $ownership = $this->request->getPost('ownership') ?: 'COMPANY_OWNED';
         $truck_status = $this->request->getPost('truck_status') ?: 'AVAILABLE';
         $remarks = $this->request->getPost('remarks');
 
@@ -221,7 +221,7 @@ class FMS_Truck_Model extends Model
         $acquired_from = $this->request->getPost('acquired_from');
         $acquired_from_branch = $this->request->getPost('acquired_from_branch');
         $account_manager = $this->request->getPost('account_manager');
-        $ownership = $this->request->getPost('ownership') ?: 'COMPANY-OWNED';
+        $ownership = $this->request->getPost('ownership') ?: 'COMPANY_OWNED';
         $truck_status = $this->request->getPost('truck_status') ?: 'AVAILABLE';
         $remarks = $this->request->getPost('remarks');
 
@@ -366,19 +366,6 @@ class FMS_Truck_Model extends Model
         $rate = $this->request->getPost('rate') ?: 0;
         $remarks = $this->request->getPost('remarks');
 
-        // Auto-calculate document status
-        $document_status = 'VALID';
-        if($expiration_date) {
-            $today = new \DateTime();
-            $expiry = new \DateTime($expiration_date);
-            $daysDiff = $today->diff($expiry)->days;
-            if($expiry < $today) {
-                $document_status = 'EXPIRED';
-            } elseif($daysDiff <= 30) {
-                $document_status = 'EXPIRING';
-            }
-        }
-
         // Handle file upload
         $attachment = $this->uploadDocumentAttachment($truck_id);
 
@@ -389,7 +376,6 @@ class FMS_Truck_Model extends Model
                 `document_number`,
                 `issue_date`,
                 `expiration_date`,
-                `document_status`,
                 `provider_name`,
                 `policy_number`,
                 `coverage_type`,
@@ -400,14 +386,13 @@ class FMS_Truck_Model extends Model
                 `remarks`,
                 `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             [
                 $truck_id,
                 $document_type,
                 $document_number,
                 $issue_date,
                 $expiration_date,
-                $document_status,
                 $provider_name,
                 $policy_number,
                 $coverage_type,
@@ -446,19 +431,6 @@ class FMS_Truck_Model extends Model
         $rate = $this->request->getPost('rate') ?: 0;
         $remarks = $this->request->getPost('remarks');
 
-        // Auto-calculate document status
-        $document_status = 'VALID';
-        if($expiration_date) {
-            $today = new \DateTime();
-            $expiry = new \DateTime($expiration_date);
-            $daysDiff = $today->diff($expiry)->days;
-            if($expiry < $today) {
-                $document_status = 'EXPIRED';
-            } elseif($daysDiff <= 30) {
-                $document_status = 'EXPIRING';
-            }
-        }
-
         // Get existing document for attachment
         $existing = $this->db->query("SELECT document_attachment FROM tbl_truck_documents WHERE document_id = ?", [$document_id])->getRowArray();
         $attachment = $existing ? $existing['document_attachment'] : '';
@@ -479,7 +451,6 @@ class FMS_Truck_Model extends Model
                 `document_number` = ?,
                 `issue_date` = ?,
                 `expiration_date` = ?,
-                `document_status` = ?,
                 `provider_name` = ?,
                 `policy_number` = ?,
                 `coverage_type` = ?,
@@ -496,7 +467,6 @@ class FMS_Truck_Model extends Model
                 $document_number,
                 $issue_date,
                 $expiration_date,
-                $document_status,
                 $provider_name,
                 $policy_number,
                 $coverage_type,
@@ -543,7 +513,18 @@ class FMS_Truck_Model extends Model
     // ==============================
     public function getDocuments($truck_id)
     {
-        $query = $this->db->query("SELECT * FROM tbl_truck_documents WHERE truck_id = ? ORDER BY document_id DESC", [$truck_id]);
+        $query = $this->db->query("
+            SELECT *,
+                   CASE
+                       WHEN expiration_date IS NULL THEN 'VALID'
+                       WHEN expiration_date < CURDATE() THEN 'EXPIRED'
+                       WHEN expiration_date <= CURDATE() + INTERVAL 30 DAY THEN 'EXPIRING'
+                       ELSE 'VALID'
+                   END AS document_status
+            FROM tbl_truck_documents
+            WHERE truck_id = ?
+            ORDER BY document_id DESC
+        ", [$truck_id]);
         return $query->getResultArray();
     }
 
@@ -552,7 +533,17 @@ class FMS_Truck_Model extends Model
     // ==============================
     public function getDocument($document_id)
     {
-        $query = $this->db->query("SELECT * FROM tbl_truck_documents WHERE document_id = ?", [$document_id]);
+        $query = $this->db->query("
+            SELECT *,
+                   CASE
+                       WHEN expiration_date IS NULL THEN 'VALID'
+                       WHEN expiration_date < CURDATE() THEN 'EXPIRED'
+                       WHEN expiration_date <= CURDATE() + INTERVAL 30 DAY THEN 'EXPIRING'
+                       ELSE 'VALID'
+                   END AS document_status
+            FROM tbl_truck_documents
+            WHERE document_id = ?
+        ", [$document_id]);
         return $query->getRowArray();
     }
 
@@ -561,9 +552,6 @@ class FMS_Truck_Model extends Model
     // ==============================
     public function getTruckHistory($truck_id)
     {
-        $truck = $this->db->query("SELECT plate_number FROM tbl_trucks WHERE truck_id = ?", [$truck_id])->getRow();
-        if (!$truck || !$truck->plate_number) return [];
-
         return $this->db->query("
             SELECT t.trip_code, t.origin, t.destination, t.actual_delivery_date,
                    c.customer_name,
@@ -573,9 +561,9 @@ class FMS_Truck_Model extends Model
             JOIN tbl_trips t ON a.trip_id = t.trip_id
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
             LEFT JOIN tbl_delivery_receipts dr ON dr.trip_id = t.trip_id
-            WHERE (a.truck_plate = ? OR a.tractor_plate = ? OR a.chassis_plate = ?)
+            WHERE ? IN (a.truck_id, a.tractor_id, a.chassis_id)
               AND t.trip_status = 'COMPLETED'
             ORDER BY t.actual_delivery_date DESC, a.assignment_id DESC
-        ", [$truck->plate_number, $truck->plate_number, $truck->plate_number])->getResultArray();
+        ", [$truck_id])->getResultArray();
     }
 }

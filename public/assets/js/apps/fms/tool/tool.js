@@ -30,7 +30,7 @@ function __Tool() {
                         $('#tool_quantity_display').val(data.quantity_on_hand || 0);
                         $('#tool_location').val(data.current_location);
                         $('#tool_condition').val(data.tool_condition);
-                        $('#tool_availability').val(data.availability);
+                        $('#tool_availability').val(data.tool_status);
                         $('#tool_assigned_to').val(data.assigned_to);
                         $('#tool_truck_id').val(data.truck_id);
                         $('#tool_truck_plate').val(data.truck_plate);

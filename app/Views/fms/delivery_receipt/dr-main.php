@@ -37,7 +37,6 @@ $pending_trips = $this->db->query("
            c.customer_name,
            d.dispatch_id,
            d.dispatch_date,
-           d.dispatch_status,
            d.truck,
            d.driver,
            d.helper,
@@ -885,7 +884,7 @@ echo view('templates/myheader.php');
                         </div>
 
                         <div id="pod_signature_preview" class="mt-2" style="display:none;">
-                            <img id="pod_signature_img" src="" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
+                            <img id="pod_signature_img" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
                             <div class="mt-1" style="font-size:11px;color:var(--gray-500);">
                                 <i class="bi bi-check-circle" style="color:var(--success);"></i>
                                 <span id="pod_signature_name"></span>
@@ -902,7 +901,7 @@ echo view('templates/myheader.php');
                                accept="image/*"
                                onchange="__DR.__uploadPODFile('delivery_photo')">
                         <div id="pod_photo_preview" class="mt-2" style="display:none;">
-                            <img id="pod_photo_img" src="" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
+                            <img id="pod_photo_img" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
                             <div class="mt-1" style="font-size:11px;color:var(--gray-500);">
                                 <i class="bi bi-check-circle" style="color:var(--success);"></i>
                                 <span id="pod_photo_name"></span>
@@ -919,7 +918,7 @@ echo view('templates/myheader.php');
                                accept="image/*,.pdf"
                                onchange="__DR.__uploadPODFile('signed_dr')">
                         <div id="pod_signed_dr_preview" class="mt-2" style="display:none;">
-                            <img id="pod_signed_dr_img" src="" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
+                            <img id="pod_signed_dr_img" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
                             <div class="mt-1" style="font-size:11px;color:var(--gray-500);">
                                 <i class="bi bi-check-circle" style="color:var(--success);"></i>
                                 <span id="pod_signed_dr_name"></span>
@@ -936,7 +935,7 @@ echo view('templates/myheader.php');
                                accept="image/*,.pdf"
                                onchange="__DR.__uploadPODFile('supporting_documents')">
                         <div id="pod_supporting_preview" class="mt-2" style="display:none;">
-                            <img id="pod_supporting_img" src="" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
+                            <img id="pod_supporting_img" style="max-height:80px;border-radius:6px;border:1px solid var(--gray-200);">
                             <div class="mt-1" style="font-size:11px;color:var(--gray-500);">
                                 <i class="bi bi-check-circle" style="color:var(--success);"></i>
                                 <span id="pod_supporting_name"></span>
@@ -979,7 +978,7 @@ echo view('templates/myheader.php');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <iframe id="pdfFrame" src="" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
+                <iframe id="pdfFrame" src="about:blank" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
             </div>
         </div>
     </div>

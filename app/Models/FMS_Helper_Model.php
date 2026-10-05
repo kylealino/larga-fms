@@ -20,7 +20,7 @@ class FMS_Helper_Model extends Model
     private function generateHelperCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(helper_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_helpers WHERE helper_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'HLP-' . $year . '-';
         return $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
@@ -94,22 +94,6 @@ class FMS_Helper_Model extends Model
         $expiration_date = $this->request->getPost('expiration_date');
         $has_license = (!empty($license_number)) ? 'YES' : 'NO';
 
-        // Auto-calculate license status
-        $license_status = 'NONE';
-        if($has_license == 'YES') {
-            $license_status = 'VALID';
-            if($expiration_date) {
-                $today = new \DateTime();
-                $expiry = new \DateTime($expiration_date);
-                $daysDiff = $today->diff($expiry)->days;
-                if($expiry < $today) {
-                    $license_status = 'EXPIRED';
-                } elseif($daysDiff <= 30) {
-                    $license_status = 'EXPIRING';
-                }
-            }
-        }
-
         // Check if helper name already exists
         $check = $this->db->query("SELECT COUNT(*) as count FROM tbl_helpers WHERE helper_name = ?", [$helper_name])->getRow();
         if($check->count > 0) {
@@ -134,11 +118,9 @@ class FMS_Helper_Model extends Model
                 `license_type`,
                 `restriction_code`,
                 `expiration_date`,
-                `license_status`,
-                `has_license`,
                 `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             [
                 $helper_code,
                 $helper_name,
@@ -153,8 +135,6 @@ class FMS_Helper_Model extends Model
                 $license_type,
                 $restriction_code,
                 $expiration_date,
-                $license_status,
-                $has_license,
                 $this->cuser
             ]
         );
@@ -206,23 +186,6 @@ class FMS_Helper_Model extends Model
         $license_type = $this->request->getPost('license_type');
         $restriction_code = $this->request->getPost('restriction_code');
         $expiration_date = $this->request->getPost('expiration_date');
-        $has_license = (!empty($license_number)) ? 'YES' : 'NO';
-
-        // Auto-calculate license status
-        $license_status = 'NONE';
-        if($has_license == 'YES') {
-            $license_status = 'VALID';
-            if($expiration_date) {
-                $today = new \DateTime();
-                $expiry = new \DateTime($expiration_date);
-                $daysDiff = $today->diff($expiry)->days;
-                if($expiry < $today) {
-                    $license_status = 'EXPIRED';
-                } elseif($daysDiff <= 30) {
-                    $license_status = 'EXPIRING';
-                }
-            }
-        }
 
         // Check if helper name already exists for a different helper
         $check = $this->db->query("SELECT COUNT(*) as count FROM tbl_helpers WHERE helper_name = ? AND helper_id != ?", [$helper_name, $helper_id])->getRow();
@@ -271,8 +234,6 @@ class FMS_Helper_Model extends Model
                 `license_type` = ?,
                 `restriction_code` = ?,
                 `expiration_date` = ?,
-                `license_status` = ?,
-                `has_license` = ?,
                 `license_attachment` = ?,
                 `updated_at` = NOW()
             WHERE `helper_id` = ?
@@ -291,8 +252,6 @@ class FMS_Helper_Model extends Model
                 $license_type,
                 $restriction_code,
                 $expiration_date,
-                $license_status,
-                $has_license,
                 $license_attachment,
                 $helper_id
             ]
@@ -338,7 +297,19 @@ class FMS_Helper_Model extends Model
     // ==============================
     public function getHelper($helper_id)
     {
-        $query = $this->db->query("SELECT * FROM tbl_helpers WHERE helper_id = ?", [$helper_id]);
+        $query = $this->db->query("
+            SELECT *,
+                   CASE
+                       WHEN license_number IS NULL OR license_number = '' THEN 'NONE'
+                       WHEN expiration_date IS NULL THEN 'VALID'
+                       WHEN expiration_date < CURDATE() THEN 'EXPIRED'
+                       WHEN expiration_date <= CURDATE() + INTERVAL 30 DAY THEN 'EXPIRING'
+                       ELSE 'VALID'
+                   END AS license_status,
+                   IF(license_number IS NULL OR license_number = '', 'NO', 'YES') AS has_license
+            FROM tbl_helpers
+            WHERE helper_id = ?
+        ", [$helper_id]);
         return $query->getRowArray();
     }
 
@@ -347,9 +318,6 @@ class FMS_Helper_Model extends Model
     // ==============================
     public function getHelperHistory($helper_id)
     {
-        $helper = $this->db->query("SELECT helper_name FROM tbl_helpers WHERE helper_id = ?", [$helper_id])->getRow();
-        if (!$helper || !$helper->helper_name) return [];
-
         return $this->db->query("
             SELECT t.trip_code, t.origin, t.destination, t.actual_delivery_date,
                    c.customer_name,
@@ -359,9 +327,9 @@ class FMS_Helper_Model extends Model
             JOIN tbl_trips t ON a.trip_id = t.trip_id
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
             LEFT JOIN tbl_delivery_receipts dr ON dr.trip_id = t.trip_id
-            WHERE a.helper_name = ?
+            WHERE a.helper_id = ?
               AND t.trip_status = 'COMPLETED'
             ORDER BY t.actual_delivery_date DESC, a.assignment_id DESC
-        ", [$helper->helper_name])->getResultArray();
+        ", [$helper_id])->getResultArray();
     }
 }

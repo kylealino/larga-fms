@@ -197,9 +197,11 @@ function __Vendors() {
                             '<span class="badge badge-secondary">Inactive</span>';
                         
                         var rateType = row.rate_type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function(l) { return l.toUpperCase(); });
-                        
+                        // Use the dropdown label so combos keep their "+" (e.g. TRUCK_DRIVER -> Truck + Driver)
+                        var serviceType = $('#svc_service_type option[value="' + row.service_type + '"]').text() || row.service_type;
+
                         html += '<tr>';
-                        html += '<td><strong>' + row.service_type + '</strong></td>';
+                        html += '<td><strong>' + serviceType + '</strong></td>';
                         html += '<td>' + rateType + '</td>';
                         html += '<td>₱' + parseFloat(row.rate_amount).toFixed(2) + '</td>';
                         html += '<td>' + (row.effective_date || '—') + '</td>';

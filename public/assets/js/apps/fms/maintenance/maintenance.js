@@ -58,7 +58,7 @@ function __MT() {
                         $('#sched_next_odo').val(data.next_service_odometer);
                         $('#sched_technician').val(data.technician);
                         $('#sched_priority').val(data.priority);
-                        $('#sched_status').val(data.status);
+                        $('#sched_status').val(data.schedule_status);
                         $('#sched_remarks').val(data.remarks);
 
                         $('#scheduleModalTitle').html('<i class="bi bi-pencil me-2"></i>Edit Maintenance Schedule');
@@ -289,7 +289,7 @@ function __MT() {
                         $('#rec_other_cost').val(data.other_cost);
                         $('#rec_total_cost').val(data.total_cost);
                         $('#rec_downtime').val(data.downtime_hours);
-                        $('#rec_status').val(data.status);
+                        $('#rec_status').val(data.record_status);
                         $('#rec_remarks').val(data.remarks);
 
                         $('#recordModalTitle').html('<i class="bi bi-pencil me-2"></i>Edit Maintenance Record');

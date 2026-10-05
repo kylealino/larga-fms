@@ -24,7 +24,7 @@ $issuances = $this->db->query("
 $trucks = $this->db->query("
     SELECT truck_id, truck_code, plate_number, make, model
     FROM tbl_trucks
-    WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+    WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
     ORDER BY plate_number
 ")->getResultArray();
 
@@ -35,7 +35,7 @@ $available_tools = $this->db->query("
     SELECT tool_id, tool_code, tool_name, category, brand, model, serial_number, 
            tool_condition, quantity, quantity_on_hand
     FROM tbl_tools
-    WHERE availability IN ('AVAILABLE','ASSIGNED')
+    WHERE tool_status IN ('AVAILABLE','ASSIGNED')
       AND quantity_on_hand > 0
     ORDER BY tool_name
 ")->getResultArray();
@@ -79,12 +79,12 @@ foreach ($tools as $t) {
     $total_units += intval($t['quantity'] ?? 1);
     $total_value += floatval($t['purchase_cost']) * intval($t['quantity'] ?? 1);
 
-    if ($t['availability'] == 'AVAILABLE') $stat_available++;
-    elseif ($t['availability'] == 'ASSIGNED') $stat_assigned++;
-    elseif ($t['availability'] == 'UNDER_REPAIR') $stat_under_repair++;
-    elseif ($t['availability'] == 'DAMAGED') $stat_damaged++;
-    elseif ($t['availability'] == 'LOST') $stat_lost++;
-    elseif ($t['availability'] == 'RETIRED') $stat_retired++;
+    if ($t['tool_status'] == 'AVAILABLE') $stat_available++;
+    elseif ($t['tool_status'] == 'ASSIGNED') $stat_assigned++;
+    elseif ($t['tool_status'] == 'UNDER_REPAIR') $stat_under_repair++;
+    elseif ($t['tool_status'] == 'DAMAGED') $stat_damaged++;
+    elseif ($t['tool_status'] == 'LOST') $stat_lost++;
+    elseif ($t['tool_status'] == 'RETIRED') $stat_retired++;
 }
 
 echo view('templates/myheader.php');
@@ -605,13 +605,13 @@ echo view('templates/myheader.php');
                                 <td>
                                     <?php
                                     $avClass = 'badge-secondary';
-                                    $avLabel = $row['availability'];
-                                    if($row['availability'] == 'AVAILABLE') { $avClass = 'badge-success'; $avLabel = 'Available'; }
-                                    elseif($row['availability'] == 'ASSIGNED') { $avClass = 'badge-warning'; $avLabel = 'Assigned'; }
-                                    elseif($row['availability'] == 'UNDER_REPAIR') { $avClass = 'badge-info'; $avLabel = 'Under Repair'; }
-                                    elseif($row['availability'] == 'DAMAGED') { $avClass = 'badge-danger'; $avLabel = 'Damaged'; }
-                                    elseif($row['availability'] == 'LOST') { $avClass = 'badge-danger'; $avLabel = 'Lost'; }
-                                    elseif($row['availability'] == 'RETIRED') { $avClass = 'badge-secondary'; $avLabel = 'Retired'; }
+                                    $avLabel = $row['tool_status'];
+                                    if($row['tool_status'] == 'AVAILABLE') { $avClass = 'badge-success'; $avLabel = 'Available'; }
+                                    elseif($row['tool_status'] == 'ASSIGNED') { $avClass = 'badge-warning'; $avLabel = 'Assigned'; }
+                                    elseif($row['tool_status'] == 'UNDER_REPAIR') { $avClass = 'badge-info'; $avLabel = 'Under Repair'; }
+                                    elseif($row['tool_status'] == 'DAMAGED') { $avClass = 'badge-danger'; $avLabel = 'Damaged'; }
+                                    elseif($row['tool_status'] == 'LOST') { $avClass = 'badge-danger'; $avLabel = 'Lost'; }
+                                    elseif($row['tool_status'] == 'RETIRED') { $avClass = 'badge-secondary'; $avLabel = 'Retired'; }
                                     ?>
                                     <span class="badge <?=$avClass;?>"><?=$avLabel;?></span>
                                 </td>
@@ -640,7 +640,7 @@ echo view('templates/myheader.php');
                                                 title="Tool Journey">
                                             <i class="bi bi-clock-history"></i>
                                         </button>
-                                        <?php if($onHand > 0 && $row['availability'] != 'RETIRED' && $row['availability'] != 'LOST'): ?>
+                                        <?php if($onHand > 0 && $row['tool_status'] != 'RETIRED' && $row['tool_status'] != 'LOST'): ?>
                                         <button class="btn-icon btn-icon-dispatch" 
                                                 onclick="__Tool.__openIssueModal(<?=$row['tool_id'];?>)" 
                                                 title="Issue Tool">

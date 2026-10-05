@@ -20,7 +20,7 @@ class FMS_Maintenance_Model extends Model
     private function generateScheduleCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_maintenance_schedules WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(schedule_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_maintenance_schedules WHERE schedule_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return 'MTS-' . $year . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
     }
@@ -28,7 +28,7 @@ class FMS_Maintenance_Model extends Model
     private function generateRecordCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_maintenance_records WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(record_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_maintenance_records WHERE record_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return 'MTR-' . $year . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
     }
@@ -41,7 +41,7 @@ class FMS_Maintenance_Model extends Model
         return $this->db->query("
             SELECT truck_id, truck_code, plate_number, make, model, current_odometer
             FROM tbl_trucks
-            WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+            WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
             ORDER BY plate_number
         ")->getResultArray();
     }
@@ -97,7 +97,7 @@ class FMS_Maintenance_Model extends Model
             INSERT INTO `tbl_maintenance_schedules`(
                 `schedule_code`, `truck_id`, `truck_plate`, `maintenance_type`, `service_type`,
                 `scheduled_date`, `current_odometer`, `service_interval`, `next_service_odometer`,
-                `technician`, `priority`, `status`, `remarks`, `created_by`
+                `technician`, `priority`, `schedule_status`, `remarks`, `created_by`
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
@@ -136,7 +136,7 @@ class FMS_Maintenance_Model extends Model
                 `truck_id` = ?, `truck_plate` = ?, `maintenance_type` = ?, `service_type` = ?,
                 `scheduled_date` = ?, `current_odometer` = ?, `service_interval` = ?,
                 `next_service_odometer` = ?, `technician` = ?, `priority` = ?,
-                `status` = ?, `remarks` = ?, `updated_at` = NOW()
+                `schedule_status` = ?, `remarks` = ?, `updated_at` = NOW()
             WHERE `schedule_id` = ?
             ",
             [
@@ -235,7 +235,7 @@ class FMS_Maintenance_Model extends Model
                 `record_code`, `schedule_id`, `truck_id`, `truck_plate`, `maintenance_date`,
                 `odometer`, `maintenance_type`, `service_category`, `problem_reason`,
                 `work_performed`, `technician`, `labor_cost`, `parts_cost`, `other_cost`,
-                `total_cost`, `downtime_hours`, `status`, `remarks`, `created_by`
+                `total_cost`, `downtime_hours`, `record_status`, `remarks`, `created_by`
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
@@ -278,7 +278,7 @@ class FMS_Maintenance_Model extends Model
             if ($schedule_id) {
                 $this->db->query("
                     UPDATE tbl_maintenance_schedules 
-                    SET status = 'COMPLETED' 
+                    SET schedule_status = 'COMPLETED' 
                     WHERE schedule_id = ?
                 ", [$schedule_id]);
             }
@@ -327,7 +327,7 @@ class FMS_Maintenance_Model extends Model
                 `odometer` = ?, `maintenance_type` = ?, `service_category` = ?,
                 `problem_reason` = ?, `work_performed` = ?, `technician` = ?,
                 `labor_cost` = ?, `parts_cost` = ?, `other_cost` = ?,
-                `total_cost` = ?, `downtime_hours` = ?, `status` = ?,
+                `total_cost` = ?, `downtime_hours` = ?, `record_status` = ?,
                 `remarks` = ?, `updated_at` = NOW()
             WHERE `record_id` = ?
             ",

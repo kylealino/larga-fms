@@ -20,7 +20,7 @@ class FMS_Dispatch_Model extends Model
     private function generateDispatchCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_dispatch WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(dispatch_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_dispatch WHERE dispatch_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'DSP-' . $year . '-';
         return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -32,7 +32,7 @@ class FMS_Dispatch_Model extends Model
     private function generateChecklistCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_dispatch_checklist WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(checklist_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_dispatch_checklist WHERE checklist_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'CHK-' . $year . '-';
         return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -44,7 +44,7 @@ class FMS_Dispatch_Model extends Model
     private function generateExpenseCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_dispatch_expenses WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(expense_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_dispatch_expenses WHERE expense_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'EXP-' . $year . '-';
         return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
@@ -66,7 +66,6 @@ class FMS_Dispatch_Model extends Model
                    a.vehicle_type,
                    a.vendor_name,
                    d.dispatch_id,
-                   d.dispatch_status,
                    CASE WHEN d.dispatch_id IS NOT NULL THEN 1 ELSE 0 END as has_dispatch
             FROM tbl_trips t
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
@@ -365,7 +364,7 @@ class FMS_Dispatch_Model extends Model
         $container_return_status = $this->request->getPost('container_return_status') ?: 'NOT_APPLICABLE';
         $container_return_proof = $this->request->getPost('container_return_proof');
         $dispatcher_name = $this->request->getPost('dispatcher_name');
-        $dispatch_status = $this->request->getPost('dispatch_status') ?: 'DISPATCHED';
+        $trip_status = $this->request->getPost('trip_status') ?: 'DISPATCHED';
         $actual_delivery_date = $this->request->getPost('actual_delivery_date');
         $actual_delivery_time = $this->request->getPost('actual_delivery_time');
         $odometer_in = $this->request->getPost('odometer_in') ?: 0;
@@ -385,12 +384,12 @@ class FMS_Dispatch_Model extends Model
                 `container_release_port`, `container_release_date`, `container_release_time`,
                 `container_return_required`, `container_return_date`, `container_return_time`,
                 `container_return_port`, `container_return_odometer`, `container_return_status`,
-                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `container_return_proof`, `dispatcher_name`,
                 `actual_delivery_date`, `actual_delivery_time`,
                 `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
                 `delay_reason`, `remarks`, `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $dispatch_code, $trip_id, $dispatch_date, $dispatch_time,
                 $truck, $driver, $helper, $origin, $destination,
@@ -400,7 +399,7 @@ class FMS_Dispatch_Model extends Model
                 $container_release_port, $container_release_date, $container_release_time,
                 $container_return_required, $container_return_date, $container_return_time,
                 $container_return_port, $container_return_odometer, $container_return_status,
-                $container_return_proof, $dispatcher_name, $dispatch_status,
+                $container_return_proof, $dispatcher_name,
                 $actual_delivery_date, $actual_delivery_time,
                 $odometer_in, $fuel_level_in, $total_distance, $fuel_consumed,
                 $delay_reason, $remarks, $this->cuser
@@ -410,9 +409,13 @@ class FMS_Dispatch_Model extends Model
         if ($query) {
             $dispatch_id = $this->db->insertID();
             
-            // Update trip status
-            $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$dispatch_status, $trip_id]);
-            
+            // Trip status is the single lifecycle
+            $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$trip_status, $trip_id]);
+
+            if (in_array($trip_status, ['COMPLETED', 'CANCELLED'])) {
+                $this->releaseTripResources($trip_id);
+            }
+
             return ['status' => 'success', 'message' => 'Dispatch Saved Successfully!', 'dispatch_id' => $dispatch_id];
         } else {
             $error = $this->db->error();
@@ -454,7 +457,7 @@ class FMS_Dispatch_Model extends Model
         $container_return_status = $this->request->getPost('container_return_status') ?: 'NOT_APPLICABLE';
         $container_return_proof = $this->request->getPost('container_return_proof');
         $dispatcher_name = $this->request->getPost('dispatcher_name');
-        $dispatch_status = $this->request->getPost('dispatch_status');
+        $trip_status = $this->request->getPost('trip_status') ?: 'DISPATCHED';
         $actual_delivery_date = $this->request->getPost('actual_delivery_date');
         $actual_delivery_time = $this->request->getPost('actual_delivery_time');
         $odometer_in = $this->request->getPost('odometer_in') ?: 0;
@@ -467,8 +470,8 @@ class FMS_Dispatch_Model extends Model
         // Same container-return gate as the last-waypoint-arrival flow: don't let a
         // manual "Completed" pick skip past a container that hasn't been returned yet.
         $completionBlocked = false;
-        if ($dispatch_status === 'COMPLETED' && (int) $container_return_required === 1 && $container_return_status !== 'RETURNED') {
-            $dispatch_status = 'DELIVERED';
+        if ($trip_status === 'COMPLETED' && (int) $container_return_required === 1 && $container_return_status !== 'RETURNED') {
+            $trip_status = 'DELIVERED';
             $completionBlocked = true;
         }
 
@@ -488,7 +491,7 @@ class FMS_Dispatch_Model extends Model
                 `container_return_time` = ?, `container_return_port` = ?,
                 `container_return_odometer` = ?, `container_return_status` = ?,
                 `container_return_proof` = ?, `dispatcher_name` = ?,
-                `dispatch_status` = ?, `actual_delivery_date` = ?,
+                `actual_delivery_date` = ?,
                 `actual_delivery_time` = ?, `odometer_in` = ?,
                 `fuel_level_in` = ?, `total_distance` = ?,
                 `fuel_consumed` = ?, `delay_reason` = ?, `remarks` = ?,
@@ -509,7 +512,7 @@ class FMS_Dispatch_Model extends Model
                 $container_return_time, $container_return_port,
                 $container_return_odometer, $container_return_status,
                 $container_return_proof, $dispatcher_name,
-                $dispatch_status, $actual_delivery_date,
+                $actual_delivery_date,
                 $actual_delivery_time, $odometer_in,
                 $fuel_level_in, $total_distance,
                 $fuel_consumed, $delay_reason, $remarks,
@@ -518,10 +521,10 @@ class FMS_Dispatch_Model extends Model
         );
 
         if ($query) {
-            // Update trip status
-            $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$dispatch_status, $trip_id]);
+            // Trip status is the single lifecycle
+            $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$trip_status, $trip_id]);
 
-            if ($dispatch_status === 'COMPLETED') {
+            if (in_array($trip_status, ['COMPLETED', 'CANCELLED'])) {
                 $this->releaseTripResources($trip_id);
             }
 
@@ -543,6 +546,11 @@ class FMS_Dispatch_Model extends Model
     {
         $dispatch_id = $this->request->getPost('dispatch_id');
         $trip_id = $this->request->getPost('trip_id');
+
+        $hasDR = $this->db->query("SELECT COUNT(*) as total FROM tbl_delivery_receipts WHERE dispatch_id = ?", [$dispatch_id])->getRow()->total;
+        if ($hasDR > 0) {
+            return ['status' => 'error', 'message' => 'Cannot delete a dispatch that already has a delivery receipt.'];
+        }
 
         // Delete checklist and expenses first
         $this->db->query("DELETE FROM `tbl_dispatch_checklist` WHERE `dispatch_id` = ?", [$dispatch_id]);
@@ -670,7 +678,7 @@ class FMS_Dispatch_Model extends Model
         if ($dispatch) {
             $this->db->query("
                 UPDATE tbl_dispatch
-                SET dispatch_status = 'COMPLETED', actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
+                SET actual_delivery_date = ?, actual_delivery_time = ?, updated_at = NOW()
                 WHERE dispatch_id = ?
             ", [$arrivalDate, $arrivalTime, $dispatch->dispatch_id]);
         }
@@ -682,14 +690,14 @@ class FMS_Dispatch_Model extends Model
 
     // ==============================
     // RELEASE TRIP RESOURCES: free the truck/tractor/chassis/driver/helper
-    // assigned to a trip back to AVAILABLE. Called whenever a trip/dispatch
-    // is marked COMPLETED, whether via last-waypoint-arrival or a manual
+    // assigned to a trip back to AVAILABLE. Called whenever a trip is marked
+    // COMPLETED or CANCELLED, whether via last-waypoint-arrival or a manual
     // dispatch edit.
     // ==============================
     private function releaseTripResources($trip_id)
     {
         $assignment = $this->db->query("
-            SELECT truck_plate, tractor_plate, chassis_plate, driver_name, helper_name
+            SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
             FROM tbl_trip_assignments
             WHERE trip_id = ?
             ORDER BY assignment_id DESC
@@ -697,16 +705,14 @@ class FMS_Dispatch_Model extends Model
         ", [$trip_id])->getRow();
 
         if ($assignment) {
-            foreach ([$assignment->truck_plate, $assignment->tractor_plate, $assignment->chassis_plate] as $plate) {
-                if (!empty($plate)) {
-                    $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE plate_number = ?", [$plate]);
-                }
+            foreach (array_filter([$assignment->truck_id, $assignment->tractor_id, $assignment->chassis_id]) as $truck_id) {
+                $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE truck_id = ?", [$truck_id]);
             }
-            if (!empty($assignment->driver_name)) {
-                $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_name = ?", [$assignment->driver_name]);
+            if (!empty($assignment->driver_id)) {
+                $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_id = ?", [$assignment->driver_id]);
             }
-            if (!empty($assignment->helper_name)) {
-                $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_name = ?", [$assignment->helper_name]);
+            if (!empty($assignment->helper_id)) {
+                $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_id = ?", [$assignment->helper_id]);
             }
         }
     }

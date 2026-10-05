@@ -23,13 +23,13 @@ class FMS_MaintenanceReports_Model extends Model
         $params = [$filters['date_from'], $filters['date_to']];
 
         if (!empty($filters['status'])) {
-            $where .= " AND r.status = ?";
+            $where .= " AND r.record_status = ?";
             $params[] = $filters['status'];
         }
 
         $rows = $this->db->query("
             SELECT r.record_code, r.truck_plate, r.maintenance_date, r.maintenance_type,
-                   r.service_category, r.technician, r.total_cost, r.status
+                   r.service_category, r.technician, r.total_cost, r.record_status
             FROM tbl_maintenance_records r
             $where
             ORDER BY r.maintenance_date DESC, r.record_id DESC
@@ -39,7 +39,7 @@ class FMS_MaintenanceReports_Model extends Model
         $completed = 0;
         foreach ($rows as $row) {
             $totalCost += floatval($row['total_cost']);
-            if ($row['status'] === 'COMPLETED') $completed++;
+            if ($row['record_status'] === 'COMPLETED') $completed++;
         }
 
         return [
@@ -52,7 +52,7 @@ class FMS_MaintenanceReports_Model extends Model
                 ['key' => 'service_category', 'label' => 'Category', 'align' => 'left', 'format' => 'text'],
                 ['key' => 'technician', 'label' => 'Technician', 'align' => 'left', 'format' => 'text'],
                 ['key' => 'total_cost', 'label' => 'Total Cost', 'align' => 'right', 'format' => 'currency'],
-                ['key' => 'status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
+                ['key' => 'record_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'COMPLETED' => 'badge-success', 'IN_PROGRESS' => 'badge-warning', 'PENDING' => 'badge-secondary', 'CANCELLED' => 'badge-danger'
                 ]],
             ],
@@ -130,7 +130,7 @@ class FMS_MaintenanceReports_Model extends Model
     // ==============================
     public function getUpcomingMaintenance($filters)
     {
-        $where = "WHERE status = 'SCHEDULED'";
+        $where = "WHERE schedule_status = 'SCHEDULED'";
         $params = [];
 
         if (!empty($filters['date_from']) && !empty($filters['date_to'])) {
@@ -141,7 +141,7 @@ class FMS_MaintenanceReports_Model extends Model
 
         $rows = $this->db->query("
             SELECT schedule_code, truck_plate, maintenance_type, scheduled_date,
-                   next_service_odometer, priority, status
+                   next_service_odometer, priority, schedule_status
             FROM tbl_maintenance_schedules
             $where
             ORDER BY scheduled_date ASC
@@ -164,7 +164,7 @@ class FMS_MaintenanceReports_Model extends Model
                 ['key' => 'priority', 'label' => 'Priority', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'HIGH' => 'badge-danger', 'NORMAL' => 'badge-info', 'LOW' => 'badge-secondary'
                 ]],
-                ['key' => 'status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
+                ['key' => 'schedule_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'SCHEDULED' => 'badge-primary'
                 ]],
             ],
@@ -333,12 +333,12 @@ class FMS_MaintenanceReports_Model extends Model
         $where = "";
         $params = [];
         if (!empty($filters['status'])) {
-            $where = "WHERE availability = ?";
+            $where = "WHERE tool_status = ?";
             $params[] = $filters['status'];
         }
 
         $rows = $this->db->query("
-            SELECT tool_code, tool_name, category, quantity, quantity_on_hand, availability, tool_condition
+            SELECT tool_code, tool_name, category, quantity, quantity_on_hand, tool_status, tool_condition
             FROM tbl_tools
             $where
             ORDER BY tool_name ASC
@@ -347,8 +347,8 @@ class FMS_MaintenanceReports_Model extends Model
         $totalQty = 0; $available = 0; $out = 0;
         foreach ($rows as $row) {
             $totalQty += floatval($row['quantity']);
-            if ($row['availability'] === 'AVAILABLE') $available++;
-            if ($row['availability'] === 'ASSIGNED') $out++;
+            if ($row['tool_status'] === 'AVAILABLE') $available++;
+            if ($row['tool_status'] === 'ASSIGNED') $out++;
         }
 
         return [
@@ -359,7 +359,7 @@ class FMS_MaintenanceReports_Model extends Model
                 ['key' => 'category', 'label' => 'Category', 'align' => 'left', 'format' => 'text'],
                 ['key' => 'quantity', 'label' => 'Total Qty', 'align' => 'right', 'format' => 'number'],
                 ['key' => 'quantity_on_hand', 'label' => 'On Hand', 'align' => 'right', 'format' => 'number'],
-                ['key' => 'availability', 'label' => 'Availability', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
+                ['key' => 'tool_status', 'label' => 'Availability', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'AVAILABLE' => 'badge-success', 'ASSIGNED' => 'badge-warning', 'UNDER_REPAIR' => 'badge-info',
                     'DAMAGED' => 'badge-danger', 'RETIRED' => 'badge-secondary', 'LOST' => 'badge-danger'
                 ]],
@@ -440,12 +440,12 @@ class FMS_MaintenanceReports_Model extends Model
         $where = "";
         $params = [];
         if (!empty($filters['status'])) {
-            $where = "WHERE status = ?";
+            $where = "WHERE supply_status = ?";
             $params[] = $filters['status'];
         }
 
         $rows = $this->db->query("
-            SELECT supply_code, supply_name, category, current_stock, minimum_stock, unit_cost, status
+            SELECT supply_code, supply_name, category, current_stock, minimum_stock, unit_cost, supply_status
             FROM tbl_supplies
             $where
             ORDER BY supply_name ASC
@@ -453,8 +453,8 @@ class FMS_MaintenanceReports_Model extends Model
 
         $lowStock = 0; $outOfStock = 0;
         foreach ($rows as $row) {
-            if ($row['status'] === 'LOW_STOCK') $lowStock++;
-            if ($row['status'] === 'OUT_OF_STOCK') $outOfStock++;
+            if ($row['supply_status'] === 'LOW_STOCK') $lowStock++;
+            if ($row['supply_status'] === 'OUT_OF_STOCK') $outOfStock++;
         }
 
         return [
@@ -466,7 +466,7 @@ class FMS_MaintenanceReports_Model extends Model
                 ['key' => 'current_stock', 'label' => 'Current Stock', 'align' => 'right', 'format' => 'number'],
                 ['key' => 'minimum_stock', 'label' => 'Minimum Stock', 'align' => 'right', 'format' => 'number'],
                 ['key' => 'unit_cost', 'label' => 'Unit Cost', 'align' => 'right', 'format' => 'currency'],
-                ['key' => 'status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
+                ['key' => 'supply_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'IN_STOCK' => 'badge-success', 'LOW_STOCK' => 'badge-warning', 'OUT_OF_STOCK' => 'badge-danger'
                 ]],
             ],
@@ -537,16 +537,16 @@ class FMS_MaintenanceReports_Model extends Model
     public function getLowStock($filters)
     {
         $rows = $this->db->query("
-            SELECT supply_code, supply_name, category, current_stock, minimum_stock, status
+            SELECT supply_code, supply_name, category, current_stock, minimum_stock, supply_status
             FROM tbl_supplies
-            WHERE status IN ('LOW_STOCK','OUT_OF_STOCK')
+            WHERE supply_status IN ('LOW_STOCK','OUT_OF_STOCK')
             ORDER BY current_stock ASC
         ")->getResultArray();
 
         $lowStock = 0; $outOfStock = 0;
         foreach ($rows as $row) {
-            if ($row['status'] === 'LOW_STOCK') $lowStock++;
-            if ($row['status'] === 'OUT_OF_STOCK') $outOfStock++;
+            if ($row['supply_status'] === 'LOW_STOCK') $lowStock++;
+            if ($row['supply_status'] === 'OUT_OF_STOCK') $outOfStock++;
         }
 
         return [
@@ -557,7 +557,7 @@ class FMS_MaintenanceReports_Model extends Model
                 ['key' => 'category', 'label' => 'Category', 'align' => 'left', 'format' => 'text'],
                 ['key' => 'current_stock', 'label' => 'Current Stock', 'align' => 'right', 'format' => 'number'],
                 ['key' => 'minimum_stock', 'label' => 'Minimum Stock', 'align' => 'right', 'format' => 'number'],
-                ['key' => 'status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
+                ['key' => 'supply_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => [
                     'LOW_STOCK' => 'badge-warning', 'OUT_OF_STOCK' => 'badge-danger'
                 ]],
             ],

@@ -20,7 +20,7 @@ class FMS_Payment_Model extends Model
     private function generateReceiptNumber()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_payments WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(receipt_number, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_payments WHERE receipt_number LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return 'PAY-' . $year . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
     }

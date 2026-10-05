@@ -45,7 +45,7 @@ $disposals = $this->db->query("
 $trucks = $this->db->query("
     SELECT truck_id, truck_code, plate_number, make, model, current_odometer
     FROM tbl_trucks
-    WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+    WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
     ORDER BY plate_number
 ")->getResultArray();
 
@@ -746,7 +746,7 @@ echo view('templates/myheader.php');
                                 <td><?=$row['installation_date'] ? date('M d, Y', strtotime($row['installation_date'])) : '—';?></td>
                                 <td><?=number_format($row['installation_odometer'], 0);?> km</td>
                                 <td>
-                                    <?php if($row['status'] == 'ACTIVE'): ?>
+                                    <?php if($row['installation_status'] == 'ACTIVE'): ?>
                                         <span class="badge badge-success">Active</span>
                                     <?php else: ?>
                                         <span class="badge badge-secondary">Removed</span>
@@ -756,7 +756,7 @@ echo view('templates/myheader.php');
                                 <td><?=number_format($row['distance_used_km'], 0);?> km</td>
                                 <td class="text-center">
                                     <div class="action-group">
-                                        <?php if($row['status'] == 'ACTIVE'): ?>
+                                        <?php if($row['installation_status'] == 'ACTIVE'): ?>
                                         <button class="btn-icon btn-icon-dispatch" 
                                                 onclick="__Tire.__openRemoveModal(<?=$row['installation_id'];?>, <?=$row['installation_odometer'];?>)" 
                                                 title="Remove Tire">

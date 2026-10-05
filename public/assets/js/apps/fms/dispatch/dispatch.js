@@ -187,7 +187,7 @@ function __Dispatch() {
                     $('#container_return_status').val(data.container_return_status);
                     $('#container_return_proof').val(data.container_return_proof);
                     $('#dispatcher_name').val(data.dispatcher_name);
-                    $('#dispatch_status').val(data.dispatch_status);
+                    $('#trip_status').val(data.trip_status);
                     $('#actual_delivery_date').val(data.actual_delivery_date);
                     $('#actual_delivery_time').val(data.actual_delivery_time);
                     $('#odometer_in').val(data.odometer_in);
@@ -232,7 +232,7 @@ function __Dispatch() {
                     $('#container_return_status').val('NOT_APPLICABLE');
                     $('#container_return_proof').val('');
                     $('#dispatcher_name').val('');
-                    $('#dispatch_status').val('DISPATCHED');
+                    $('#trip_status').val('DISPATCHED');
                     $('#actual_delivery_date').val('');
                     $('#actual_delivery_time').val('');
                     $('#odometer_in').val('');
@@ -293,7 +293,7 @@ function __Dispatch() {
     this.__saveDispatch = function() {
         var trip_id = $('#dispatch_trip_id').val();
         var dispatch_date = $('#dispatch_date').val();
-        var dispatch_status = $('#dispatch_status').val();
+        var trip_status = $('#trip_status').val();
 
         if(!dispatch_date) {
             toastr.warning('Please select dispatch date', 'Missing field');
@@ -329,7 +329,7 @@ function __Dispatch() {
             container_return_status: $('#container_return_status').val(),
             container_return_proof: $('#container_return_proof').val(),
             dispatcher_name: $('#dispatcher_name').val(),
-            dispatch_status: dispatch_status,
+            trip_status: trip_status,
             actual_delivery_date: $('#actual_delivery_date').val(),
             actual_delivery_time: $('#actual_delivery_time').val(),
             odometer_in: $('#odometer_in').val() || 0,
@@ -380,7 +380,7 @@ function __Dispatch() {
         var dispatch_id = $('#dispatch_id').val();
         var trip_id = $('#dispatch_trip_id').val();
         var dispatch_date = $('#dispatch_date').val();
-        var dispatch_status = $('#dispatch_status').val();
+        var trip_status = $('#trip_status').val();
 
         if(!dispatch_id) {
             toastr.error('No dispatch ID found. Please save the dispatch first.');
@@ -422,7 +422,7 @@ function __Dispatch() {
             container_return_status: $('#container_return_status').val(),
             container_return_proof: $('#container_return_proof').val(),
             dispatcher_name: $('#dispatcher_name').val(),
-            dispatch_status: dispatch_status,
+            trip_status: trip_status,
             actual_delivery_date: $('#actual_delivery_date').val(),
             actual_delivery_time: $('#actual_delivery_time').val(),
             odometer_in: $('#odometer_in').val() || 0,

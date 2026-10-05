@@ -1264,7 +1264,7 @@ $(document).ready(function() {
     });
 
     $('#pdfModal').on('hidden.bs.modal', function () {
-        document.getElementById('pdfFrame').src = '';
+        document.getElementById('pdfFrame').src = 'about:blank';
     });
 
     $('#podModal').on('hidden.bs.modal', function () {

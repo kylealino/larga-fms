@@ -5,7 +5,19 @@ $this->db = \Config\Database::connect();
 // ==============================
 // FETCH DATA
 // ==============================
-$query = $this->db->query("SELECT * FROM tbl_helpers ORDER BY helper_id DESC");
+$query = $this->db->query("
+    SELECT *,
+           CASE
+               WHEN license_number IS NULL OR license_number = '' THEN 'NONE'
+               WHEN expiration_date IS NULL THEN 'VALID'
+               WHEN expiration_date < CURDATE() THEN 'EXPIRED'
+               WHEN expiration_date <= CURDATE() + INTERVAL 30 DAY THEN 'EXPIRING'
+               ELSE 'VALID'
+           END AS license_status,
+           IF(license_number IS NULL OR license_number = '', 'NO', 'YES') AS has_license
+    FROM tbl_helpers
+    ORDER BY helper_id DESC
+");
 $helpers = $query->getResultArray();
 
 // ==============================
@@ -13,8 +25,8 @@ $helpers = $query->getResultArray();
 // ==============================
 $total_helpers = count($helpers);
 $total_available = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE helper_status = 'AVAILABLE'")->getRow()->total;
-$total_on_trip = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE helper_status IN ('ASSIGNED', 'ON TRIP')")->getRow()->total;
-$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE helper_status IN ('INACTIVE', 'ON LEAVE')")->getRow()->total;
+$total_on_trip = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE helper_status IN ('ASSIGNED', 'ON_TRIP')")->getRow()->total;
+$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_helpers WHERE helper_status IN ('INACTIVE', 'ON_LEAVE')")->getRow()->total;
 
 echo view('templates/myheader.php');
 ?>
@@ -1073,7 +1085,7 @@ echo view('templates/myheader.php');
         <div class="stat-right"><i class="bi bi-person-check"></i></div>
         <span class="filter-badge">Click to filter</span>
     </div>
-    <div class="stat-card" data-filter="ON TRIP" onclick="filterTable('ON TRIP')">
+    <div class="stat-card" data-filter="ON_TRIP" onclick="filterTable('ON_TRIP')">
         <div class="stat-left">
             <div class="stat-label">On Trip</div>
             <div class="stat-value"><?=$total_on_trip;?></div>
@@ -1158,8 +1170,8 @@ echo view('templates/myheader.php');
                                         $statusLabel = 'Inactive';
                                         if($row['helper_status'] == 'AVAILABLE') { $statusClass = 'badge-success'; $statusLabel = 'Available'; }
                                         elseif($row['helper_status'] == 'ASSIGNED') { $statusClass = 'badge-warning'; $statusLabel = 'Assigned'; }
-                                        elseif($row['helper_status'] == 'ON TRIP') { $statusClass = 'badge-info'; $statusLabel = 'On Trip'; }
-                                        elseif($row['helper_status'] == 'ON LEAVE') { $statusClass = 'badge-secondary'; $statusLabel = 'On Leave'; }
+                                        elseif($row['helper_status'] == 'ON_TRIP') { $statusClass = 'badge-info'; $statusLabel = 'On Trip'; }
+                                        elseif($row['helper_status'] == 'ON_LEAVE') { $statusClass = 'badge-secondary'; $statusLabel = 'On Leave'; }
                                         ?>
                                         <span class="badge <?=$statusClass;?>"><?=$statusLabel;?></span>
                                     </td>
@@ -1291,8 +1303,8 @@ echo view('templates/myheader.php');
                             <select id="form_helper_status" class="form-control">
                                 <option value="AVAILABLE">Available</option>
                                 <option value="ASSIGNED">Assigned</option>
-                                <option value="ON TRIP">On Trip</option>
-                                <option value="ON LEAVE">On Leave</option>
+                                <option value="ON_TRIP">On Trip</option>
+                                <option value="ON_LEAVE">On Leave</option>
                                 <option value="INACTIVE">Inactive</option>
                             </select>
                         </div>
@@ -1543,10 +1555,10 @@ function filterTable(status) {
         $('#filterBadgeAvailable').show();
         $('#filterStatusDisplay').text('(Filtered: Available)');
         $('#clearFilterBtn').show();
-    } else if(status === 'ON TRIP') {
+    } else if(status === 'ON_TRIP') {
         // Search for both "Assigned" and "On Trip" statuses
         helperTable.column(columnIndex).search('Assigned|On Trip', true, false).draw();
-        $('.stat-card[data-filter="ON TRIP"]').addClass('active');
+        $('.stat-card[data-filter="ON_TRIP"]').addClass('active');
         $('#filterBadgeOnTrip').show();
         $('#filterStatusDisplay').text('(Filtered: On Trip / Assigned)');
         $('#clearFilterBtn').show();
@@ -1714,8 +1726,8 @@ function viewHelper(helper_id) {
                 var statusLabel = '';
                 if(data.helper_status == 'AVAILABLE') { statusLabel = 'Available'; }
                 else if(data.helper_status == 'ASSIGNED') { statusLabel = 'Assigned'; }
-                else if(data.helper_status == 'ON TRIP') { statusLabel = 'On Trip'; }
-                else if(data.helper_status == 'ON LEAVE') { statusLabel = 'On Leave'; }
+                else if(data.helper_status == 'ON_TRIP') { statusLabel = 'On Trip'; }
+                else if(data.helper_status == 'ON_LEAVE') { statusLabel = 'On Leave'; }
                 else { statusLabel = 'Inactive'; }
 
                 // License attachment preview

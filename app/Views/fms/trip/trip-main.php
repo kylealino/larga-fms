@@ -5,7 +5,12 @@ $this->db = \Config\Database::connect();
 // ==============================
 // FETCH DATA
 // ==============================
-$query = $this->db->query("SELECT * FROM tbl_trips ORDER BY trip_id DESC");
+$query = $this->db->query("
+    SELECT t.*,
+           EXISTS(SELECT 1 FROM tbl_trip_assignments a WHERE a.trip_id = t.trip_id) AS has_assignment
+    FROM tbl_trips t
+    ORDER BY t.trip_id DESC
+");
 $trips = $query->getResultArray();
 
 // ==============================
@@ -923,7 +928,7 @@ echo view('templates/myheader.php');
                                     <select id="form_customer_id" class="form-control" required>
                                         <option value="">— Select Customer —</option>
                                         <?php
-                                        $customers = $this->db->query("SELECT customer_id, customer_name FROM tbl_customers WHERE status = 'ACTIVE' ORDER BY customer_name")->getResultArray();
+                                        $customers = $this->db->query("SELECT customer_id, customer_name FROM tbl_customers WHERE customer_status = 'ACTIVE' ORDER BY customer_name")->getResultArray();
                                         foreach($customers as $c):
                                         ?>
                                         <option value="<?=$c['customer_id'];?>"><?=$c['customer_name'];?></option>
@@ -1168,21 +1173,21 @@ echo view('templates/myheader.php');
                             
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_truck_field" style="display:none;">
                                 <label class="form-label">Truck <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_truck_plate">
+                                <select class="form-control" id="assignment_truck_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
                             
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_tractor_field" style="display:none;">
                                 <label class="form-label">Tractor <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_tractor_plate">
+                                <select class="form-control" id="assignment_tractor_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
                             
                             <div class="col-md-4 mb-2 toggle-field" id="assignment_chassis_field" style="display:none;">
                                 <label class="form-label">Chassis <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_chassis_plate">
+                                <select class="form-control" id="assignment_chassis_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
@@ -1204,21 +1209,21 @@ echo view('templates/myheader.php');
                             
                             <div class="col-md-3 mb-2 toggle-field" id="assignment_vendor_field" style="display:none;">
                                 <label class="form-label">Vendor <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_vendor_name">
+                                <select class="form-control" id="assignment_vendor_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
                             
                             <div class="col-md-3 mb-2" id="assignment_driver_field">
                                 <label class="form-label">Driver <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_driver_name">
+                                <select class="form-control" id="assignment_driver_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
                             
                             <div class="col-md-3 mb-2" id="assignment_helper_field">
                                 <label class="form-label">Helper</label>
-                                <select class="form-control" id="assignment_helper_name">
+                                <select class="form-control" id="assignment_helper_id">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>
@@ -1273,17 +1278,6 @@ echo view('templates/myheader.php');
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Fuel Level %</label>
                                 <input type="number" class="form-control" id="assignment_fuel_level" max="100" placeholder="100">
-                            </div>
-                            
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Status</label>
-                                <select class="form-control" id="assignment_status">
-                                    <option value="ASSIGNED">Assigned</option>
-                                    <option value="DISPATCHED">Dispatched</option>
-                                    <option value="IN_TRANSIT">In Transit</option>
-                                    <option value="COMPLETED">Completed</option>
-                                    <option value="CANCELLED">Cancelled</option>
-                                </select>
                             </div>
                             
                             <div class="col-md-12 mb-2">

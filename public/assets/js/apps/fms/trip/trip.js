@@ -44,9 +44,9 @@ function __Trips() {
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
             $('#assignment_rented_section').show();
-            $('#assignment_truck_plate').prop('required', false);
-            $('#assignment_tractor_plate').prop('required', false);
-            $('#assignment_chassis_plate').prop('required', false);
+            $('#assignment_truck_id').prop('required', false);
+            $('#assignment_tractor_id').prop('required', false);
+            $('#assignment_chassis_id').prop('required', false);
         }
     };
 
@@ -71,19 +71,19 @@ function __Trips() {
     // ==============================
     this.__resetAssignmentForm = function() {
         $('#assignment_vehicle_type').val('');
-        $('#assignment_truck_plate').val('');
-        $('#assignment_tractor_plate').val('');
-        $('#assignment_chassis_plate').val('');
+        $('#assignment_truck_id').val('');
+        $('#assignment_tractor_id').val('');
+        $('#assignment_chassis_id').val('');
         $('#assignment_chassis_type').val('OWNED');
-        $('#assignment_vendor_name').val('');
+        $('#assignment_vendor_id').val('');
         $('#assignment_rental_rate').val('');
         $('#assignment_rental_start_date').val('');
         $('#assignment_rental_end_date').val('');
         $('#assignment_rental_agreement_no').val('');
         $('#assignment_vendor_contact_person').val('');
         $('#assignment_vendor_contact_number').val('');
-        $('#assignment_driver_name').val('');
-        $('#assignment_helper_name').val('');
+        $('#assignment_driver_id').val('');
+        $('#assignment_helper_id').val('');
         var today = new Date().toISOString().split('T')[0];
         $('#assignment_assignment_date').val(today);
         $('#assignment_dispatch_time').val('');
@@ -91,7 +91,6 @@ function __Trips() {
         $('#assignment_odometer_before_trip').val('');
         $('#assignment_fuel_level').val('');
         $('#assignment_remarks').val('');
-        $('#assignment_status').val('ASSIGNED');
         
         $('#assignment_truck_field').hide();
         $('#assignment_tractor_field').hide();
@@ -402,19 +401,19 @@ function __Trips() {
                     
                     $('#assignment_id').val('');
                     $('#assignment_vehicle_type').val('');
-                    $('#assignment_truck_plate').val('');
-                    $('#assignment_tractor_plate').val('');
-                    $('#assignment_chassis_plate').val('');
+                    $('#assignment_truck_id').val('');
+                    $('#assignment_tractor_id').val('');
+                    $('#assignment_chassis_id').val('');
                     $('#assignment_chassis_type').val('OWNED');
-                    $('#assignment_vendor_name').val('');
+                    $('#assignment_vendor_id').val('');
                     $('#assignment_rental_rate').val('');
                     $('#assignment_rental_start_date').val('');
                     $('#assignment_rental_end_date').val('');
                     $('#assignment_rental_agreement_no').val('');
                     $('#assignment_vendor_contact_person').val('');
                     $('#assignment_vendor_contact_number').val('');
-                    $('#assignment_driver_name').val('');
-                    $('#assignment_helper_name').val('');
+                    $('#assignment_driver_id').val('');
+                    $('#assignment_helper_id').val('');
                     var today = new Date().toISOString().split('T')[0];
                     $('#assignment_assignment_date').val(today);
                     $('#assignment_dispatch_time').val('');
@@ -422,7 +421,6 @@ function __Trips() {
                     $('#assignment_odometer_before_trip').val('');
                     $('#assignment_fuel_level').val('');
                     $('#assignment_remarks').val('');
-                    $('#assignment_status').val('ASSIGNED');
                     
                     $('#assignment_driver_field').show();
                     $('#assignment_helper_field').show();
@@ -468,25 +466,24 @@ function __Trips() {
                 if(data && data.assignment_id) {
                     $('#assignment_id').val(data.assignment_id);
                     $('#assignment_vehicle_type').val(data.vehicle_type);
-                    $('#assignment_truck_plate').val(data.truck_plate || '');
-                    $('#assignment_tractor_plate').val(data.tractor_plate || '');
-                    $('#assignment_chassis_plate').val(data.chassis_plate || '');
+                    $('#assignment_truck_id').val(data.truck_id || '');
+                    $('#assignment_tractor_id').val(data.tractor_id || '');
+                    $('#assignment_chassis_id').val(data.chassis_id || '');
                     $('#assignment_chassis_type').val(data.chassis_type || 'OWNED');
-                    $('#assignment_vendor_name').val(data.vendor_name || '');
+                    $('#assignment_vendor_id').val(data.vendor_id || '');
                     $('#assignment_rental_rate').val(data.rental_rate || 0);
                     $('#assignment_rental_start_date').val(data.rental_start_date || '');
                     $('#assignment_rental_end_date').val(data.rental_end_date || '');
                     $('#assignment_rental_agreement_no').val(data.rental_agreement_no || '');
                     $('#assignment_vendor_contact_person').val(data.vendor_contact_person || '');
                     $('#assignment_vendor_contact_number').val(data.vendor_contact_number || '');
-                    $('#assignment_driver_name').val(data.driver_name || '');
-                    $('#assignment_helper_name').val(data.helper_name || '');
+                    $('#assignment_driver_id').val(data.driver_id || '');
+                    $('#assignment_helper_id').val(data.helper_id || '');
                     $('#assignment_assignment_date').val(data.assignment_date || '');
                     $('#assignment_dispatch_time').val(data.dispatch_time || '');
                     $('#assignment_dispatch_location').val(data.dispatch_location || '');
                     $('#assignment_odometer_before_trip').val(data.odometer_before_trip || 0);
                     $('#assignment_fuel_level').val(data.fuel_level || 0);
-                    $('#assignment_status').val(data.assignment_status || 'ASSIGNED');
                     $('#assignment_remarks').val(data.remarks || '');
                     
                     __Trips.__toggleVehicleFields();
@@ -516,7 +513,7 @@ function __Trips() {
     this.__saveAssignment = function() {
         var trip_id = $('#assignment_trip_id').val();
         var vehicle_type = $('#assignment_vehicle_type').val();
-        var driver_name = $('#assignment_driver_name').val();
+        var driver_id = $('#assignment_driver_id').val();
         var assignment_date = $('#assignment_assignment_date').val();
         
         if(!vehicle_type) {
@@ -526,41 +523,41 @@ function __Trips() {
         }
         
         if(vehicle_type == 'RIGID') {
-            if(!$('#assignment_truck_plate').val()) {
+            if(!$('#assignment_truck_id').val()) {
                 toastr.warning('Please select a truck', 'Missing field');
-                $('#assignment_truck_plate').focus();
+                $('#assignment_truck_id').focus();
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_CHASSIS') {
-            if(!$('#assignment_tractor_plate').val() || !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please select both tractor and chassis', 'Missing field');
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
-            if(!$('#assignment_tractor_plate').val() || !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please select both tractor and chassis', 'Missing field');
                 return;
             }
-            if(!$('#assignment_vendor_name').val()) {
+            if(!$('#assignment_vendor_id').val()) {
                 toastr.warning('Please select a vendor', 'Missing field');
-                $('#assignment_vendor_name').focus();
+                $('#assignment_vendor_id').focus();
                 return;
             }
         } else if(vehicle_type == 'RENTED_ALL') {
-            if(!$('#assignment_vendor_name').val()) {
+            if(!$('#assignment_vendor_id').val()) {
                 toastr.warning('Please select a vendor', 'Missing field');
-                $('#assignment_vendor_name').focus();
+                $('#assignment_vendor_id').focus();
                 return;
             }
-            if(!$('#assignment_truck_plate').val() && !$('#assignment_tractor_plate').val() && !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_truck_id').val() && !$('#assignment_tractor_id').val() && !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please provide at least one vehicle (Truck, Tractor, or Chassis)', 'Missing field');
                 return;
             }
         }
         
-        if(!driver_name) {
+        if(!driver_id) {
             toastr.warning('Please select a driver', 'Missing field');
-            $('#assignment_driver_name').focus();
+            $('#assignment_driver_id').focus();
             return;
         }
         
@@ -578,25 +575,24 @@ function __Trips() {
         var mparam = {
             trip_id: trip_id,
             vehicle_type: vehicle_type,
-            truck_plate: $('#assignment_truck_plate').val() || '',
-            tractor_plate: $('#assignment_tractor_plate').val() || '',
-            chassis_plate: $('#assignment_chassis_plate').val() || '',
+            truck_id: $('#assignment_truck_id').val() || '',
+            tractor_id: $('#assignment_tractor_id').val() || '',
+            chassis_id: $('#assignment_chassis_id').val() || '',
             chassis_type: chassis_type,
-            vendor_name: $('#assignment_vendor_name').val() || '',
+            vendor_id: $('#assignment_vendor_id').val() || '',
             rental_rate: $('#assignment_rental_rate').val() || 0,
             rental_start_date: $('#assignment_rental_start_date').val() || '',
             rental_end_date: $('#assignment_rental_end_date').val() || '',
             rental_agreement_no: $('#assignment_rental_agreement_no').val() || '',
             vendor_contact_person: $('#assignment_vendor_contact_person').val() || '',
             vendor_contact_number: $('#assignment_vendor_contact_number').val() || '',
-            driver_name: driver_name,
-            helper_name: $('#assignment_helper_name').val() || '',
+            driver_id: driver_id,
+            helper_id: $('#assignment_helper_id').val() || '',
             assignment_date: assignment_date,
             dispatch_time: $('#assignment_dispatch_time').val() || '',
             dispatch_location: $('#assignment_dispatch_location').val() || '',
             odometer_before_trip: $('#assignment_odometer_before_trip').val() || 0,
             fuel_level: $('#assignment_fuel_level').val() || 0,
-            assignment_status: $('#assignment_status').val() || 'ASSIGNED',
             remarks: $('#assignment_remarks').val() || '',
             meaction: 'SAVE_ASSIGNMENT'
         };
@@ -637,7 +633,7 @@ function __Trips() {
         var assignment_id = $('#assignment_id').val();
         var trip_id = $('#assignment_trip_id').val();
         var vehicle_type = $('#assignment_vehicle_type').val();
-        var driver_name = $('#assignment_driver_name').val();
+        var driver_id = $('#assignment_driver_id').val();
         var assignment_date = $('#assignment_assignment_date').val();
         
         if(!vehicle_type) {
@@ -647,41 +643,41 @@ function __Trips() {
         }
         
         if(vehicle_type == 'RIGID') {
-            if(!$('#assignment_truck_plate').val()) {
+            if(!$('#assignment_truck_id').val()) {
                 toastr.warning('Please select a truck', 'Missing field');
-                $('#assignment_truck_plate').focus();
+                $('#assignment_truck_id').focus();
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_CHASSIS') {
-            if(!$('#assignment_tractor_plate').val() || !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please select both tractor and chassis', 'Missing field');
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
-            if(!$('#assignment_tractor_plate').val() || !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please select both tractor and chassis', 'Missing field');
                 return;
             }
-            if(!$('#assignment_vendor_name').val()) {
+            if(!$('#assignment_vendor_id').val()) {
                 toastr.warning('Please select a vendor', 'Missing field');
-                $('#assignment_vendor_name').focus();
+                $('#assignment_vendor_id').focus();
                 return;
             }
         } else if(vehicle_type == 'RENTED_ALL') {
-            if(!$('#assignment_vendor_name').val()) {
+            if(!$('#assignment_vendor_id').val()) {
                 toastr.warning('Please select a vendor', 'Missing field');
-                $('#assignment_vendor_name').focus();
+                $('#assignment_vendor_id').focus();
                 return;
             }
-            if(!$('#assignment_truck_plate').val() && !$('#assignment_tractor_plate').val() && !$('#assignment_chassis_plate').val()) {
+            if(!$('#assignment_truck_id').val() && !$('#assignment_tractor_id').val() && !$('#assignment_chassis_id').val()) {
                 toastr.warning('Please provide at least one vehicle (Truck, Tractor, or Chassis)', 'Missing field');
                 return;
             }
         }
         
-        if(!driver_name) {
+        if(!driver_id) {
             toastr.warning('Please select a driver', 'Missing field');
-            $('#assignment_driver_name').focus();
+            $('#assignment_driver_id').focus();
             return;
         }
         
@@ -700,25 +696,24 @@ function __Trips() {
             assignment_id: assignment_id,
             trip_id: trip_id,
             vehicle_type: vehicle_type,
-            truck_plate: $('#assignment_truck_plate').val() || '',
-            tractor_plate: $('#assignment_tractor_plate').val() || '',
-            chassis_plate: $('#assignment_chassis_plate').val() || '',
+            truck_id: $('#assignment_truck_id').val() || '',
+            tractor_id: $('#assignment_tractor_id').val() || '',
+            chassis_id: $('#assignment_chassis_id').val() || '',
             chassis_type: chassis_type,
-            vendor_name: $('#assignment_vendor_name').val() || '',
+            vendor_id: $('#assignment_vendor_id').val() || '',
             rental_rate: $('#assignment_rental_rate').val() || 0,
             rental_start_date: $('#assignment_rental_start_date').val() || '',
             rental_end_date: $('#assignment_rental_end_date').val() || '',
             rental_agreement_no: $('#assignment_rental_agreement_no').val() || '',
             vendor_contact_person: $('#assignment_vendor_contact_person').val() || '',
             vendor_contact_number: $('#assignment_vendor_contact_number').val() || '',
-            driver_name: driver_name,
-            helper_name: $('#assignment_helper_name').val() || '',
+            driver_id: driver_id,
+            helper_id: $('#assignment_helper_id').val() || '',
             assignment_date: assignment_date,
             dispatch_time: $('#assignment_dispatch_time').val() || '',
             dispatch_location: $('#assignment_dispatch_location').val() || '',
             odometer_before_trip: $('#assignment_odometer_before_trip').val() || 0,
             fuel_level: $('#assignment_fuel_level').val() || 0,
-            assignment_status: $('#assignment_status').val() || 'ASSIGNED',
             remarks: $('#assignment_remarks').val() || '',
             meaction: 'UPDATE_ASSIGNMENT'
         };
@@ -815,10 +810,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.plate_number + '">' + item.plate_number + '</option>';
+                        opts += '<option value="' + item.truck_id + '">' + item.plate_number + '</option>';
                     });
                 }
-                $('#assignment_truck_plate').html(opts);
+                $('#assignment_truck_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading trucks: " + error);
@@ -834,10 +829,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.plate_number + '">' + item.plate_number + '</option>';
+                        opts += '<option value="' + item.truck_id + '">' + item.plate_number + '</option>';
                     });
                 }
-                $('#assignment_tractor_plate').html(opts);
+                $('#assignment_tractor_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading tractors: " + error);
@@ -853,10 +848,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.plate_number + '">' + item.plate_number + '</option>';
+                        opts += '<option value="' + item.truck_id + '">' + item.plate_number + '</option>';
                     });
                 }
-                $('#assignment_chassis_plate').html(opts);
+                $('#assignment_chassis_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading chassis: " + error);
@@ -872,10 +867,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.driver_name + '">' + item.driver_name + '</option>';
+                        opts += '<option value="' + item.driver_id + '">' + item.driver_name + '</option>';
                     });
                 }
-                $('#assignment_driver_name').html(opts);
+                $('#assignment_driver_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading drivers: " + error);
@@ -891,10 +886,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.helper_name + '">' + item.helper_name + '</option>';
+                        opts += '<option value="' + item.helper_id + '">' + item.helper_name + '</option>';
                     });
                 }
-                $('#assignment_helper_name').html(opts);
+                $('#assignment_helper_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading helpers: " + error);
@@ -910,10 +905,10 @@ function __Trips() {
                 var opts = '<option value="">— Select —</option>';
                 if(data && data.length > 0) {
                     $.each(data, function(i, item) {
-                        opts += '<option value="' + item.vendor_name + '">' + item.vendor_name + '</option>';
+                        opts += '<option value="' + item.vendor_id + '">' + item.vendor_name + '</option>';
                     });
                 }
-                $('#assignment_vendor_name').html(opts);
+                $('#assignment_vendor_id').html(opts);
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading vendors: " + error);

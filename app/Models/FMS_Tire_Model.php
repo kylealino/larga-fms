@@ -20,28 +20,28 @@ class FMS_Tire_Model extends Model
     private function generateTireCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tires WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(tire_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tires WHERE tire_code LIKE ?", ['%-' . $year . '-%']);
         return 'TIR-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
     private function generateTransactionCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tire_transactions WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(transaction_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tire_transactions WHERE transaction_code LIKE ?", ['%-' . $year . '-%']);
         return 'TTX-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
     private function generateInstallationCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tire_installations WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(installation_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tire_installations WHERE installation_code LIKE ?", ['%-' . $year . '-%']);
         return 'TIN-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
     private function generateDisposalCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tire_disposals WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(disposal_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tire_disposals WHERE disposal_code LIKE ?", ['%-' . $year . '-%']);
         return 'TDS-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
@@ -53,7 +53,7 @@ class FMS_Tire_Model extends Model
         return $this->db->query("
             SELECT truck_id, truck_code, plate_number, make, model, current_odometer
             FROM tbl_trucks
-            WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+            WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
             ORDER BY plate_number
         ")->getResultArray();
     }
@@ -174,7 +174,7 @@ class FMS_Tire_Model extends Model
         $tire_id = $this->request->getPost('tire_id');
 
         $activeInstall = $this->db->query("
-            SELECT installation_id FROM tbl_tire_installations WHERE tire_id = ? AND status = 'ACTIVE' LIMIT 1
+            SELECT installation_id FROM tbl_tire_installations WHERE tire_id = ? AND installation_status = 'ACTIVE' LIMIT 1
         ", [$tire_id])->getRow();
 
         if ($activeInstall) {
@@ -301,7 +301,7 @@ class FMS_Tire_Model extends Model
             INSERT INTO `tbl_tire_installations`(
                 `installation_code`, `tire_id`, `tire_code`, `truck_id`, `truck_plate`,
                 `position`, `installation_date`, `installation_odometer`,
-                `installed_by`, `installation_remarks`, `status`, `created_by`
+                `installed_by`, `installation_remarks`, `installation_status`, `created_by`
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?)
         ", [
             $installation_code, $tire_id, $tire_code, $truck_id, $truck_plate,
@@ -344,7 +344,7 @@ class FMS_Tire_Model extends Model
 
         $query = $this->db->query("
             UPDATE `tbl_tire_installations` SET
-                `status` = 'REMOVED',
+                `installation_status` = 'REMOVED',
                 `removed_date` = ?,
                 `removal_odometer` = ?,
                 `distance_used_km` = ?,
@@ -491,7 +491,7 @@ class FMS_Tire_Model extends Model
                 'description' => 'Installed on ' . ($i['truck_plate'] ?: 'Truck #' . $i['truck_id']),
                 'details' => 'Position: ' . ($i['position'] ?: '—') . ' | Odometer: ' . number_format($i['installation_odometer'], 0) . ' km | By: ' . ($i['installed_by'] ?: '—')
             ];
-            if ($i['status'] == 'REMOVED' && $i['removed_date']) {
+            if ($i['installation_status'] == 'REMOVED' && $i['removed_date']) {
                 $journey[] = [
                     'date' => $i['removed_date'],
                     'type' => 'REMOVED',

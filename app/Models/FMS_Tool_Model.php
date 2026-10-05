@@ -20,14 +20,14 @@ class FMS_Tool_Model extends Model
     private function generateToolCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tools WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(tool_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tools WHERE tool_code LIKE ?", ['%-' . $year . '-%']);
         return 'TL-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
     private function generateIssuanceCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_tool_issuances WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(issuance_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_tool_issuances WHERE issuance_code LIKE ?", ['%-' . $year . '-%']);
         return 'TIS-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
@@ -39,7 +39,7 @@ class FMS_Tool_Model extends Model
         return $this->db->query("
             SELECT truck_id, truck_code, plate_number, make, model
             FROM tbl_trucks
-            WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+            WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
             ORDER BY plate_number
         ")->getResultArray();
     }
@@ -50,7 +50,7 @@ class FMS_Tool_Model extends Model
             SELECT tool_id, tool_code, tool_name, category, brand, model, serial_number, 
                    tool_condition, quantity, quantity_on_hand
             FROM tbl_tools
-            WHERE availability IN ('AVAILABLE','ASSIGNED')
+            WHERE tool_status IN ('AVAILABLE','ASSIGNED')
               AND quantity_on_hand > 0
             ORDER BY tool_name
         ")->getResultArray();
@@ -150,7 +150,7 @@ class FMS_Tool_Model extends Model
                 `tool_code`, `tool_name`, `category`, `brand`, `model`, `serial_number`,
                 `purchase_date`, `purchase_cost`, `quantity`, `quantity_on_hand`,
                 `current_location`, `tool_condition`,
-                `availability`, `assigned_to`, `truck_id`, `truck_plate`,
+                `tool_status`, `assigned_to`, `truck_id`, `truck_plate`,
                 `remarks`, `created_by`
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ", [
@@ -231,7 +231,7 @@ class FMS_Tool_Model extends Model
                 `purchase_date` = ?, `purchase_cost` = ?,
                 `quantity` = ?, `quantity_on_hand` = ?,
                 `current_location` = ?, `tool_condition` = ?,
-                `availability` = ?, `assigned_to` = ?, `truck_id` = ?, `truck_plate` = ?,
+                `tool_status` = ?, `assigned_to` = ?, `truck_id` = ?, `truck_plate` = ?,
                 `remarks` = ?, `updated_at` = NOW()
             WHERE `tool_id` = ?
         ", [
@@ -345,13 +345,13 @@ class FMS_Tool_Model extends Model
             $totalQty = intval($tool->quantity);
             $new_availability = ($new_on_hand < $totalQty) ? 'ASSIGNED' : 'AVAILABLE';
 
-            if (in_array($tool->availability, ['RETIRED','LOST','DAMAGED'])) {
-                $new_availability = $tool->availability;
+            if (in_array($tool->tool_status, ['RETIRED','LOST','DAMAGED'])) {
+                $new_availability = $tool->tool_status;
             }
 
             $this->db->query("
                 UPDATE tbl_tools 
-                SET quantity_on_hand = ?, availability = ?, updated_at = NOW()
+                SET quantity_on_hand = ?, tool_status = ?, updated_at = NOW()
                 WHERE tool_id = ?
             ", [$new_on_hand, $new_availability, $tool_id]);
 
@@ -442,7 +442,7 @@ class FMS_Tool_Model extends Model
                 $this->db->query("
                     UPDATE tbl_tools SET
                         quantity_on_hand = ?,
-                        availability = ?,
+                        tool_status = ?,
                         tool_condition = ?,
                         updated_at = NOW()
                     WHERE tool_id = ?
@@ -466,7 +466,7 @@ class FMS_Tool_Model extends Model
                 } elseif ($new_availability !== 'DAMAGED') {
                     // Other units are still out — reassign, but don't clobber a just-set DAMAGED flag
                     $this->db->query("
-                        UPDATE tbl_tools SET availability = 'ASSIGNED' WHERE tool_id = ?
+                        UPDATE tbl_tools SET tool_status = 'ASSIGNED' WHERE tool_id = ?
                     ", [$iss->tool_id]);
                 }
             }
@@ -514,7 +514,7 @@ class FMS_Tool_Model extends Model
                     if (intval($openCount) == 0) {
                         $this->db->query("
                             UPDATE tbl_tools 
-                            SET quantity_on_hand = ?, availability = ?, 
+                            SET quantity_on_hand = ?, tool_status = ?, 
                                 assigned_to = NULL, truck_id = NULL, truck_plate = NULL, 
                                 updated_at = NOW()
                             WHERE tool_id = ?
@@ -522,7 +522,7 @@ class FMS_Tool_Model extends Model
                     } else {
                         $this->db->query("
                             UPDATE tbl_tools 
-                            SET quantity_on_hand = ?, availability = ?, updated_at = NOW()
+                            SET quantity_on_hand = ?, tool_status = ?, updated_at = NOW()
                             WHERE tool_id = ?
                         ", [$new_on_hand, $new_availability, $iss->tool_id]);
                     }

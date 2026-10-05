@@ -28,7 +28,7 @@ function __Sup() {
                         $('#sup_reorder').val(data.reorder_level);
                         $('#sup_supplier').val(data.supplier);
                         $('#sup_location').val(data.storage_location);
-                        $('#sup_status_display').val(data.status);
+                        $('#sup_status_display').val(data.supply_status);
                         $('#sup_remarks').val(data.remarks);
 
                         $('#supplyModalTitle').html('<i class="bi bi-pencil me-2"></i>Edit Supply');

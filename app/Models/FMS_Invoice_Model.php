@@ -20,7 +20,7 @@ class FMS_Invoice_Model extends Model
     private function generateInvoiceCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_invoices WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(invoice_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_invoices WHERE invoice_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         return 'INV-' . $year . '-' . str_pad($count, 6, '0', STR_PAD_LEFT);
     }

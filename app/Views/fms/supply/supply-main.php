@@ -24,7 +24,7 @@ $transactions = $this->db->query("
 $trucks = $this->db->query("
     SELECT truck_id, truck_code, plate_number, make, model
     FROM tbl_trucks
-    WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+    WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
     ORDER BY plate_number
 ")->getResultArray();
 
@@ -39,10 +39,10 @@ $stat_discontinued = 0;
 $total_value = 0;
 
 foreach ($supplies as $s) {
-    if ($s['status'] == 'IN_STOCK') $stat_in_stock++;
-    elseif ($s['status'] == 'LOW_STOCK') $stat_low_stock++;
-    elseif ($s['status'] == 'OUT_OF_STOCK') $stat_out_of_stock++;
-    elseif ($s['status'] == 'DISCONTINUED') $stat_discontinued++;
+    if ($s['supply_status'] == 'IN_STOCK') $stat_in_stock++;
+    elseif ($s['supply_status'] == 'LOW_STOCK') $stat_low_stock++;
+    elseif ($s['supply_status'] == 'OUT_OF_STOCK') $stat_out_of_stock++;
+    elseif ($s['supply_status'] == 'DISCONTINUED') $stat_discontinued++;
     $total_value += floatval($s['current_stock']) * floatval($s['unit_cost']);
 }
 
@@ -514,8 +514,8 @@ echo view('templates/myheader.php');
                                 $minimum = floatval($row['minimum_stock']);
                                 $pct = ($minimum > 0) ? min(100, ($current / ($minimum * 3)) * 100) : 100;
                                 $barClass = '';
-                                if ($row['status'] == 'LOW_STOCK') $barClass = 'warning';
-                                elseif ($row['status'] == 'OUT_OF_STOCK') $barClass = 'danger';
+                                if ($row['supply_status'] == 'LOW_STOCK') $barClass = 'warning';
+                                elseif ($row['supply_status'] == 'OUT_OF_STOCK') $barClass = 'danger';
                                 $totalVal = $current * floatval($row['unit_cost']);
                             ?>
                             <tr>
@@ -540,11 +540,11 @@ echo view('templates/myheader.php');
                                 <td>
                                     <?php
                                     $stClass = 'badge-secondary';
-                                    $stLabel = $row['status'];
-                                    if($row['status'] == 'IN_STOCK') { $stClass = 'badge-success'; $stLabel = 'In Stock'; }
-                                    elseif($row['status'] == 'LOW_STOCK') { $stClass = 'badge-warning'; $stLabel = 'Low Stock'; }
-                                    elseif($row['status'] == 'OUT_OF_STOCK') { $stClass = 'badge-danger'; $stLabel = 'Out of Stock'; }
-                                    elseif($row['status'] == 'DISCONTINUED') { $stClass = 'badge-secondary'; $stLabel = 'Discontinued'; }
+                                    $stLabel = $row['supply_status'];
+                                    if($row['supply_status'] == 'IN_STOCK') { $stClass = 'badge-success'; $stLabel = 'In Stock'; }
+                                    elseif($row['supply_status'] == 'LOW_STOCK') { $stClass = 'badge-warning'; $stLabel = 'Low Stock'; }
+                                    elseif($row['supply_status'] == 'OUT_OF_STOCK') { $stClass = 'badge-danger'; $stLabel = 'Out of Stock'; }
+                                    elseif($row['supply_status'] == 'DISCONTINUED') { $stClass = 'badge-secondary'; $stLabel = 'Discontinued'; }
                                     ?>
                                     <span class="badge <?=$stClass;?>"><?=$stLabel;?></span>
                                 </td>

@@ -20,7 +20,7 @@ class FMS_Customer_Model extends Model
     private function generateCustomerCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_customers WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(customer_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_customers WHERE customer_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'CUST-' . $year . '-';
         return $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
@@ -66,7 +66,7 @@ class FMS_Customer_Model extends Model
                 `billing_address`,
                 `payment_terms`,
                 `credit_limit`,
-                `status`,
+                `customer_status`,
                 `remarks`,
                 `created_by`
             )
@@ -137,7 +137,7 @@ class FMS_Customer_Model extends Model
                 `billing_address` = ?,
                 `payment_terms` = ?,
                 `credit_limit` = ?,
-                `status` = ?,
+                `customer_status` = ?,
                 `remarks` = ?,
                 `updated_at` = NOW()
             WHERE `customer_id` = ?
@@ -208,7 +208,7 @@ class FMS_Customer_Model extends Model
                 `contact_person`,
                 `contact_number`,
                 `special_instructions`,
-                `status`,
+                `location_status`,
                 `created_by`
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
@@ -258,7 +258,7 @@ class FMS_Customer_Model extends Model
                 `contact_person` = ?,
                 `contact_number` = ?,
                 `special_instructions` = ?,
-                `status` = ?,
+                `location_status` = ?,
                 `updated_at` = NOW()
             WHERE `location_id` = ?
             ", 

@@ -14,7 +14,6 @@ $trips = $this->db->query("
            a.vehicle_type,
            a.vendor_name,
            d.dispatch_id,
-           d.dispatch_status,
            d.container_return_required,
            d.container_return_status,
            CASE WHEN d.dispatch_id IS NOT NULL THEN 1 ELSE 0 END as has_dispatch
@@ -37,10 +36,10 @@ $total_dispatch_completed = 0;
 foreach($trips as $row) {
     $total_assigned++; // Count all returned rows for "Total Assigned Trips" card
     if(empty($row['dispatch_id'])) $total_pending++; // Assigned but not yet dispatched
-    if($row['dispatch_status'] == 'DISPATCHED') $total_dispatched++;
-    elseif($row['dispatch_status'] == 'IN_TRANSIT') $total_in_transit++;
-    elseif($row['dispatch_status'] == 'DELIVERED') $total_delivered++;
-    elseif($row['dispatch_status'] == 'COMPLETED') $total_dispatch_completed++;
+    if($row['trip_status'] == 'DISPATCHED') $total_dispatched++;
+    elseif($row['trip_status'] == 'IN_TRANSIT') $total_in_transit++;
+    elseif($row['trip_status'] == 'DELIVERED') $total_delivered++;
+    elseif($row['trip_status'] == 'COMPLETED') $total_dispatch_completed++;
 
     if((int) ($row['container_return_required'] ?? 0) === 1 && $row['container_return_status'] !== 'RETURNED') {
         $total_container_return++;
@@ -1100,8 +1099,8 @@ echo view('templates/myheader.php');
                                 <input type="text" class="form-control" id="dispatcher_name" placeholder="Dispatcher name">
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label class="form-label">Dispatch Status</label>
-                                <select class="form-control" id="dispatch_status">
+                                <label class="form-label">Trip Status</label>
+                                <select class="form-control" id="trip_status">
                                     <option value="DISPATCHED">Dispatched</option>
                                     <option value="IN_TRANSIT">In Transit</option>
                                     <option value="DELIVERED">Delivered</option>

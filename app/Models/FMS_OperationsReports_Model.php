@@ -82,13 +82,13 @@ class FMS_OperationsReports_Model extends Model
         $binds = [$filters['date_from'], $filters['date_to']];
 
         if (!empty($filters['status'])) {
-            $where .= " AND d.dispatch_status = ?";
+            $where .= " AND tr.trip_status = ?";
             $binds[] = $filters['status'];
         }
 
         $rows = $this->db->query("
             SELECT d.dispatch_id, d.dispatch_code, d.trip_id, d.dispatch_date, d.driver, d.truck,
-                   d.total_distance, d.dispatch_status,
+                   d.total_distance, tr.trip_status,
                    tr.trip_code
             FROM tbl_dispatch d
             LEFT JOIN tbl_trips tr ON d.trip_id = tr.trip_id
@@ -101,13 +101,13 @@ class FMS_OperationsReports_Model extends Model
         $inTransit = 0;
         $totalDistance = 0;
         foreach ($rows as $row) {
-            if ($row['dispatch_status'] === 'COMPLETED') $completed++;
-            if ($row['dispatch_status'] === 'IN_TRANSIT') $inTransit++;
+            if ($row['trip_status'] === 'COMPLETED') $completed++;
+            if ($row['trip_status'] === 'IN_TRANSIT') $inTransit++;
             $totalDistance += (float) ($row['total_distance'] ?? 0);
         }
 
         $badgeMap = [
-            'PENDING' => 'badge-secondary', 'DISPATCHED' => 'badge-primary', 'IN_TRANSIT' => 'badge-warning',
+            'ASSIGNED' => 'badge-secondary', 'DISPATCHED' => 'badge-primary', 'IN_TRANSIT' => 'badge-warning',
             'DELIVERED' => 'badge-success', 'COMPLETED' => 'badge-success', 'CANCELLED' => 'badge-danger',
         ];
 
@@ -120,7 +120,7 @@ class FMS_OperationsReports_Model extends Model
                 ['key' => 'truck', 'label' => 'Truck', 'align' => 'left', 'format' => 'text'],
                 ['key' => 'dispatch_date', 'label' => 'Dispatch Date', 'align' => 'left', 'format' => 'date'],
                 ['key' => 'total_distance', 'label' => 'Distance', 'align' => 'right', 'format' => 'number'],
-                ['key' => 'dispatch_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => $badgeMap],
+                ['key' => 'trip_status', 'label' => 'Status', 'align' => 'center', 'format' => 'badge', 'badge_map' => $badgeMap],
             ],
             'rows' => $rows,
             'stats' => [
@@ -138,10 +138,8 @@ class FMS_OperationsReports_Model extends Model
     // ==============================
     public function getTruckUtilizationReport($filters)
     {
-        // tbl_dispatch.truck is free text — a single plate for RIGID trucks, or a composite
-        // "TRACTOR + CHASSIS" string for tractor/trailer combos. Match on either the whole
-        // string or either side of the " + " so combo vehicles get their activity counted too
-        // (a plain substring match would false-positive on plates like ABC-1234 vs ABC-12345).
+        // A truck is counted for every dispatch whose trip assignment used it as
+        // the rigid truck, the tractor, or the chassis.
         $rows = $this->db->query("
             SELECT tk.truck_id, tk.truck_code, tk.plate_number, tk.vehicle_type, tk.truck_status,
                    COALESCE(dsub.dispatch_count, 0) as dispatch_count,
@@ -152,10 +150,10 @@ class FMS_OperationsReports_Model extends Model
                        COUNT(d.dispatch_id) as dispatch_count,
                        COALESCE(SUM(d.total_distance),0) as total_distance
                 FROM tbl_trucks tk2
-                LEFT JOIN tbl_dispatch d
-                    ON (d.truck = tk2.plate_number
-                        OR d.truck LIKE CONCAT(tk2.plate_number, ' + %')
-                        OR d.truck LIKE CONCAT('% + ', tk2.plate_number))
+                JOIN tbl_trip_assignments a
+                    ON tk2.truck_id IN (a.truck_id, a.tractor_id, a.chassis_id)
+                JOIN tbl_dispatch d
+                    ON d.trip_id = a.trip_id
                    AND d.dispatch_date BETWEEN ? AND ?
                 GROUP BY tk2.truck_id
             ) dsub ON dsub.truck_id = tk.truck_id
@@ -166,14 +164,14 @@ class FMS_OperationsReports_Model extends Model
         $active = 0;
         $fleetDistance = 0;
         foreach ($rows as $row) {
-            if (in_array($row['truck_status'], ['ACTIVE', 'DISPATCHED', 'IN_USE'])) $active++;
+            if (in_array($row['truck_status'], ['ASSIGNED', 'DISPATCHED', 'IN_TRANSIT', 'RETURNING'])) $active++;
             $fleetDistance += (float) ($row['total_distance'] ?? 0);
         }
 
         $badgeMap = [
-            'ACTIVE' => 'badge-success', 'AVAILABLE' => 'badge-success', 'DISPATCHED' => 'badge-primary',
-            'IN_USE' => 'badge-primary', 'MAINTENANCE' => 'badge-warning', 'INACTIVE' => 'badge-secondary',
-            'DECOMMISSIONED' => 'badge-danger',
+            'AVAILABLE' => 'badge-success', 'ASSIGNED' => 'badge-primary', 'DISPATCHED' => 'badge-primary',
+            'IN_TRANSIT' => 'badge-primary', 'RETURNING' => 'badge-info', 'UNDER_MAINTENANCE' => 'badge-warning',
+            'OUT_OF_SERVICE' => 'badge-danger', 'RETIRED' => 'badge-secondary',
         ];
 
         return [
@@ -206,11 +204,12 @@ class FMS_OperationsReports_Model extends Model
                    COALESCE(dsub.trips_completed, 0) as trips_completed
             FROM tbl_drivers dv
             LEFT JOIN (
-                SELECT driver, COUNT(*) as trips_completed
-                FROM tbl_dispatch
-                WHERE dispatch_date BETWEEN ? AND ?
-                GROUP BY driver
-            ) dsub ON dsub.driver = dv.driver_name
+                SELECT a.driver_id, COUNT(*) as trips_completed
+                FROM tbl_dispatch d
+                JOIN tbl_trip_assignments a ON a.trip_id = d.trip_id
+                WHERE d.dispatch_date BETWEEN ? AND ?
+                GROUP BY a.driver_id
+            ) dsub ON dsub.driver_id = dv.driver_id
             ORDER BY trips_completed DESC, dv.driver_name ASC
         ", [$filters['date_from'], $filters['date_to']])->getResultArray();
 
@@ -261,11 +260,12 @@ class FMS_OperationsReports_Model extends Model
                    COALESCE(dsub.assignments_count, 0) as assignments_count
             FROM tbl_helpers h
             LEFT JOIN (
-                SELECT helper, COUNT(*) as assignments_count
-                FROM tbl_dispatch
-                WHERE dispatch_date BETWEEN ? AND ?
-                GROUP BY helper
-            ) dsub ON dsub.helper = h.helper_name
+                SELECT a.helper_id, COUNT(*) as assignments_count
+                FROM tbl_dispatch d
+                JOIN tbl_trip_assignments a ON a.trip_id = d.trip_id
+                WHERE d.dispatch_date BETWEEN ? AND ?
+                GROUP BY a.helper_id
+            ) dsub ON dsub.helper_id = h.helper_id
             ORDER BY assignments_count DESC, h.helper_name ASC
         ", [$filters['date_from'], $filters['date_to']])->getResultArray();
 

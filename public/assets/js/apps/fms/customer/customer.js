@@ -214,7 +214,7 @@ function __Customers() {
                 var html = '';
                 if(data.length > 0) {
                     $.each(data, function(index, row) {
-                        var statusBadge = row.status == 'ACTIVE' ? 
+                        var statusBadge = row.location_status == 'ACTIVE' ? 
                             '<span class="badge badge-success">Active</span>' : 
                             '<span class="badge badge-secondary">Inactive</span>';
                         

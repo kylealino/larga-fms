@@ -20,7 +20,7 @@ class FMS_Driver_Model extends Model
     private function generateDriverCode()
     {
         $year = date('Y');
-        $query = $this->db->query("SELECT COUNT(*) as total FROM tbl_drivers WHERE YEAR(created_at) = ?", [$year]);
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(driver_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_drivers WHERE driver_code LIKE ?", ['%-' . $year . '-%']);
         $count = $query->getRow()->total + 1;
         $prefix = 'DRV-' . $year . '-';
         return $prefix . str_pad($count, 4, '0', STR_PAD_LEFT);
@@ -92,13 +92,13 @@ class FMS_Driver_Model extends Model
         $heavy_vehicle_experience = $this->request->getPost('heavy_vehicle_experience') ?: 0;
         $tractor_head_experience = $this->request->getPost('tractor_head_experience') ?: 0;
         $ten_wheeler_experience = $this->request->getPost('ten_wheeler_experience') ?: 0;
-        $long_distance_experience = $this->request->getPost('long_distance_experience') ?: 'NO';
-        $city_urban_experience = $this->request->getPost('city_urban_experience') ?: 'NO';
-        $highway_experience = $this->request->getPost('highway_experience') ?: 'NO';
+        $long_distance_experience = $this->request->getPost('long_distance_experience') ?: 0;
+        $city_urban_experience = $this->request->getPost('city_urban_experience') ?: 0;
+        $highway_experience = $this->request->getPost('highway_experience') ?: 0;
         $route_experience = $this->request->getPost('route_experience');
         $cargo_handling_experience = $this->request->getPost('cargo_handling_experience');
-        $defensive_driving_training = $this->request->getPost('defensive_driving_training') ?: 'NO';
-        $safety_training = $this->request->getPost('safety_training') ?: 'NO';
+        $defensive_driving_training = $this->request->getPost('defensive_driving_training') ?: 0;
+        $safety_training = $this->request->getPost('safety_training') ?: 0;
         $other_certifications = $this->request->getPost('other_certifications');
         $training_expiration_date = $this->request->getPost('training_expiration_date');
         $qualification_remarks = $this->request->getPost('qualification_remarks');
@@ -116,22 +116,6 @@ class FMS_Driver_Model extends Model
         $issue_date = $this->request->getPost('issue_date');
         $expiration_date = $this->request->getPost('expiration_date');
         $has_license = (!empty($license_number)) ? 'YES' : 'NO';
-
-        // Auto-calculate license status
-        $license_status = 'NONE';
-        if($has_license == 'YES') {
-            $license_status = 'VALID';
-            if($expiration_date) {
-                $today = new \DateTime();
-                $expiry = new \DateTime($expiration_date);
-                $daysDiff = $today->diff($expiry)->days;
-                if($expiry < $today) {
-                    $license_status = 'EXPIRED';
-                } elseif($daysDiff <= 30) {
-                    $license_status = 'EXPIRING';
-                }
-            }
-        }
 
         // Check if driver name already exists
         $check = $this->db->query("SELECT COUNT(*) as count FROM tbl_drivers WHERE driver_name = ?", [$driver_name])->getRow();
@@ -176,11 +160,9 @@ class FMS_Driver_Model extends Model
                 `restriction_code`,
                 `issue_date`,
                 `expiration_date`,
-                `license_status`,
-                `has_license`,
                 `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
             [
                 $driver_code,
                 $driver_name,
@@ -214,8 +196,6 @@ class FMS_Driver_Model extends Model
                 $restriction_code,
                 $issue_date,
                 $expiration_date,
-                $license_status,
-                $has_license,
                 $this->cuser
             ]
         );
@@ -267,13 +247,13 @@ class FMS_Driver_Model extends Model
         $heavy_vehicle_experience = $this->request->getPost('heavy_vehicle_experience') ?: 0;
         $tractor_head_experience = $this->request->getPost('tractor_head_experience') ?: 0;
         $ten_wheeler_experience = $this->request->getPost('ten_wheeler_experience') ?: 0;
-        $long_distance_experience = $this->request->getPost('long_distance_experience') ?: 'NO';
-        $city_urban_experience = $this->request->getPost('city_urban_experience') ?: 'NO';
-        $highway_experience = $this->request->getPost('highway_experience') ?: 'NO';
+        $long_distance_experience = $this->request->getPost('long_distance_experience') ?: 0;
+        $city_urban_experience = $this->request->getPost('city_urban_experience') ?: 0;
+        $highway_experience = $this->request->getPost('highway_experience') ?: 0;
         $route_experience = $this->request->getPost('route_experience');
         $cargo_handling_experience = $this->request->getPost('cargo_handling_experience');
-        $defensive_driving_training = $this->request->getPost('defensive_driving_training') ?: 'NO';
-        $safety_training = $this->request->getPost('safety_training') ?: 'NO';
+        $defensive_driving_training = $this->request->getPost('defensive_driving_training') ?: 0;
+        $safety_training = $this->request->getPost('safety_training') ?: 0;
         $other_certifications = $this->request->getPost('other_certifications');
         $training_expiration_date = $this->request->getPost('training_expiration_date');
         $qualification_remarks = $this->request->getPost('qualification_remarks');
@@ -290,23 +270,6 @@ class FMS_Driver_Model extends Model
         $restriction_code = $this->request->getPost('restriction_code');
         $issue_date = $this->request->getPost('issue_date');
         $expiration_date = $this->request->getPost('expiration_date');
-        $has_license = (!empty($license_number)) ? 'YES' : 'NO';
-
-        // Auto-calculate license status
-        $license_status = 'NONE';
-        if($has_license == 'YES') {
-            $license_status = 'VALID';
-            if($expiration_date) {
-                $today = new \DateTime();
-                $expiry = new \DateTime($expiration_date);
-                $daysDiff = $today->diff($expiry)->days;
-                if($expiry < $today) {
-                    $license_status = 'EXPIRED';
-                } elseif($daysDiff <= 30) {
-                    $license_status = 'EXPIRING';
-                }
-            }
-        }
 
         // Check if driver name already exists for a different driver
         $check = $this->db->query("SELECT COUNT(*) as count FROM tbl_drivers WHERE driver_name = ? AND driver_id != ?", [$driver_name, $driver_id])->getRow();
@@ -374,8 +337,6 @@ class FMS_Driver_Model extends Model
                 `restriction_code` = ?,
                 `issue_date` = ?,
                 `expiration_date` = ?,
-                `license_status` = ?,
-                `has_license` = ?,
                 `license_attachment` = ?,
                 `updated_at` = NOW()
             WHERE `driver_id` = ?
@@ -413,8 +374,6 @@ class FMS_Driver_Model extends Model
                 $restriction_code,
                 $issue_date,
                 $expiration_date,
-                $license_status,
-                $has_license,
                 $license_attachment,
                 $driver_id
             ]
@@ -460,7 +419,19 @@ class FMS_Driver_Model extends Model
     // ==============================
     public function getDriver($driver_id)
     {
-        $query = $this->db->query("SELECT * FROM tbl_drivers WHERE driver_id = ?", [$driver_id]);
+        $query = $this->db->query("
+            SELECT *,
+                   CASE
+                       WHEN license_number IS NULL OR license_number = '' THEN 'NONE'
+                       WHEN expiration_date IS NULL THEN 'VALID'
+                       WHEN expiration_date < CURDATE() THEN 'EXPIRED'
+                       WHEN expiration_date <= CURDATE() + INTERVAL 30 DAY THEN 'EXPIRING'
+                       ELSE 'VALID'
+                   END AS license_status,
+                   IF(license_number IS NULL OR license_number = '', 'NO', 'YES') AS has_license
+            FROM tbl_drivers
+            WHERE driver_id = ?
+        ", [$driver_id]);
         return $query->getRowArray();
     }
 
@@ -605,9 +576,6 @@ class FMS_Driver_Model extends Model
     // ==============================
     public function getDriverHistory($driver_id)
     {
-        $driver = $this->db->query("SELECT driver_name FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRow();
-        if (!$driver || !$driver->driver_name) return [];
-
         return $this->db->query("
             SELECT t.trip_code, t.origin, t.destination, t.actual_delivery_date,
                    c.customer_name,
@@ -617,9 +585,9 @@ class FMS_Driver_Model extends Model
             JOIN tbl_trips t ON a.trip_id = t.trip_id
             LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
             LEFT JOIN tbl_delivery_receipts dr ON dr.trip_id = t.trip_id
-            WHERE a.driver_name = ?
+            WHERE a.driver_id = ?
               AND t.trip_status = 'COMPLETED'
             ORDER BY t.actual_delivery_date DESC, a.assignment_id DESC
-        ", [$driver->driver_name])->getResultArray();
+        ", [$driver_id])->getResultArray();
     }
 }

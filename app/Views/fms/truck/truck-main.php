@@ -13,9 +13,9 @@ $trucks = $query->getResultArray();
 // ==============================
 $total_trucks = count($trucks);
 $total_available = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status = 'AVAILABLE'")->getRow()->total;
-$total_in_transit = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status IN ('ASSIGNED', 'DISPATCHED', 'IN TRANSIT', 'RETURNING')")->getRow()->total;
-$total_maintenance = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status = 'UNDER MAINTENANCE'")->getRow()->total;
-$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status IN ('OUT OF SERVICE', 'RETIRED')")->getRow()->total;
+$total_in_transit = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT', 'RETURNING')")->getRow()->total;
+$total_maintenance = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status = 'UNDER_MAINTENANCE'")->getRow()->total;
+$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_trucks WHERE truck_status IN ('OUT_OF_SERVICE', 'RETIRED')")->getRow()->total;
 
 echo view('templates/myheader.php');
 ?>
@@ -1017,7 +1017,7 @@ echo view('templates/myheader.php');
         <div class="stat-right"><i class="bi bi-check-circle"></i></div>
         <span class="filter-badge">Click to filter</span>
     </div>
-    <div class="stat-card" data-filter="IN TRANSIT" onclick="filterTable('IN TRANSIT')">
+    <div class="stat-card" data-filter="IN_TRANSIT" onclick="filterTable('IN_TRANSIT')">
         <div class="stat-left">
             <div class="stat-label">In Transit</div>
             <div class="stat-value"><?=$total_in_transit;?></div>
@@ -1104,10 +1104,10 @@ echo view('templates/myheader.php');
                                         if($row['truck_status'] == 'AVAILABLE') { $statusClass = 'badge-success'; $statusLabel = 'Available'; }
                                         elseif($row['truck_status'] == 'ASSIGNED') { $statusClass = 'badge-warning'; $statusLabel = 'Assigned'; }
                                         elseif($row['truck_status'] == 'DISPATCHED') { $statusClass = 'badge-info'; $statusLabel = 'Dispatched'; }
-                                        elseif($row['truck_status'] == 'IN TRANSIT') { $statusClass = 'badge-primary'; $statusLabel = 'In Transit'; }
+                                        elseif($row['truck_status'] == 'IN_TRANSIT') { $statusClass = 'badge-primary'; $statusLabel = 'In Transit'; }
                                         elseif($row['truck_status'] == 'RETURNING') { $statusClass = 'badge-info'; $statusLabel = 'Returning'; }
-                                        elseif($row['truck_status'] == 'UNDER MAINTENANCE') { $statusClass = 'badge-warning'; $statusLabel = 'Under Maintenance'; }
-                                        elseif($row['truck_status'] == 'OUT OF SERVICE') { $statusClass = 'badge-danger'; $statusLabel = 'Out of Service'; }
+                                        elseif($row['truck_status'] == 'UNDER_MAINTENANCE') { $statusClass = 'badge-warning'; $statusLabel = 'Under Maintenance'; }
+                                        elseif($row['truck_status'] == 'OUT_OF_SERVICE') { $statusClass = 'badge-danger'; $statusLabel = 'Out of Service'; }
                                         elseif($row['truck_status'] == 'RETIRED') { $statusClass = 'badge-secondary'; $statusLabel = 'Retired'; }
                                         ?>
                                         <span class="badge <?=$statusClass;?>"><?=$statusLabel;?></span>
@@ -1183,7 +1183,7 @@ echo view('templates/myheader.php');
                         <div class="col-md-12">
                             <div class="d-flex align-items-center gap-4">
                                 <div>
-                                    <img id="imagePreview" src="<?=base_url('assets/images/profile/truck-default.jpg');?>" class="truck-image-preview" alt="Truck Image">
+                                    <img id="imagePreview" src="<?=base_url('assets/images/profile/truck-default.svg');?>" class="truck-image-preview" alt="Truck Image">
                                 </div>
                                 <div>
                                     <label class="form-label">Truck Image</label>
@@ -1284,10 +1284,10 @@ echo view('templates/myheader.php');
                                 <option value="AVAILABLE">Available</option>
                                 <option value="ASSIGNED">Assigned</option>
                                 <option value="DISPATCHED">Dispatched</option>
-                                <option value="IN TRANSIT">In Transit</option>
+                                <option value="IN_TRANSIT">In Transit</option>
                                 <option value="RETURNING">Returning</option>
-                                <option value="UNDER MAINTENANCE">Under Maintenance</option>
-                                <option value="OUT OF SERVICE">Out of Service</option>
+                                <option value="UNDER_MAINTENANCE">Under Maintenance</option>
+                                <option value="OUT_OF_SERVICE">Out of Service</option>
                                 <option value="RETIRED">Retired</option>
                             </select>
                         </div>
@@ -1320,7 +1320,7 @@ echo view('templates/myheader.php');
                             <div class="col-md-6">
                                 <label class="form-label">Ownership</label>
                                 <select id="form_ownership" class="form-control">
-                                    <option value="COMPANY-OWNED">Company-Owned</option>
+                                    <option value="COMPANY_OWNED">Company-Owned</option>
                                     <option value="LEASED">Leased</option>
                                     <option value="RENTED">Rented</option>
                                 </select>
@@ -1398,9 +1398,9 @@ echo view('templates/myheader.php');
                             <option value="">— Select —</option>
                             <option value="REGISTRATION">Registration (OR/CR)</option>
                             <option value="INSURANCE">Insurance</option>
-                            <option value="SOLIDARITY STICKER">Solidarity Sticker</option>
-                            <option value="EAGLE STICKER">Eagle Sticker</option>
-                            <option value="GENERAL STICKER">General Sticker</option>
+                            <option value="SOLIDARITY_STICKER">Solidarity Sticker</option>
+                            <option value="EAGLE_STICKER">Eagle Sticker</option>
+                            <option value="GENERAL_STICKER">General Sticker</option>
                             <option value="FRANCHISE">Franchise</option>
                             <option value="ACCREDITATION">Accreditation</option>
                             <option value="OTHER">Other</option>
@@ -1662,9 +1662,9 @@ function filterTable(status) {
         $('#filterBadgeAvailable').show();
         $('#filterStatusDisplay').text('(Filtered: Available)');
         $('#clearFilterBtn').show();
-    } else if(status === 'IN TRANSIT') {
+    } else if(status === 'IN_TRANSIT') {
         truckTable.column(4).search('Assigned|Dispatched|In Transit|Returning', true, false).draw();
-        $('.stat-card[data-filter="IN TRANSIT"]').addClass('active');
+        $('.stat-card[data-filter="IN_TRANSIT"]').addClass('active');
         $('#filterBadgeInTransit').show();
         $('#filterStatusDisplay').text('(Filtered: In Transit)');
         $('#clearFilterBtn').show();
@@ -1747,11 +1747,11 @@ function openAddTruck() {
     $('#form_acquired_from').val('');
     $('#form_acquired_from_branch').val('');
     $('#form_account_manager').val('');
-    $('#form_ownership').val('COMPANY-OWNED');
+    $('#form_ownership').val('COMPANY_OWNED');
     $('#form_truck_status').val('AVAILABLE');
     $('#form_remarks').val('');
     $('#form_existing_image').val('');
-    $('#imagePreview').attr('src', '<?=base_url('assets/images/profile/truck-default.jpg');?>');
+    $('#imagePreview').attr('src', '<?=base_url('assets/images/profile/truck-default.svg');?>');
     $('#form_truck_image').val('');
     $('#truckForm').removeClass('was-validated');
     var modal = new bootstrap.Modal(document.getElementById('truckModal'));
@@ -1774,7 +1774,7 @@ function editTruck(truck_id) {
         dataType: 'json',
         success: function(data) {
             if(data) {
-                var truck_image = data.truck_image ? '<?=base_url();?>' + data.truck_image : '<?=base_url('assets/images/profile/truck-default.jpg');?>';
+                var truck_image = data.truck_image ? '<?=base_url();?>' + data.truck_image : '<?=base_url('assets/images/profile/truck-default.svg');?>';
                 
                 $('#truckModalTitle').html('<i class="bi bi-pencil me-2"></i>Edit Truck');
                 $('#formBtnText').text('Update Truck');
@@ -1833,7 +1833,7 @@ function viewTruck(truck_id) {
         dataType: 'json',
         success: function(data) {
             if(data) {
-                var truck_image = data.truck_image ? '<?=base_url();?>' + data.truck_image : '<?=base_url('assets/images/profile/truck-default.jpg');?>';
+                var truck_image = data.truck_image ? '<?=base_url();?>' + data.truck_image : '<?=base_url('assets/images/profile/truck-default.svg');?>';
                 
                 var configLabel = '';
                 if(data.vehicle_config == 'RIGID') { configLabel = 'Rigid Truck'; }
@@ -1845,10 +1845,10 @@ function viewTruck(truck_id) {
                 if(data.truck_status == 'AVAILABLE') { statusLabel = 'Available'; statusClass = 'badge-success'; }
                 else if(data.truck_status == 'ASSIGNED') { statusLabel = 'Assigned'; statusClass = 'badge-warning'; }
                 else if(data.truck_status == 'DISPATCHED') { statusLabel = 'Dispatched'; statusClass = 'badge-info'; }
-                else if(data.truck_status == 'IN TRANSIT') { statusLabel = 'In Transit'; statusClass = 'badge-primary'; }
+                else if(data.truck_status == 'IN_TRANSIT') { statusLabel = 'In Transit'; statusClass = 'badge-primary'; }
                 else if(data.truck_status == 'RETURNING') { statusLabel = 'Returning'; statusClass = 'badge-info'; }
-                else if(data.truck_status == 'UNDER MAINTENANCE') { statusLabel = 'Under Maintenance'; statusClass = 'badge-warning'; }
-                else if(data.truck_status == 'OUT OF SERVICE') { statusLabel = 'Out of Service'; statusClass = 'badge-danger'; }
+                else if(data.truck_status == 'UNDER_MAINTENANCE') { statusLabel = 'Under Maintenance'; statusClass = 'badge-warning'; }
+                else if(data.truck_status == 'OUT_OF_SERVICE') { statusLabel = 'Out of Service'; statusClass = 'badge-danger'; }
                 else { statusLabel = 'Retired'; statusClass = 'badge-secondary'; }
 
                 var html = `
@@ -1909,7 +1909,7 @@ function viewTruck(truck_id) {
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <small class="text-muted">Ownership</small>
-                                    <div><strong>${data.ownership || '—'}</strong></div>
+                                    <div><strong>${data.ownership ? data.ownership.replace(/_/g, '-') : '—'}</strong></div>
                                 </div>
                                 <div class="col-md-12 mb-2">
                                     <small class="text-muted">Acquisition</small>

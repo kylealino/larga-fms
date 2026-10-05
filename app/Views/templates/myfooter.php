@@ -47,7 +47,6 @@
 <script src="<?=base_url('assets/js/theme/app.init.js')?>"></script>
 <script src="<?=base_url('assets/js/theme/theme.js')?>"></script>
 <script src="<?=base_url('assets/js/theme/app.min.js')?>"></script>
-<script src="<?=base_url('assets/js/theme/sidebarmenu.js')?>"></script>
 <script src="<?=base_url('assets/libs/owl.carousel/dist/owl.carousel.min.js')?>"></script>
 <script src="<?=base_url('assets/js/plugins/toastr-init.js')?>"></script>
 

@@ -5,7 +5,7 @@ $this->db = \Config\Database::connect();
 $trucks = $this->db->query("
     SELECT truck_id, truck_code, plate_number, make, model, current_odometer
     FROM tbl_trucks
-    WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+    WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
     ORDER BY plate_number
 ")->getResultArray();
 
@@ -36,9 +36,9 @@ $total_records = count($records);
 $total_cost = 0;
 
 foreach ($schedules as $s) {
-    if ($s['status'] == 'SCHEDULED') $total_scheduled++;
-    elseif ($s['status'] == 'IN_PROGRESS') $total_in_progress++;
-    elseif ($s['status'] == 'OVERDUE') $total_overdue++;
+    if ($s['schedule_status'] == 'SCHEDULED') $total_scheduled++;
+    elseif ($s['schedule_status'] == 'IN_PROGRESS') $total_in_progress++;
+    elseif ($s['schedule_status'] == 'OVERDUE') $total_overdue++;
 }
 
 foreach ($records as $r) {
@@ -454,13 +454,13 @@ echo view('templates/myheader.php');
                                 <td>
                                     <?php
                                     $stClass = 'badge-secondary';
-                                    if($row['status'] == 'SCHEDULED') $stClass = 'badge-info';
-                                    elseif($row['status'] == 'IN_PROGRESS') $stClass = 'badge-warning';
-                                    elseif($row['status'] == 'COMPLETED') $stClass = 'badge-success';
-                                    elseif($row['status'] == 'CANCELLED') $stClass = 'badge-secondary';
-                                    elseif($row['status'] == 'OVERDUE') $stClass = 'badge-danger';
+                                    if($row['schedule_status'] == 'SCHEDULED') $stClass = 'badge-info';
+                                    elseif($row['schedule_status'] == 'IN_PROGRESS') $stClass = 'badge-warning';
+                                    elseif($row['schedule_status'] == 'COMPLETED') $stClass = 'badge-success';
+                                    elseif($row['schedule_status'] == 'CANCELLED') $stClass = 'badge-secondary';
+                                    elseif($row['schedule_status'] == 'OVERDUE') $stClass = 'badge-danger';
                                     ?>
-                                    <span class="badge <?=$stClass;?>"><?=str_replace('_', ' ', $row['status']);?></span>
+                                    <span class="badge <?=$stClass;?>"><?=str_replace('_', ' ', $row['schedule_status']);?></span>
                                 </td>
                                 <td class="text-center">
                                     <div class="action-group">

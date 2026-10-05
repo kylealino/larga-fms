@@ -20,14 +20,14 @@ class FMS_Supply_Model extends Model
     private function generateSupplyCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_supplies WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(supply_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_supplies WHERE supply_code LIKE ?", ['%-' . $year . '-%']);
         return 'SUP-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
     private function generateTransactionCode()
     {
         $year = date('Y');
-        $q = $this->db->query("SELECT COUNT(*) as total FROM tbl_supply_transactions WHERE YEAR(created_at) = ?", [$year]);
+        $q = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(transaction_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_supply_transactions WHERE transaction_code LIKE ?", ['%-' . $year . '-%']);
         return 'STX-' . $year . '-' . str_pad($q->getRow()->total + 1, 6, '0', STR_PAD_LEFT);
     }
 
@@ -39,7 +39,7 @@ class FMS_Supply_Model extends Model
         return $this->db->query("
             SELECT truck_id, truck_code, plate_number, make, model
             FROM tbl_trucks
-            WHERE truck_status NOT IN ('RETIRED','OUT OF SERVICE')
+            WHERE truck_status NOT IN ('RETIRED','OUT_OF_SERVICE')
             ORDER BY plate_number
         ")->getResultArray();
     }
@@ -89,7 +89,7 @@ class FMS_Supply_Model extends Model
             INSERT INTO `tbl_supplies`(
                 `supply_code`, `supply_name`, `category`, `unit`,
                 `current_stock`, `minimum_stock`, `reorder_level`,
-                `unit_cost`, `supplier`, `storage_location`, `status`,
+                `unit_cost`, `supplier`, `storage_location`, `supply_status`,
                 `remarks`, `created_by`
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ", [
@@ -100,6 +100,10 @@ class FMS_Supply_Model extends Model
         ]);
 
         if ($query) {
+            // Opening stock goes into the ledger so recalcSupplyStock() can replay from 0
+            if (floatval($current_stock) > 0) {
+                $this->recordAdjustment($this->db->insertID(), $supply_code, $supply_name, $unit, $unit_cost, 0, $current_stock, 'Opening stock');
+            }
             return ['status' => 'success', 'message' => 'Supply Saved Successfully!', 'supply_code' => $supply_code];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while saving supply.'];
@@ -121,12 +125,14 @@ class FMS_Supply_Model extends Model
         $status = $this->computeStatus($current_stock, $minimum_stock);
         $remarks = $this->request->getPost('remarks');
 
+        $old = $this->db->query("SELECT supply_code, current_stock FROM tbl_supplies WHERE supply_id = ?", [$supply_id])->getRow();
+
         $query = $this->db->query("
             UPDATE `tbl_supplies` SET
                 `supply_name` = ?, `category` = ?, `unit` = ?,
                 `current_stock` = ?, `minimum_stock` = ?, `reorder_level` = ?,
                 `unit_cost` = ?, `supplier` = ?, `storage_location` = ?,
-                `status` = ?, `remarks` = ?, `updated_at` = NOW()
+                `supply_status` = ?, `remarks` = ?, `updated_at` = NOW()
             WHERE `supply_id` = ?
         ", [
             $supply_name, $category, $unit,
@@ -136,6 +142,10 @@ class FMS_Supply_Model extends Model
         ]);
 
         if ($query) {
+            // The ledger is the source of truth — a stock edit is recorded as an ADJUSTMENT
+            if ($old && floatval($old->current_stock) != floatval($current_stock)) {
+                $this->recordAdjustment($supply_id, $old->supply_code, $supply_name, $unit, $unit_cost, $old->current_stock, $current_stock, 'Stock edited on supply record');
+            }
             return ['status' => 'success', 'message' => 'Supply Updated Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while updating supply.'];
@@ -253,7 +263,7 @@ class FMS_Supply_Model extends Model
             $new_status = $this->computeStatus($new_stock, $supply->minimum_stock);
             $this->db->query("
                 UPDATE tbl_supplies 
-                SET current_stock = ?, status = ?, updated_at = NOW()
+                SET current_stock = ?, supply_status = ?, updated_at = NOW()
                 WHERE supply_id = ?
             ", [$new_stock, $new_status, $supply_id]);
 
@@ -293,7 +303,7 @@ class FMS_Supply_Model extends Model
                 $restored_stock = floatval($txn->previous_stock);
                 $new_status = $this->computeStatus($restored_stock, $supply->minimum_stock ?? 0);
                 $this->db->query("
-                    UPDATE tbl_supplies SET current_stock = ?, status = ?, updated_at = NOW() WHERE supply_id = ?
+                    UPDATE tbl_supplies SET current_stock = ?, supply_status = ?, updated_at = NOW() WHERE supply_id = ?
                 ", [$restored_stock, $new_status, $txn->supply_id]);
             }
             return ['status' => 'success', 'message' => 'Transaction Deleted Successfully!'];
@@ -361,6 +371,26 @@ class FMS_Supply_Model extends Model
         return 'IN_STOCK';
     }
 
+    // ==============================
+    // RECORD ADJUSTMENT: ledger entry setting stock to an absolute value
+    // ==============================
+    private function recordAdjustment($supply_id, $supply_code, $supply_name, $unit, $unit_cost, $previous_stock, $new_stock, $purpose)
+    {
+        $this->db->query("
+            INSERT INTO `tbl_supply_transactions`(
+                `transaction_code`, `transaction_type`, `transaction_date`,
+                `supply_id`, `supply_code`, `supply_name`,
+                `quantity`, `unit`, `unit_cost`, `total_cost`,
+                `previous_stock`, `new_stock`, `purpose`, `created_by`
+            ) VALUES (?, 'ADJUSTMENT', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ", [
+            $this->generateTransactionCode(), date('Y-m-d'),
+            $supply_id, $supply_code, $supply_name,
+            $new_stock, $unit, $unit_cost, (floatval($new_stock) - floatval($previous_stock)) * floatval($unit_cost),
+            $previous_stock, $new_stock, $purpose, $this->cuser
+        ]);
+    }
+
     private function recalcSupplyStock($supply_id)
     {
         // Recompute current stock by summing effects of all transactions
@@ -386,7 +416,7 @@ class FMS_Supply_Model extends Model
 
         $this->db->query("
             UPDATE tbl_supplies 
-            SET current_stock = ?, status = ?, updated_at = NOW()
+            SET current_stock = ?, supply_status = ?, updated_at = NOW()
             WHERE supply_id = ?
         ", [$current, $new_status, $supply_id]);
     }

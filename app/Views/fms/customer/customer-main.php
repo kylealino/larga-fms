@@ -12,8 +12,8 @@ $customers = $query->getResultArray();
 // DASHBOARD CALCULATIONS
 // ==============================
 $total_customers = count($customers);
-$total_active = $this->db->query("SELECT COUNT(*) as total FROM tbl_customers WHERE status = 'ACTIVE'")->getRow()->total;
-$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_customers WHERE status = 'INACTIVE'")->getRow()->total;
+$total_active = $this->db->query("SELECT COUNT(*) as total FROM tbl_customers WHERE customer_status = 'ACTIVE'")->getRow()->total;
+$total_inactive = $this->db->query("SELECT COUNT(*) as total FROM tbl_customers WHERE customer_status = 'INACTIVE'")->getRow()->total;
 
 echo view('templates/myheader.php');
 ?>
@@ -902,7 +902,7 @@ echo view('templates/myheader.php');
                                     <td><?=$row['customer_type'] ?: '—';?></td>
                                     <td><?=$row['contact_person'] ?: '—';?></td>
                                     <td>
-                                        <?php if($row['status'] == 'ACTIVE'): ?>
+                                        <?php if($row['customer_status'] == 'ACTIVE'): ?>
                                             <span class="badge badge-success">Active</span>
                                         <?php else: ?>
                                             <span class="badge badge-secondary">Inactive</span>
@@ -921,7 +921,7 @@ echo view('templates/myheader.php');
                                                 <i class="bi bi-geo-alt"></i>
                                             </button>
                                             <button class="btn-icon btn-icon-edit" 
-                                                    onclick="__Customers.__editCustomer(<?=$row['customer_id'];?>, '<?=addslashes($row['customer_code']);?>', '<?=addslashes($row['customer_name']);?>', '<?=addslashes($row['customer_type']);?>', '<?=$row['tin'];?>', '<?=addslashes($row['contact_person']);?>', '<?=addslashes($row['contact_position']);?>', '<?=$row['contact_number'];?>', '<?=$row['email_address'];?>', '<?=addslashes($row['business_address']);?>', '<?=addslashes($row['billing_address']);?>', '<?=$row['payment_terms'];?>', '<?=$row['credit_limit'];?>', '<?=$row['status'];?>', '<?=addslashes($row['remarks']);?>')" 
+                                                    onclick="__Customers.__editCustomer(<?=$row['customer_id'];?>, '<?=addslashes($row['customer_code']);?>', '<?=addslashes($row['customer_name']);?>', '<?=addslashes($row['customer_type']);?>', '<?=$row['tin'];?>', '<?=addslashes($row['contact_person']);?>', '<?=addslashes($row['contact_position']);?>', '<?=$row['contact_number'];?>', '<?=$row['email_address'];?>', '<?=addslashes($row['business_address']);?>', '<?=addslashes($row['billing_address']);?>', '<?=$row['payment_terms'];?>', '<?=$row['credit_limit'];?>', '<?=$row['customer_status'];?>', '<?=addslashes($row['remarks']);?>')" 
                                                     title="Edit Customer">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
@@ -1353,7 +1353,7 @@ function viewCustomer(customer_id) {
         dataType: 'json',
         success: function(data) {
             if(data) {
-                var statusBadge = data.status == 'ACTIVE' ? 
+                var statusBadge = data.customer_status == 'ACTIVE' ? 
                     '<span class="badge badge-success">Active</span>' : 
                     '<span class="badge badge-secondary">Inactive</span>';
 
