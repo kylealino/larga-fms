@@ -220,8 +220,19 @@ class FMS_Trip_Model extends Model
         $unit = $this->request->getPost('unit');
         $estimated_weight = $this->request->getPost('estimated_weight') ?: 0;
         $special_instructions = $this->request->getPost('special_instructions');
-        $trip_status = $this->request->getPost('trip_status') ?: 'SCHEDULED';
+        $requested_status = $this->request->getPost('trip_status');
         $remarks = $this->request->getPost('remarks');
+
+        // The edit form only manages the planning stage (Draft/Scheduled) and cancelling before
+        // dispatch. Later stages move only through Assign / Dispatch / DR — editing details must
+        // never rewind a trip or skip the dispatch and inspection.
+        $current_status = $this->db->query("SELECT trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow()->trip_status ?? 'SCHEDULED';
+        $trip_status = $current_status;
+        if (in_array($current_status, ['DRAFT', 'SCHEDULED']) && in_array($requested_status, ['DRAFT', 'SCHEDULED', 'CANCELLED'])) {
+            $trip_status = $requested_status;
+        } elseif ($current_status === 'ASSIGNED' && $requested_status === 'CANCELLED') {
+            $trip_status = 'CANCELLED';
+        }
 
         $query = $this->db->query("
             UPDATE `tbl_trips`
@@ -245,6 +256,16 @@ class FMS_Trip_Model extends Model
         );
 
         if ($query) {
+            // A cancelled trip frees its truck/driver/helper (same as cancelling from Dispatch)
+            if ($trip_status === 'CANCELLED') {
+                $old = $this->db->query("
+                    SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
+                    FROM tbl_trip_assignments WHERE trip_id = ?
+                ", [$trip_id])->getRow();
+                if ($old) {
+                    $this->setResourceStatus([$old->truck_id, $old->tractor_id, $old->chassis_id], $old->driver_id, $old->helper_id, 'AVAILABLE');
+                }
+            }
             return ['status' => 'success', 'message' => 'Trip Updated Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while updating.'];
@@ -346,6 +367,39 @@ class FMS_Trip_Model extends Model
         // Name/plate snapshots kept for history
         $snap = $this->getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id);
 
+        // Vendor package: units and crew belong to the vendor, not our master lists —
+        // keep their plates/names as text and tie up none of our own resources
+        if ($vehicle_type == 'RENTED_ALL') {
+            $truck_id = $tractor_id = $chassis_id = $driver_id = $helper_id = null;
+            $snap = $this->getVendorPackageSnapshot($snap['vendor_name']);
+            if (!$vendor_id) {
+                return ['status' => 'error', 'message' => 'Please select the vendor providing the package.'];
+            }
+            if (!$snap['tractor_plate'] && !$snap['chassis_plate']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor tractor or chassis plate.'];
+            }
+            if (!$snap['driver_name']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor driver name.'];
+            }
+        }
+
+        // Our tractor + the vendor's chassis: the chassis isn't one of ours — keep its plate as text
+        if ($vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
+            $chassis_id = null;
+            $chassis_type = 'RENTED';
+            $vendor_chassis = strtoupper(trim((string) $this->request->getPost('vendor_chassis_plate')));
+            $snap['chassis_plate'] = $vendor_chassis !== '' ? $vendor_chassis : null;
+            if (!$tractor_id) {
+                return ['status' => 'error', 'message' => 'Please select the tractor.'];
+            }
+            if (!$vendor_id) {
+                return ['status' => 'error', 'message' => 'Please select the vendor providing the chassis.'];
+            }
+            if (!$snap['chassis_plate']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor chassis plate.'];
+            }
+        }
+
         $query = $this->db->query("
             INSERT INTO `tbl_trip_assignments`(
                 `trip_id`, `vehicle_type`, `truck_id`, `truck_plate`, `tractor_id`, `tractor_plate`,
@@ -413,6 +467,39 @@ class FMS_Trip_Model extends Model
         ", [$assignment_id])->getRow();
 
         $snap = $this->getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id);
+
+        // Vendor package: units and crew belong to the vendor, not our master lists —
+        // keep their plates/names as text and tie up none of our own resources
+        if ($vehicle_type == 'RENTED_ALL') {
+            $truck_id = $tractor_id = $chassis_id = $driver_id = $helper_id = null;
+            $snap = $this->getVendorPackageSnapshot($snap['vendor_name']);
+            if (!$vendor_id) {
+                return ['status' => 'error', 'message' => 'Please select the vendor providing the package.'];
+            }
+            if (!$snap['tractor_plate'] && !$snap['chassis_plate']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor tractor or chassis plate.'];
+            }
+            if (!$snap['driver_name']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor driver name.'];
+            }
+        }
+
+        // Our tractor + the vendor's chassis: the chassis isn't one of ours — keep its plate as text
+        if ($vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
+            $chassis_id = null;
+            $chassis_type = 'RENTED';
+            $vendor_chassis = strtoupper(trim((string) $this->request->getPost('vendor_chassis_plate')));
+            $snap['chassis_plate'] = $vendor_chassis !== '' ? $vendor_chassis : null;
+            if (!$tractor_id) {
+                return ['status' => 'error', 'message' => 'Please select the tractor.'];
+            }
+            if (!$vendor_id) {
+                return ['status' => 'error', 'message' => 'Please select the vendor providing the chassis.'];
+            }
+            if (!$snap['chassis_plate']) {
+                return ['status' => 'error', 'message' => 'Please enter the vendor chassis plate.'];
+            }
+        }
 
         $query = $this->db->query("
             UPDATE `tbl_trip_assignments`
@@ -505,18 +592,55 @@ class FMS_Trip_Model extends Model
     }
 
     // ==============================
+    // VENDOR PACKAGE SNAPSHOT: vendor-supplied units and crew (typed in, not in our master lists)
+    // ==============================
+    private function getVendorPackageSnapshot($vendor_name)
+    {
+        $text = function($key, $upper = false) {
+            $v = trim((string) $this->request->getPost($key));
+            return $v === '' ? null : ($upper ? strtoupper($v) : $v);
+        };
+        return [
+            'truck_plate'   => null,
+            'tractor_plate' => $text('vendor_tractor_plate', true),
+            'chassis_plate' => $text('vendor_chassis_plate', true),
+            'vendor_name'   => $vendor_name,
+            'driver_name'   => $text('vendor_driver_name'),
+            'helper_name'   => $text('vendor_helper_name'),
+        ];
+    }
+
+    // ==============================
+    // VENDOR PACKAGE RATE: the vendor's tractor+chassis+driver+helper (or truck+driver+helper) service
+    // ==============================
+    public function getVendorPackageRate($vendor_id)
+    {
+        return $this->db->query("
+            SELECT service_type, rate_type, rate_amount
+            FROM tbl_vendor_services
+            WHERE vendor_id = ? AND service_status = 'ACTIVE'
+              AND service_type IN ('TRACTOR_CHASSIS_DRIVER_HELPER', 'TRUCK_DRIVER_HELPER')
+            ORDER BY FIELD(service_type, 'TRACTOR_CHASSIS_DRIVER_HELPER', 'TRUCK_DRIVER_HELPER'), service_id DESC
+            LIMIT 1
+        ", [$vendor_id])->getRowArray();
+    }
+
+    // ==============================
     // SET RESOURCE STATUS: trucks + driver + helper by ID
     // ==============================
     private function setResourceStatus($truck_ids, $driver_id, $helper_id, $status)
     {
+        // Releasing only touches units still in a trip status — a status changed by hand
+        // (e.g. UNDER_MAINTENANCE, ON_LEAVE) is kept
+        $onlyTrip = $status === 'AVAILABLE';
         foreach (array_filter($truck_ids) as $id) {
-            $this->db->query("UPDATE tbl_trucks SET truck_status = ? WHERE truck_id = ?", [$status, $id]);
+            $this->db->query("UPDATE tbl_trucks SET truck_status = ? WHERE truck_id = ?" . ($onlyTrip ? " AND truck_status IN ('ASSIGNED','DISPATCHED','IN_TRANSIT','RETURNING')" : ""), [$status, $id]);
         }
         if (!empty($driver_id)) {
-            $this->db->query("UPDATE tbl_drivers SET driver_status = ? WHERE driver_id = ?", [$status, $driver_id]);
+            $this->db->query("UPDATE tbl_drivers SET driver_status = ? WHERE driver_id = ?" . ($onlyTrip ? " AND driver_status IN ('ASSIGNED','ON_TRIP','RETURNING')" : ""), [$status, $driver_id]);
         }
         if (!empty($helper_id)) {
-            $this->db->query("UPDATE tbl_helpers SET helper_status = ? WHERE helper_id = ?", [$status, $helper_id]);
+            $this->db->query("UPDATE tbl_helpers SET helper_status = ? WHERE helper_id = ?" . ($onlyTrip ? " AND helper_status IN ('ASSIGNED','ON_TRIP')" : ""), [$status, $helper_id]);
         }
     }
 

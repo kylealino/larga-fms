@@ -115,8 +115,9 @@ function __Dispatch() {
                                                 break;
                                             case 'RENTED_ALL':
                                                 vehicleTypeLabel = 'Rented All (Package)';
-                                                vehicleDisplay = 'Package: ' + (vendorName || 'Vendor');
-                                                truckValue = 'Rented Package - ' + (vendorName || '');
+                                                var vendorUnits = [assignData.tractor_plate, assignData.chassis_plate].filter(Boolean).join(' + ');
+                                                vehicleDisplay = (vendorUnits ? vendorUnits + ' — ' : '') + 'Package: ' + (vendorName || 'Vendor');
+                                                truckValue = (vendorUnits || 'Rented Package') + ' (Vendor: ' + (vendorName || '—') + ')';
                                                 break;
                                             default:
                                                 vehicleTypeLabel = '—';
@@ -206,6 +207,7 @@ function __Dispatch() {
                     
                     __Dispatch.__loadChecklist(data.dispatch_id);
                     __Dispatch.__loadExpenses(data.dispatch_id);
+                    __Dispatch.__loadInspection(data.dispatch_id);
                     
                 } else {
                     $('#dispatch_id').val('');
@@ -252,6 +254,7 @@ function __Dispatch() {
                     $('#checklistBody').html('<tr><td colspan="9" class="text-center text-muted">No checklist items</td></tr>');
                     $('#expensesBody').html('<tr><td colspan="8" class="text-center text-muted">No expenses recorded</td></tr>');
                     $('#total_expenses').text('₱0.00');
+                    __Dispatch.__resetInspection();
                 }
                 
                 var modal = new bootstrap.Modal(document.getElementById('dispatchModal'));
@@ -286,6 +289,362 @@ function __Dispatch() {
             $('#container_return_fields').hide();
         }
     };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — RESET (new dispatch)
+    // ==============================
+    this.__resetInspection = function() {
+        $('#insp_code_display').text('Not started').attr('class', 'badge badge-secondary');
+        $('#insp_banner').attr('class', 'insp-banner pending');
+        $('#insp_banner_text').text('Save the dispatch first, then complete the inspection. The trip can\'t go In Transit until it\'s cleared.');
+        $('#insp_date').val(new Date().toISOString().split('T')[0]);
+        $('#insp_time').val('');
+        $('#insp_inspector_name').val('');
+        $('#insp_final_status').val('SAFE');
+        $('#insp_defects').val('');
+        $('#insp_remarks').val('');
+        $('#insp_driver_name').text($('#dispatch_driver_display').text() || '—');
+        $('#insp_inspector_display').text('— save the inspector name first');
+        $('#insp_form_file, #insp_driver_file, #insp_inspector_file').val('');
+        $('#insp_form_upload, #insp_driver_pad, #insp_inspector_pad').show();
+        $('#insp_form_preview, #insp_driver_signed, #insp_inspector_signed').hide();
+        __Dispatch.__clearSigPad('driver');
+        __Dispatch.__clearSigPad('inspector');
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — LOAD
+    // ==============================
+    this.__loadInspection = function(dispatch_id) {
+        if(!dispatch_id) { __Dispatch.__resetInspection(); return; }
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-dispatch',
+            data: { dispatch_id: dispatch_id, meaction: 'GET_INSPECTION' },
+            dataType: 'json',
+            success: function(data) {
+                __Dispatch.__resetInspection();
+                if(!data) return;
+                __Dispatch.__renderInspection(data);
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error loading inspection: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — RENDER
+    // ==============================
+    this.__renderInspection = function(data) {
+        var ins = data.inspection;
+        $('#insp_driver_name').text(data.assigned_driver_name || 'No driver assigned');
+
+        if(data.cleared) {
+            $('#insp_banner').attr('class', 'insp-banner ok');
+            $('#insp_banner_text').text('Inspection cleared — the truck may go In Transit.');
+            $('#insp_code_display').attr('class', 'badge badge-success');
+        } else if(ins && ins.final_status === 'REQUIRES_REPAIR') {
+            $('#insp_banner').attr('class', 'insp-banner blocked');
+            $('#insp_banner_text').text('Vehicle requires repair — it cannot go In Transit until it is re-inspected as Safe and signed again.');
+            $('#insp_code_display').attr('class', 'badge badge-danger');
+        } else {
+            $('#insp_banner').attr('class', 'insp-banner pending');
+            $('#insp_banner_text').text('Still needed before In Transit: ' + data.missing.join(', ') + '.');
+            $('#insp_code_display').attr('class', 'badge badge-warning');
+        }
+        if(!ins) return;
+
+        $('#insp_code_display').text(ins.inspection_code);
+        $('#insp_date').val(ins.inspection_date);
+        $('#insp_time').val(ins.inspection_time ? ins.inspection_time.substring(0, 5) : '');
+        $('#insp_inspector_name').val(ins.inspector_name || '');
+        $('#insp_final_status').val(ins.final_status);
+        $('#insp_defects').val(ins.defects_found || '');
+        $('#insp_remarks').val(ins.remarks || '');
+        $('#insp_inspector_display').text(ins.inspector_name || '— save the inspector name first');
+
+        if(ins.inspection_form) {
+            var url = mesiteurl + ins.inspection_form;
+            $('#insp_form_link').attr('href', url);
+            if(/\.pdf$/i.test(ins.inspection_form)) {
+                $('#insp_form_img').hide(); $('#insp_form_pdf').show();
+            } else {
+                $('#insp_form_img').attr('src', url).show(); $('#insp_form_pdf').hide();
+            }
+            $('#insp_form_upload').hide(); $('#insp_form_preview').show();
+        }
+
+        $.each(['driver', 'inspector'], function(i, who) {
+            var path = ins[who + '_signature'];
+            if(!path) return;
+            var name = who === 'driver' ? ins.driver_name : ins.inspector_name;
+            $('#insp_' + who + '_img').attr('src', mesiteurl + path);
+            $('#insp_' + who + '_meta').text('Signed by ' + (name || '—') + ' · ' + (ins[who + '_signed_at'] || ''));
+            $('#insp_' + who + '_pad').hide(); $('#insp_' + who + '_signed').show();
+        });
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — SAVE DETAILS
+    // ==============================
+    this.__saveInspection = function() {
+        var dispatch_id = $('#dispatch_id').val();
+        if(!dispatch_id) {
+            toastr.warning('Please save the dispatch first before the inspection');
+            return;
+        }
+        if(!$('#insp_inspector_name').val().trim()) {
+            toastr.warning('Please enter the inspector name', 'Missing field');
+            $('#insp_inspector_name').focus();
+            return;
+        }
+
+        var mparam = {
+            dispatch_id: dispatch_id,
+            inspection_date: $('#insp_date').val(),
+            inspection_time: $('#insp_time').val(),
+            inspector_name: $('#insp_inspector_name').val().trim(),
+            final_status: $('#insp_final_status').val(),
+            defects_found: $('#insp_defects').val(),
+            remarks: $('#insp_remarks').val(),
+            meaction: 'SAVE_INSPECTION'
+        };
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-dispatch',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                if(data.status == 'success'){
+                    toastr.success(data.message);
+                    __Dispatch.__loadInspection(dispatch_id);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — UPLOAD FORM
+    // ==============================
+    this.__uploadInspectionForm = function() {
+        var dispatch_id = $('#dispatch_id').val();
+        var file = $('#insp_form_file')[0].files[0];
+        if(!file) return;
+        if(!dispatch_id) {
+            toastr.warning('Please save the dispatch first before the inspection');
+            $('#insp_form_file').val('');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('dispatch_id', dispatch_id);
+        formData.append('file', file);
+        formData.append('meaction', 'UPLOAD_INSPECTION_FORM');
+
+        toastr.info('Uploading inspection form...');
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-dispatch',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#insp_form_file').val('');
+                if(data.status == 'success'){
+                    toastr.success(data.message);
+                    __Dispatch.__loadInspection(dispatch_id);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#insp_form_file').val('');
+                toastr.error("Upload error: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — SIGNATURE PADS (mouse + touch)
+    // ==============================
+    this.__initSigPad = function(who) {
+        var canvas = document.getElementById('insp_' + who + '_canvas');
+        if(!canvas) return;
+        __Dispatch.__fitSigPad(canvas);
+        if(canvas.dataset.initialized === '1') return;
+        canvas.dataset.initialized = '1';
+
+        var ctx = canvas.getContext('2d');
+        var drawing = false, lastX = 0, lastY = 0;
+        var wrapper = $(canvas).closest('.insp-sig-wrapper');
+
+        function getPos(e) {
+            var rect = canvas.getBoundingClientRect();
+            var t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+            return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+        }
+        function start(e) {
+            if(e.cancelable) e.preventDefault();
+            drawing = true;
+            wrapper.addClass('active');
+            var p = getPos(e);
+            lastX = p.x; lastY = p.y;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1.1, 0, Math.PI * 2);
+            ctx.fillStyle = '#1a1a1a';
+            ctx.fill();
+        }
+        function move(e) {
+            if(!drawing) return;
+            if(e.cancelable) e.preventDefault();
+            var p = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+            lastX = p.x; lastY = p.y;
+        }
+        function stop(e) {
+            if(!drawing) return;
+            if(e.cancelable) e.preventDefault();
+            drawing = false;
+            wrapper.removeClass('active');
+        }
+
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', move);
+        canvas.addEventListener('mouseup', stop);
+        canvas.addEventListener('mouseleave', stop);
+        canvas.addEventListener('touchstart', start, { passive: false });
+        canvas.addEventListener('touchmove', move, { passive: false });
+        canvas.addEventListener('touchend', stop, { passive: false });
+        canvas.addEventListener('touchcancel', stop, { passive: false });
+    };
+
+    this.__fitSigPad = function(canvas) {
+        var ratio = Math.max(window.devicePixelRatio || 1, 1);
+        var w = canvas.offsetWidth, h = canvas.offsetHeight;
+        if(w < 10 || h < 10) return;
+        canvas.width = w * ratio;
+        canvas.height = h * ratio;
+        var ctx = canvas.getContext('2d');
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(ratio, ratio);
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    };
+
+    this.__clearSigPad = function(who) {
+        var canvas = document.getElementById('insp_' + who + '_canvas');
+        if(!canvas) return;
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    this.__isSigPadEmpty = function(who) {
+        var canvas = document.getElementById('insp_' + who + '_canvas');
+        if(!canvas) return true;
+        var blank = document.createElement('canvas');
+        blank.width = canvas.width;
+        blank.height = canvas.height;
+        return canvas.toDataURL() === blank.toDataURL();
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — SIGN (drawn or uploaded image)
+    // ==============================
+    this.__signInspection = function(who, fromFile) {
+        var dispatch_id = $('#dispatch_id').val();
+        if(!dispatch_id) {
+            toastr.warning('Please save the dispatch first before the inspection');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('dispatch_id', dispatch_id);
+        formData.append('signer', who);
+        formData.append('meaction', 'SIGN_INSPECTION');
+
+        if(fromFile) {
+            var file = $('#insp_' + who + '_file')[0].files[0];
+            if(!file) return;
+            formData.append('file', file);
+        } else {
+            if(__Dispatch.__isSigPadEmpty(who)) {
+                toastr.warning('Please sign in the box before saving.');
+                return;
+            }
+            formData.append('signature_data', document.getElementById('insp_' + who + '_canvas').toDataURL('image/png'));
+        }
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-dispatch',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(data) {
+                $('#insp_' + who + '_file').val('');
+                if(data.status == 'success'){
+                    toastr.success(data.message);
+                    __Dispatch.__loadInspection(dispatch_id);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                $('#insp_' + who + '_file').val('');
+                toastr.error("Error: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // PRE-TRIP INSPECTION — REMOVE FILE / SIGNATURE (to replace or re-sign)
+    // ==============================
+    this.__removeInspectionFile = function(field) {
+        var dispatch_id = $('#dispatch_id').val();
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'fms-dispatch',
+            data: { dispatch_id: dispatch_id, field: field, meaction: 'REMOVE_INSPECTION_FILE' },
+            dataType: 'json',
+            success: function(data) {
+                if(data.status == 'success'){
+                    __Dispatch.__loadInspection(dispatch_id);
+                    setTimeout(function() {
+                        __Dispatch.__initSigPad('driver');
+                        __Dispatch.__initSigPad('inspector');
+                    }, 300);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error: " + error);
+            }
+        });
+    };
+
+    // Signature pads need the modal visible to measure their size
+    // (Bootstrap 5 fires native events — a jQuery-delegated handler doesn't see them)
+    document.addEventListener('shown.bs.modal', function(e) {
+        if(e.target && e.target.id === 'dispatchModal') {
+            __Dispatch.__initSigPad('driver');
+            __Dispatch.__initSigPad('inspector');
+        }
+    });
 
     // ==============================
     // SAVE DISPATCH

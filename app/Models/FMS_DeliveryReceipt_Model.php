@@ -137,6 +137,18 @@ class FMS_DeliveryReceipt_Model extends Model
             return ['status' => 'error', 'message' => 'Missing trip or dispatch reference.'];
         }
 
+        $trip = $this->db->query("SELECT trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow();
+        // Same rule as the DR screen's trip list: a cancelled trip gets no DR
+        if (!$trip || $trip->trip_status === 'CANCELLED') {
+            return ['status' => 'error', 'message' => 'This trip was cancelled — no delivery receipt can be created.'];
+        }
+        if (in_array($trip->trip_status, ['ASSIGNED', 'DISPATCHED'])) {
+            $gate = model('App\Models\FMS_Dispatch_Model')->getInspectionGate($trip_id);
+            if (!$gate['cleared']) {
+                return ['status' => 'error', 'message' => $gate['message']];
+            }
+        }
+
         $existing = $this->db->query("
             SELECT dr_id FROM tbl_delivery_receipts WHERE dispatch_id = ? LIMIT 1
         ", [$dispatch_id])->getRow();

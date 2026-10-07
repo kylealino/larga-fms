@@ -105,7 +105,7 @@ class FMS_Billing_Model extends Model
         }
 
         $dr = $this->db->query("
-            SELECT dr.dr_id, dr.trip_id, dr.customer_id, t.service_type
+            SELECT dr.dr_id, dr.trip_id, dr.customer_id, dr.dr_status, t.service_type
             FROM tbl_delivery_receipts dr
             LEFT JOIN tbl_trips t ON dr.trip_id = t.trip_id
             WHERE dr.dr_id = ?
@@ -113,6 +113,11 @@ class FMS_Billing_Model extends Model
 
         if (!$dr) {
             return ['status' => 'error', 'message' => 'Delivery receipt not found.'];
+        }
+
+        // Same rule as the billable DR list: only delivered (fully or partially) DRs can be billed
+        if (!in_array($dr->dr_status, ['DELIVERED', 'PARTIALLY_DELIVERED'])) {
+            return ['status' => 'error', 'message' => 'Only delivered or partially delivered receipts can be billed.'];
         }
 
         $billing_code = $this->generateBillingCode();

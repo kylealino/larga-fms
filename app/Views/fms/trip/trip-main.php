@@ -1203,13 +1203,34 @@ echo view('templates/myheader.php');
                             <div class="col-md-12 mb-2 toggle-field" id="assignment_rented_section" style="display:none;">
                                 <div class="alert alert-info">
                                     <i class="bi bi-info-circle me-2"></i>
-                                    <strong>Rented All Package:</strong> This includes Tractor, Chassis, Driver, and Helper as a complete package from the vendor.
+                                    <strong>Rented All Package:</strong> The vendor provides the tractor, chassis, driver and helper. Enter their plates and names below — none of your own units or crew are used.
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 toggle-field" id="assignment_vendor_units" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-3 mb-2 vendor-pkg-only">
+                                        <label class="form-label">Vendor Tractor Plate <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="assignment_vendor_tractor_plate" placeholder="e.g., NBC-1234" style="text-transform:uppercase;">
+                                    </div>
+                                    <div class="col-md-3 mb-2">
+                                        <label class="form-label">Vendor Chassis Plate <span class="required vendor-chassis-required" style="display:none;">*</span></label>
+                                        <input type="text" class="form-control" id="assignment_vendor_chassis_plate" placeholder="e.g., CHV-5678" style="text-transform:uppercase;">
+                                    </div>
+                                    <div class="col-md-3 mb-2 vendor-pkg-only">
+                                        <label class="form-label">Vendor Driver <span class="required">*</span></label>
+                                        <input type="text" class="form-control" id="assignment_vendor_driver_name" placeholder="Driver full name">
+                                    </div>
+                                    <div class="col-md-3 mb-2 vendor-pkg-only">
+                                        <label class="form-label">Vendor Helper</label>
+                                        <input type="text" class="form-control" id="assignment_vendor_helper_name" placeholder="Helper full name">
+                                    </div>
                                 </div>
                             </div>
                             
                             <div class="col-md-3 mb-2 toggle-field" id="assignment_vendor_field" style="display:none;">
                                 <label class="form-label">Vendor <span class="required">*</span></label>
-                                <select class="form-control" id="assignment_vendor_id">
+                                <select class="form-control" id="assignment_vendor_id" onchange="__Trips.__loadVendorPackageRate()">
                                     <option value="">— Select —</option>
                                 </select>
                             </div>

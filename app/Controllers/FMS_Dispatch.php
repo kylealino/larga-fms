@@ -127,6 +127,38 @@ class FMS_Dispatch extends BaseController
                 echo json_encode($result);
                 break;
 
+            // PRE-TRIP INSPECTION
+            case 'GET_INSPECTION':
+                $dispatch_id = $this->request->getPost('dispatch_id');
+                try { $result = $this->dispatchModel->getInspection($dispatch_id); }
+                catch (\Throwable $e) { $result = null; }
+                echo json_encode($result);
+                break;
+
+            case 'SAVE_INSPECTION':
+                try { $result = $this->dispatchModel->saveInspection(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
+            case 'UPLOAD_INSPECTION_FORM':
+                try { $result = $this->dispatchModel->uploadInspectionForm(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
+            case 'SIGN_INSPECTION':
+                try { $result = $this->dispatchModel->signInspection(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
+            case 'REMOVE_INSPECTION_FILE':
+                try { $result = $this->dispatchModel->removeInspectionFile(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
             // WAYPOINT TRACKING
             case 'GET_WAYPOINTS_TRACKING':
                 $trip_id = $this->request->getPost('trip_id');

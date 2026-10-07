@@ -23,7 +23,8 @@ function __Trips() {
         $('#assignment_vendor_field').hide();
         $('#assignment_rental_fields').hide();
         $('#assignment_rented_section').hide();
-        
+        $('#assignment_vendor_units').hide();
+
         $('#assignment_driver_field').show();
         $('#assignment_helper_field').show();
         
@@ -35,8 +36,10 @@ function __Trips() {
             $('#assignment_chassis_type_field').show();
         } else if(type == 'TRACTOR_RENTED_CHASSIS') {
             $('#assignment_tractor_field').show();
-            $('#assignment_chassis_field').show();
-            $('#assignment_chassis_type_field').show();
+            // The chassis is the vendor's — type its plate instead of picking one of ours
+            $('#assignment_vendor_units').show();
+            $('.vendor-pkg-only').hide();
+            $('.vendor-chassis-required').show();
             $('#assignment_chassis_type').val('RENTED');
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
@@ -44,6 +47,12 @@ function __Trips() {
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
             $('#assignment_rented_section').show();
+            $('#assignment_vendor_units').show();
+            $('.vendor-pkg-only').show();
+            $('.vendor-chassis-required').hide();
+            // The vendor supplies the crew — hide our own driver/helper lists
+            $('#assignment_driver_field').hide();
+            $('#assignment_helper_field').hide();
             $('#assignment_truck_id').prop('required', false);
             $('#assignment_tractor_id').prop('required', false);
             $('#assignment_chassis_id').prop('required', false);
@@ -57,7 +66,7 @@ function __Trips() {
         var chassisType = $('#assignment_chassis_type').val();
         var vehicleType = $('#assignment_vehicle_type').val();
         
-        if(vehicleType == 'TRACTOR_RENTED_CHASSIS' || chassisType == 'RENTED') {
+        if(vehicleType == 'TRACTOR_RENTED_CHASSIS' || vehicleType == 'RENTED_ALL' || chassisType == 'RENTED') {
             $('#assignment_vendor_field').show();
             $('#assignment_rental_fields').show();
         } else {
@@ -84,6 +93,7 @@ function __Trips() {
         $('#assignment_vendor_contact_number').val('');
         $('#assignment_driver_id').val('');
         $('#assignment_helper_id').val('');
+        $('#assignment_vendor_tractor_plate, #assignment_vendor_chassis_plate, #assignment_vendor_driver_name, #assignment_vendor_helper_name').val('');
         var today = new Date().toISOString().split('T')[0];
         $('#assignment_assignment_date').val(today);
         $('#assignment_dispatch_time').val('');
@@ -414,6 +424,7 @@ function __Trips() {
                     $('#assignment_vendor_contact_number').val('');
                     $('#assignment_driver_id').val('');
                     $('#assignment_helper_id').val('');
+                    $('#assignment_vendor_tractor_plate, #assignment_vendor_chassis_plate, #assignment_vendor_driver_name, #assignment_vendor_helper_name').val('');
                     var today = new Date().toISOString().split('T')[0];
                     $('#assignment_assignment_date').val(today);
                     $('#assignment_dispatch_time').val('');
@@ -479,6 +490,15 @@ function __Trips() {
                     $('#assignment_vendor_contact_number').val(data.vendor_contact_number || '');
                     $('#assignment_driver_id').val(data.driver_id || '');
                     $('#assignment_helper_id').val(data.helper_id || '');
+                    if(data.vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
+                        $('#assignment_vendor_chassis_plate').val(data.chassis_plate || '');
+                    }
+                    if(data.vehicle_type == 'RENTED_ALL') {
+                        $('#assignment_vendor_tractor_plate').val(data.tractor_plate || '');
+                        $('#assignment_vendor_chassis_plate').val(data.chassis_plate || '');
+                        $('#assignment_vendor_driver_name').val(data.driver_name || '');
+                        $('#assignment_vendor_helper_name').val(data.helper_name || '');
+                    }
                     $('#assignment_assignment_date').val(data.assignment_date || '');
                     $('#assignment_dispatch_time').val(data.dispatch_time || '');
                     $('#assignment_dispatch_location').val(data.dispatch_location || '');
@@ -534,8 +554,14 @@ function __Trips() {
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
-            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
-                toastr.warning('Please select both tractor and chassis', 'Missing field');
+            if(!$('#assignment_tractor_id').val()) {
+                toastr.warning('Please select the tractor', 'Missing field');
+                $('#assignment_tractor_id').focus();
+                return;
+            }
+            if(!$('#assignment_vendor_chassis_plate').val().trim()) {
+                toastr.warning('Please enter the vendor chassis plate', 'Missing field');
+                $('#assignment_vendor_chassis_plate').focus();
                 return;
             }
             if(!$('#assignment_vendor_id').val()) {
@@ -549,13 +575,19 @@ function __Trips() {
                 $('#assignment_vendor_id').focus();
                 return;
             }
-            if(!$('#assignment_truck_id').val() && !$('#assignment_tractor_id').val() && !$('#assignment_chassis_id').val()) {
-                toastr.warning('Please provide at least one vehicle (Truck, Tractor, or Chassis)', 'Missing field');
+            if(!$('#assignment_vendor_tractor_plate').val().trim() && !$('#assignment_vendor_chassis_plate').val().trim()) {
+                toastr.warning('Please enter the vendor tractor or chassis plate', 'Missing field');
+                $('#assignment_vendor_tractor_plate').focus();
+                return;
+            }
+            if(!$('#assignment_vendor_driver_name').val().trim()) {
+                toastr.warning('Please enter the vendor driver name', 'Missing field');
+                $('#assignment_vendor_driver_name').focus();
                 return;
             }
         }
-        
-        if(!driver_id) {
+
+        if(!driver_id && vehicle_type != 'RENTED_ALL') {
             toastr.warning('Please select a driver', 'Missing field');
             $('#assignment_driver_id').focus();
             return;
@@ -588,6 +620,10 @@ function __Trips() {
             vendor_contact_number: $('#assignment_vendor_contact_number').val() || '',
             driver_id: driver_id,
             helper_id: $('#assignment_helper_id').val() || '',
+            vendor_tractor_plate: $('#assignment_vendor_tractor_plate').val().trim(),
+            vendor_chassis_plate: $('#assignment_vendor_chassis_plate').val().trim(),
+            vendor_driver_name: $('#assignment_vendor_driver_name').val().trim(),
+            vendor_helper_name: $('#assignment_vendor_helper_name').val().trim(),
             assignment_date: assignment_date,
             dispatch_time: $('#assignment_dispatch_time').val() || '',
             dispatch_location: $('#assignment_dispatch_location').val() || '',
@@ -654,8 +690,14 @@ function __Trips() {
                 return;
             }
         } else if(vehicle_type == 'TRACTOR_RENTED_CHASSIS') {
-            if(!$('#assignment_tractor_id').val() || !$('#assignment_chassis_id').val()) {
-                toastr.warning('Please select both tractor and chassis', 'Missing field');
+            if(!$('#assignment_tractor_id').val()) {
+                toastr.warning('Please select the tractor', 'Missing field');
+                $('#assignment_tractor_id').focus();
+                return;
+            }
+            if(!$('#assignment_vendor_chassis_plate').val().trim()) {
+                toastr.warning('Please enter the vendor chassis plate', 'Missing field');
+                $('#assignment_vendor_chassis_plate').focus();
                 return;
             }
             if(!$('#assignment_vendor_id').val()) {
@@ -669,13 +711,19 @@ function __Trips() {
                 $('#assignment_vendor_id').focus();
                 return;
             }
-            if(!$('#assignment_truck_id').val() && !$('#assignment_tractor_id').val() && !$('#assignment_chassis_id').val()) {
-                toastr.warning('Please provide at least one vehicle (Truck, Tractor, or Chassis)', 'Missing field');
+            if(!$('#assignment_vendor_tractor_plate').val().trim() && !$('#assignment_vendor_chassis_plate').val().trim()) {
+                toastr.warning('Please enter the vendor tractor or chassis plate', 'Missing field');
+                $('#assignment_vendor_tractor_plate').focus();
+                return;
+            }
+            if(!$('#assignment_vendor_driver_name').val().trim()) {
+                toastr.warning('Please enter the vendor driver name', 'Missing field');
+                $('#assignment_vendor_driver_name').focus();
                 return;
             }
         }
-        
-        if(!driver_id) {
+
+        if(!driver_id && vehicle_type != 'RENTED_ALL') {
             toastr.warning('Please select a driver', 'Missing field');
             $('#assignment_driver_id').focus();
             return;
@@ -709,6 +757,10 @@ function __Trips() {
             vendor_contact_number: $('#assignment_vendor_contact_number').val() || '',
             driver_id: driver_id,
             helper_id: $('#assignment_helper_id').val() || '',
+            vendor_tractor_plate: $('#assignment_vendor_tractor_plate').val().trim(),
+            vendor_chassis_plate: $('#assignment_vendor_chassis_plate').val().trim(),
+            vendor_driver_name: $('#assignment_vendor_driver_name').val().trim(),
+            vendor_helper_name: $('#assignment_vendor_helper_name').val().trim(),
             assignment_date: assignment_date,
             dispatch_time: $('#assignment_dispatch_time').val() || '',
             dispatch_location: $('#assignment_dispatch_location').val() || '',
@@ -893,6 +945,25 @@ function __Trips() {
             },
             error: function(xhr, status, error) {
                 toastr.error("Error loading helpers: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // VENDOR PACKAGE RATE — prefill the rental rate from the vendor's package service
+    // ==============================
+    this.__loadVendorPackageRate = function() {
+        var vendor_id = $('#assignment_vendor_id').val();
+        if($('#assignment_vehicle_type').val() != 'RENTED_ALL' || !vendor_id) return;
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'fms-trips', data: { vendor_id: vendor_id, meaction: 'GET_VENDOR_PACKAGE_RATE' }, dataType: 'json',
+            success: function(data) {
+                if(data && data.rate_amount) {
+                    $('#assignment_rental_rate').val(data.rate_amount);
+                    toastr.info('Package rate: ₱' + parseFloat(data.rate_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) + ' ' + data.rate_type.replace(/_/g, ' ').toLowerCase());
+                } else {
+                    toastr.warning('This vendor has no package service rate on file. Enter the rental rate manually.');
+                }
             }
         });
     };

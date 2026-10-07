@@ -16,11 +16,16 @@ $trips = $this->db->query("
            d.dispatch_id,
            d.container_return_required,
            d.container_return_status,
+           i.inspection_form,
+           i.driver_signature,
+           i.inspector_signature,
+           i.final_status,
            CASE WHEN d.dispatch_id IS NOT NULL THEN 1 ELSE 0 END as has_dispatch
     FROM tbl_trips t
     LEFT JOIN tbl_customers c ON t.customer_id = c.customer_id
     LEFT JOIN tbl_trip_assignments a ON t.trip_id = a.trip_id
     LEFT JOIN tbl_dispatch d ON t.trip_id = d.trip_id
+    LEFT JOIN tbl_dispatch_inspections i ON i.dispatch_id = d.dispatch_id
     WHERE t.trip_status IN ('ASSIGNED', 'DISPATCHED', 'IN_TRANSIT', 'DELIVERED', 'COMPLETED')
     ORDER BY t.scheduled_date DESC
 ")->getResultArray();
@@ -782,6 +787,24 @@ echo view('templates/myheader.php');
         .btn-icon { width: 28px; height: 28px; font-size: 13px; }
         .modal-body { padding: 16px; }
     }
+
+    /* Pre-trip inspection */
+    .insp-banner { border-radius: 8px; padding: 10px 14px; font-size: 12px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .insp-banner.ok { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+    .insp-banner.pending { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .insp-banner.blocked { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .insp-sign-box { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px; height: 100%; }
+    .insp-sign-box .signer { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+    .insp-sign-box .signer-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 8px; }
+    .insp-sig-wrapper { background: #ffffff; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 6px; }
+    .insp-sig-wrapper.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .insp-sig-canvas { width: 100%; height: 140px; display: block; border-radius: 6px; background: #fdfdfd; cursor: crosshair; touch-action: none; }
+    .insp-signed { text-align: center; }
+    .insp-signed img { max-height: 110px; max-width: 100%; border-radius: 6px; border: 1px solid var(--gray-200); background: #ffffff; }
+    .insp-signed .signed-meta { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+    .insp-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; }
+    .insp-actions a { color: var(--danger); text-decoration: none; cursor: pointer; }
+    .insp-actions a:hover { text-decoration: underline; }
 </style>
 
 <div class="me-dsp-msg"></div>
@@ -990,6 +1013,13 @@ echo view('templates/myheader.php');
                                         </span>
                                         <?php if((int) ($row['container_return_required'] ?? 0) === 1 && $row['container_return_status'] !== 'RETURNED'): ?>
                                         <br><span class="badge badge-warning" style="font-size:9px;margin-top:4px;">Container Return</span>
+                                        <?php endif; ?>
+                                        <?php if($row['trip_status'] == 'DISPATCHED'): ?>
+                                            <?php if(($row['final_status'] ?? '') == 'REQUIRES_REPAIR'): ?>
+                                            <br><span class="badge badge-danger" style="font-size:9px;margin-top:4px;">Needs Repair</span>
+                                            <?php elseif(empty($row['inspection_form']) || empty($row['driver_signature']) || empty($row['inspector_signature'])): ?>
+                                            <br><span class="badge badge-warning" style="font-size:9px;margin-top:4px;">Inspection Pending</span>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </td>
                                     <td class="text-center">
@@ -1270,6 +1300,136 @@ echo view('templates/myheader.php');
                             <div class="col-md-12 mb-2">
                                 <label class="form-label">Remarks</label>
                                 <textarea class="form-control" id="dispatch_remarks" rows="2" placeholder="Additional notes"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================ -->
+                <!-- PRE-TRIP INSPECTION SECTION -->
+                <!-- ============================================ -->
+                <div class="card mt-3">
+                    <div class="card-header bg-light">
+                        <div class="section-header">
+                            <h6 class="mb-0"><i class="bi bi-shield-check me-2"></i>Pre-Trip Inspection</h6>
+                            <span class="badge badge-secondary" id="insp_code_display">Not started</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="insp-banner pending" id="insp_banner">
+                            <i class="bi bi-info-circle"></i>
+                            <span id="insp_banner_text">Save the dispatch first, then complete the inspection. The trip can't go In Transit until it's cleared.</span>
+                        </div>
+
+                        <div class="row g-2">
+                            <div class="col-md-2">
+                                <label class="form-label">Inspection Date <span class="required">*</span></label>
+                                <input type="date" class="form-control" id="insp_date">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Time</label>
+                                <input type="time" class="form-control" id="insp_time">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Inspector Name <span class="required">*</span></label>
+                                <input type="text" class="form-control" id="insp_inspector_name" placeholder="Name of inspector">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Final Status <span class="required">*</span></label>
+                                <select class="form-control" id="insp_final_status">
+                                    <option value="SAFE">Safe for operation</option>
+                                    <option value="REQUIRES_REPAIR">Requires repair before operation</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Defects Found</label>
+                                <textarea class="form-control" id="insp_defects" rows="2" placeholder="Item — description — action taken (leave blank if none)"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Remarks</label>
+                                <textarea class="form-control" id="insp_remarks" rows="2" placeholder="Additional notes"></textarea>
+                            </div>
+                            <div class="col-md-12 text-end">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="__Dispatch.__saveInspection()">
+                                    <i class="bi bi-save"></i> Save Inspection Details
+                                </button>
+                            </div>
+                        </div>
+
+                        <hr style="border-color:var(--gray-200);">
+
+                        <div class="row g-3">
+                            <!-- Inspection form upload -->
+                            <div class="col-md-4">
+                                <div class="insp-sign-box">
+                                    <div class="signer"><i class="bi bi-file-earmark-check me-1"></i>Inspection Checklist Form</div>
+                                    <div class="signer-sub">Photo or scan of the filled-out paper form (JPG, PNG, PDF · max 10MB)</div>
+                                    <div id="insp_form_upload">
+                                        <input type="file" class="form-control" id="insp_form_file" accept="image/*,.pdf" onchange="__Dispatch.__uploadInspectionForm()">
+                                    </div>
+                                    <div id="insp_form_preview" style="display:none;" class="insp-signed">
+                                        <a id="insp_form_link" href="#" target="_blank">
+                                            <img id="insp_form_img" style="display:none;">
+                                            <div id="insp_form_pdf" style="display:none;font-size:40px;color:var(--danger);"><i class="bi bi-file-earmark-pdf"></i></div>
+                                        </a>
+                                        <div class="insp-actions">
+                                            <span><i class="bi bi-check-circle" style="color:var(--success);"></i> Uploaded</span>
+                                            <a onclick="__Dispatch.__removeInspectionFile('inspection_form')"><i class="bi bi-x"></i> Replace</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Driver signature -->
+                            <div class="col-md-4">
+                                <div class="insp-sign-box">
+                                    <div class="signer"><i class="bi bi-person-badge me-1"></i>Driver Signature</div>
+                                    <div class="signer-sub">Assigned driver: <strong id="insp_driver_name">—</strong></div>
+                                    <div id="insp_driver_pad">
+                                        <div class="insp-sig-wrapper"><canvas class="insp-sig-canvas" id="insp_driver_canvas"></canvas></div>
+                                        <div class="insp-actions">
+                                            <a onclick="__Dispatch.__clearSigPad('driver')"><i class="bi bi-eraser"></i> Clear</a>
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="__Dispatch.__signInspection('driver')"><i class="bi bi-pen"></i> Sign</button>
+                                        </div>
+                                        <div class="mt-1" style="font-size:10px;color:var(--gray-500);">or upload a signature image:
+                                            <input type="file" class="form-control form-control-sm mt-1" id="insp_driver_file" accept="image/*" onchange="__Dispatch.__signInspection('driver', true)">
+                                        </div>
+                                    </div>
+                                    <div id="insp_driver_signed" class="insp-signed" style="display:none;">
+                                        <img id="insp_driver_img">
+                                        <div class="signed-meta" id="insp_driver_meta"></div>
+                                        <div class="insp-actions">
+                                            <span><i class="bi bi-check-circle" style="color:var(--success);"></i> Signed</span>
+                                            <a onclick="__Dispatch.__removeInspectionFile('driver_signature')"><i class="bi bi-x"></i> Re-sign</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Inspector signature -->
+                            <div class="col-md-4">
+                                <div class="insp-sign-box">
+                                    <div class="signer"><i class="bi bi-person-check me-1"></i>Inspector Signature</div>
+                                    <div class="signer-sub">Inspector: <strong id="insp_inspector_display">— save the inspector name first</strong></div>
+                                    <div id="insp_inspector_pad">
+                                        <div class="insp-sig-wrapper"><canvas class="insp-sig-canvas" id="insp_inspector_canvas"></canvas></div>
+                                        <div class="insp-actions">
+                                            <a onclick="__Dispatch.__clearSigPad('inspector')"><i class="bi bi-eraser"></i> Clear</a>
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="__Dispatch.__signInspection('inspector')"><i class="bi bi-pen"></i> Sign</button>
+                                        </div>
+                                        <div class="mt-1" style="font-size:10px;color:var(--gray-500);">or upload a signature image:
+                                            <input type="file" class="form-control form-control-sm mt-1" id="insp_inspector_file" accept="image/*" onchange="__Dispatch.__signInspection('inspector', true)">
+                                        </div>
+                                    </div>
+                                    <div id="insp_inspector_signed" class="insp-signed" style="display:none;">
+                                        <img id="insp_inspector_img">
+                                        <div class="signed-meta" id="insp_inspector_meta"></div>
+                                        <div class="insp-actions">
+                                            <span><i class="bi bi-check-circle" style="color:var(--success);"></i> Signed</span>
+                                            <a onclick="__Dispatch.__removeInspectionFile('inspector_signature')"><i class="bi bi-x"></i> Re-sign</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

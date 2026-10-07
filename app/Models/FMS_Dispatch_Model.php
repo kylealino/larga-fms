@@ -51,6 +51,18 @@ class FMS_Dispatch_Model extends Model
     }
 
     // ==============================
+    // GENERATE INSPECTION CODE
+    // ==============================
+    private function generateInspectionCode()
+    {
+        $year = date('Y');
+        $query = $this->db->query("SELECT IFNULL(MAX(CAST(SUBSTRING_INDEX(inspection_code, '-', -1) AS UNSIGNED)), 0) as total FROM tbl_dispatch_inspections WHERE inspection_code LIKE ?", ['%-' . $year . '-%']);
+        $count = $query->getRow()->total + 1;
+        $prefix = 'INS-' . $year . '-';
+        return $prefix . str_pad($count, 6, '0', STR_PAD_LEFT);
+    }
+
+    // ==============================
     // GET ASSIGNED TRIPS FOR DISPATCH
     // ==============================
     public function getAssignedTrips()
@@ -332,6 +344,298 @@ class FMS_Dispatch_Model extends Model
     }
 
     // ==============================
+    // PRE-TRIP INSPECTION
+    // ==============================
+    public function getInspection($dispatch_id)
+    {
+        $row = $this->db->query("SELECT * FROM tbl_dispatch_inspections WHERE dispatch_id = ?", [$dispatch_id])->getRowArray();
+
+        // Driver who must sign = the driver currently assigned to the trip
+        $assigned = $this->db->query("
+            SELECT a.driver_id, a.driver_name, d.truck
+            FROM tbl_dispatch d
+            LEFT JOIN tbl_trip_assignments a ON a.trip_id = d.trip_id
+            WHERE d.dispatch_id = ?
+        ", [$dispatch_id])->getRowArray();
+
+        $gate = $this->checkInspection($row);
+        return [
+            'inspection' => $row,
+            'assigned_driver_id' => $assigned['driver_id'] ?? null,
+            'assigned_driver_name' => $assigned['driver_name'] ?? null,
+            'truck' => $assigned['truck'] ?? null,
+            'cleared' => $gate['cleared'],
+            'missing' => $gate['missing'],
+        ];
+    }
+
+    // Is the trip cleared to move past DISPATCHED? (used here and by the DR model)
+    public function getInspectionGate($trip_id)
+    {
+        $row = $this->db->query("
+            SELECT i.* FROM tbl_dispatch_inspections i
+            JOIN tbl_dispatch d ON d.dispatch_id = i.dispatch_id
+            WHERE d.trip_id = ?
+            ORDER BY i.inspection_id DESC LIMIT 1
+        ", [$trip_id])->getRowArray();
+        $gate = $this->checkInspection($row);
+        $gate['message'] = $gate['cleared'] ? '' : 'Pre-trip inspection not cleared: ' . implode(', ', $gate['missing']) . '.';
+        return $gate;
+    }
+
+    private function checkInspection($row)
+    {
+        $missing = [];
+        if (!$row) {
+            return ['cleared' => false, 'missing' => ['inspection form', 'driver signature', 'inspector signature']];
+        }
+        if (empty($row['inspection_form'])) $missing[] = 'inspection form';
+        if (empty($row['driver_signature'])) $missing[] = 'driver signature';
+        if (empty($row['inspector_signature'])) $missing[] = 'inspector signature';
+        if ($row['final_status'] === 'REQUIRES_REPAIR') $missing[] = 'vehicle is marked Requires Repair';
+        return ['cleared' => count($missing) === 0, 'missing' => $missing];
+    }
+
+    // Trip status is still before the road (no inspection needed yet)
+    private function tripCancelled($trip_id)
+    {
+        return $this->db->query("SELECT trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow()->trip_status === 'CANCELLED';
+    }
+
+    private function tripNotStarted($trip_id)
+    {
+        $trip = $this->db->query("SELECT trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow();
+        return $trip && in_array($trip->trip_status, ['ASSIGNED', 'DISPATCHED']);
+    }
+
+    // Create the inspection row on first touch (upload / sign / save)
+    private function ensureInspection($dispatch_id)
+    {
+        $row = $this->db->query("SELECT * FROM tbl_dispatch_inspections WHERE dispatch_id = ?", [$dispatch_id])->getRow();
+        if ($row) return $row;
+
+        $dispatch = $this->db->query("SELECT dispatch_id, trip_id, truck FROM tbl_dispatch WHERE dispatch_id = ?", [$dispatch_id])->getRow();
+        if (!$dispatch) return null;
+        $driver = $this->db->query("SELECT driver_id, driver_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1", [$dispatch->trip_id])->getRow();
+
+        $this->db->query("
+            INSERT INTO `tbl_dispatch_inspections`(
+                `inspection_code`, `dispatch_id`, `trip_id`, `inspection_date`, `inspection_time`,
+                `truck_plate`, `driver_id`, `driver_name`, `created_by`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ", [
+            $this->generateInspectionCode(), $dispatch_id, $dispatch->trip_id, date('Y-m-d'), date('H:i:s'),
+            $dispatch->truck, $driver->driver_id ?? null, $driver->driver_name ?? null, $this->cuser
+        ]);
+
+        return $this->db->query("SELECT * FROM tbl_dispatch_inspections WHERE dispatch_id = ?", [$dispatch_id])->getRow();
+    }
+
+    public function saveInspection()
+    {
+        $dispatch_id = $this->request->getPost('dispatch_id');
+        $inspection_date = $this->request->getPost('inspection_date') ?: date('Y-m-d');
+        $inspection_time = $this->request->getPost('inspection_time');
+        $inspector_name = trim((string) $this->request->getPost('inspector_name'));
+        $final_status = $this->request->getPost('final_status') === 'REQUIRES_REPAIR' ? 'REQUIRES_REPAIR' : 'SAFE';
+        $defects_found = $this->request->getPost('defects_found');
+        $remarks = $this->request->getPost('remarks');
+
+        if (!$dispatch_id) {
+            return ['status' => 'error', 'message' => 'Please save the dispatch first.'];
+        }
+        if ($inspector_name === '') {
+            return ['status' => 'error', 'message' => 'Please enter the inspector name.'];
+        }
+
+        $old = $this->ensureInspection($dispatch_id);
+        if (!$old) {
+            return ['status' => 'error', 'message' => 'Dispatch not found.'];
+        }
+
+        // Signatures attest to the result — a changed result needs fresh signatures
+        $resign = $old->final_status !== $final_status && ($old->driver_signature || $old->inspector_signature);
+
+        $query = $this->db->query("
+            UPDATE `tbl_dispatch_inspections`
+            SET `inspection_date` = ?, `inspection_time` = ?, `inspector_name` = ?,
+                `final_status` = ?, `defects_found` = ?, `remarks` = ?, `updated_at` = NOW()
+            WHERE `inspection_id` = ?
+        ", [$inspection_date, $inspection_time, $inspector_name, $final_status, $defects_found, $remarks, $old->inspection_id]);
+
+        if ($resign) {
+            $this->db->query("
+                UPDATE tbl_dispatch_inspections
+                SET driver_signature = NULL, driver_signed_at = NULL, inspector_signature = NULL, inspector_signed_at = NULL
+                WHERE inspection_id = ?
+            ", [$old->inspection_id]);
+        }
+
+        if ($query) {
+            $message = $resign
+                ? 'Inspection Saved — final status changed, so the driver and inspector must sign again.'
+                : 'Inspection Saved Successfully!';
+            return ['status' => 'success', 'message' => $message];
+        } else {
+            return ['status' => 'error', 'message' => 'An error occurred while saving inspection.'];
+        }
+    }
+
+    public function uploadInspectionForm()
+    {
+        $dispatch_id = $this->request->getPost('dispatch_id');
+        $file = $this->request->getFile('file');
+
+        if (!$dispatch_id) {
+            return ['status' => 'error', 'message' => 'Please save the dispatch first.'];
+        }
+        if (!$file || !$file->isValid()) {
+            return ['status' => 'error', 'message' => 'No valid file uploaded.'];
+        }
+
+        $ext = strtolower($file->getClientExtension());
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf'])) {
+            return ['status' => 'error', 'message' => 'File type not allowed. Only JPG, PNG, GIF, WEBP, PDF.'];
+        }
+        if ($file->getSize() > 10 * 1024 * 1024) {
+            return ['status' => 'error', 'message' => 'File too large. Max 10MB.'];
+        }
+
+        $row = $this->ensureInspection($dispatch_id);
+        if (!$row) {
+            return ['status' => 'error', 'message' => 'Dispatch not found.'];
+        }
+
+        $uploadPath = FCPATH . 'uploads/dispatch_inspections/';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        $newName = 'INSP_' . $dispatch_id . '_FORM_' . time() . '.' . $ext;
+        if (!$file->move($uploadPath, $newName)) {
+            return ['status' => 'error', 'message' => 'Failed to move uploaded file.'];
+        }
+
+        $relativePath = 'uploads/dispatch_inspections/' . $newName;
+        $this->db->query("UPDATE tbl_dispatch_inspections SET inspection_form = ?, updated_at = NOW() WHERE inspection_id = ?", [$relativePath, $row->inspection_id]);
+
+        return ['status' => 'success', 'message' => 'Inspection form uploaded!', 'path' => $relativePath];
+    }
+
+    // ==============================
+    // SIGN INSPECTION (drawn base64 or uploaded image) — signer: driver | inspector
+    // ==============================
+    public function signInspection()
+    {
+        $dispatch_id = $this->request->getPost('dispatch_id');
+        $signer = $this->request->getPost('signer');
+        $image_data = $this->request->getPost('signature_data');
+        $file = $this->request->getFile('file');
+
+        if (!$dispatch_id) {
+            return ['status' => 'error', 'message' => 'Please save the dispatch first.'];
+        }
+        if (!in_array($signer, ['driver', 'inspector'])) {
+            return ['status' => 'error', 'message' => 'Invalid signer.'];
+        }
+
+        $row = $this->ensureInspection($dispatch_id);
+        if (!$row) {
+            return ['status' => 'error', 'message' => 'Dispatch not found.'];
+        }
+
+        if ($signer === 'inspector' && empty($row->inspector_name)) {
+            return ['status' => 'error', 'message' => 'Enter and save the inspector name before signing.'];
+        }
+
+        // The driver signing must be the driver assigned to the trip
+        // (our driver by ID, or the vendor's driver by name on a rented package)
+        $driver = null;
+        if ($signer === 'driver') {
+            $driver = $this->db->query("SELECT driver_id, driver_name FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1", [$row->trip_id])->getRow();
+            if (!$driver || (!$driver->driver_id && !$driver->driver_name)) {
+                return ['status' => 'error', 'message' => 'No driver is assigned to this trip.'];
+            }
+        }
+
+        $uploadPath = FCPATH . 'uploads/dispatch_inspections/';
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+        $base = 'INSP_' . $dispatch_id . '_' . strtoupper($signer) . '_SIGNATURE_' . time();
+
+        if ($image_data) {
+            if (!preg_match('/^data:image\/(png|jpeg);base64,/', $image_data, $matches)) {
+                return ['status' => 'error', 'message' => 'Invalid signature format.'];
+            }
+            $ext = $matches[1] === 'jpeg' ? 'jpg' : 'png';
+            $decoded = base64_decode(str_replace(' ', '+', preg_replace('/^data:image\/(png|jpeg);base64,/', '', $image_data)));
+            if (!$decoded || strlen($decoded) < 100) {
+                return ['status' => 'error', 'message' => 'Signature is empty.'];
+            }
+            if (strlen($decoded) > 2 * 1024 * 1024) {
+                return ['status' => 'error', 'message' => 'Signature image too large.'];
+            }
+            if (file_put_contents($uploadPath . $base . '.' . $ext, $decoded) === false) {
+                return ['status' => 'error', 'message' => 'Failed to save signature file.'];
+            }
+        } elseif ($file && $file->isValid()) {
+            $ext = strtolower($file->getClientExtension());
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                return ['status' => 'error', 'message' => 'Signature must be an image (JPG, PNG, GIF, WEBP).'];
+            }
+            if ($file->getSize() > 2 * 1024 * 1024) {
+                return ['status' => 'error', 'message' => 'Signature image too large.'];
+            }
+            if (!$file->move($uploadPath, $base . '.' . $ext)) {
+                return ['status' => 'error', 'message' => 'Failed to move uploaded file.'];
+            }
+        } else {
+            return ['status' => 'error', 'message' => 'Missing signature.'];
+        }
+
+        $relativePath = 'uploads/dispatch_inspections/' . $base . '.' . $ext;
+        if ($signer === 'driver') {
+            $this->db->query("
+                UPDATE tbl_dispatch_inspections
+                SET driver_signature = ?, driver_signed_at = NOW(), driver_id = ?, driver_name = ?, updated_at = NOW()
+                WHERE inspection_id = ?
+            ", [$relativePath, $driver->driver_id, $driver->driver_name, $row->inspection_id]);
+        } else {
+            $this->db->query("
+                UPDATE tbl_dispatch_inspections
+                SET inspector_signature = ?, inspector_signed_at = NOW(), updated_at = NOW()
+                WHERE inspection_id = ?
+            ", [$relativePath, $row->inspection_id]);
+        }
+
+        return ['status' => 'success', 'message' => ucfirst($signer) . ' signature saved!', 'path' => $relativePath];
+    }
+
+    public function removeInspectionFile()
+    {
+        $dispatch_id = $this->request->getPost('dispatch_id');
+        $field = $this->request->getPost('field');
+
+        $map = [
+            'inspection_form' => "inspection_form = NULL",
+            'driver_signature' => "driver_signature = NULL, driver_signed_at = NULL",
+            'inspector_signature' => "inspector_signature = NULL, inspector_signed_at = NULL",
+        ];
+        if (!isset($map[$field])) {
+            return ['status' => 'error', 'message' => 'Invalid field.'];
+        }
+
+        $query = $this->db->query("UPDATE tbl_dispatch_inspections SET {$map[$field]}, updated_at = NOW() WHERE dispatch_id = ?", [$dispatch_id]);
+
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Removed.'];
+        } else {
+            return ['status' => 'error', 'message' => 'An error occurred while removing.'];
+        }
+    }
+
+    // ==============================
     // SAVE DISPATCH
     // ==============================
     public function saveDispatch()
@@ -373,6 +677,11 @@ class FMS_Dispatch_Model extends Model
         $fuel_consumed = $this->request->getPost('fuel_consumed') ?: 0;
         $delay_reason = $this->request->getPost('delay_reason');
         $remarks = $this->request->getPost('remarks');
+
+        // A new dispatch has no pre-trip inspection yet — it can only start as Dispatched
+        if (!in_array($trip_status, ['DISPATCHED', 'CANCELLED'])) {
+            return ['status' => 'error', 'message' => 'Save the dispatch as Dispatched first, then complete the pre-trip inspection before moving it to ' . ucwords(strtolower(str_replace('_', ' ', $trip_status))) . '.'];
+        }
 
         $query = $this->db->query("
             INSERT INTO `tbl_dispatch`(
@@ -466,6 +775,14 @@ class FMS_Dispatch_Model extends Model
         $fuel_consumed = $this->request->getPost('fuel_consumed') ?: 0;
         $delay_reason = $this->request->getPost('delay_reason');
         $remarks = $this->request->getPost('remarks');
+
+        // Pre-trip inspection gate: the truck can't go on the road until it's cleared
+        if (in_array($trip_status, ['IN_TRANSIT', 'DELIVERED', 'COMPLETED']) && $this->tripNotStarted($trip_id)) {
+            $gate = $this->getInspectionGate($trip_id);
+            if (!$gate['cleared']) {
+                return ['status' => 'error', 'message' => $gate['message']];
+            }
+        }
 
         // Same container-return gate as the last-waypoint-arrival flow: don't let a
         // manual "Completed" pick skip past a container that hasn't been returned yet.
@@ -612,6 +929,16 @@ class FMS_Dispatch_Model extends Model
 
         $waypoint = $this->db->query("SELECT trip_id, sequence, waypoint_type FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id])->getRow();
 
+        if ($waypoint && $this->tripCancelled($waypoint->trip_id)) {
+            return ['status' => 'error', 'message' => 'This trip was cancelled — stops can no longer be recorded.'];
+        }
+        if ($waypoint && $this->tripNotStarted($waypoint->trip_id)) {
+            $gate = $this->getInspectionGate($waypoint->trip_id);
+            if (!$gate['cleared']) {
+                return ['status' => 'error', 'message' => $gate['message']];
+            }
+        }
+
         $isLastWaypoint = false;
         if ($waypoint) {
             $lastSeq = $this->db->query("SELECT MAX(sequence) as max_seq FROM tbl_trip_waypoints WHERE trip_id = ?", [$waypoint->trip_id])->getRow();
@@ -631,8 +958,14 @@ class FMS_Dispatch_Model extends Model
         ", [$actual_arrival, $waypoint_status, $arrival_remarks, $waypoint_id]);
 
         if ($query) {
-            // Arriving at the container return stop closes out the container return sub-task
-            if ($waypoint && in_array($waypoint->waypoint_type, ['PORT_TERMINAL', 'RETURN_POINT'])) {
+            // Arriving at the container return stop closes out the container return sub-task —
+            // but only after the cargo was delivered. A port stop *before* delivery is the
+            // container pickup, not its return.
+            $deliveredBefore = $waypoint && $this->db->query("
+                SELECT COUNT(*) as total FROM tbl_trip_waypoints
+                WHERE trip_id = ? AND sequence < ? AND waypoint_type IN ('DELIVERY_DESTINATION','CLIENT_WAREHOUSE')
+            ", [$waypoint->trip_id, $waypoint->sequence])->getRow()->total > 0;
+            if ($deliveredBefore && in_array($waypoint->waypoint_type, ['PORT_TERMINAL', 'RETURN_POINT'])) {
                 $ts = strtotime(str_replace('T', ' ', $actual_arrival));
                 $this->db->query("
                     UPDATE tbl_dispatch
@@ -644,6 +977,10 @@ class FMS_Dispatch_Model extends Model
             if ($isLastWaypoint) {
                 $completed = $this->completeTripResources($waypoint->trip_id, $actual_arrival);
                 if ($completed) {
+                    $rented = $this->db->query("SELECT vehicle_type FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1", [$waypoint->trip_id])->getRow();
+                    if ($rented && $rented->vehicle_type === 'RENTED_ALL') {
+                        return ['status' => 'success', 'message' => 'Last waypoint reached — trip completed. The vendor package unit and crew are released back to the vendor.'];
+                    }
                     return ['status' => 'success', 'message' => 'Last waypoint reached — trip completed, truck/driver/helper are now available.'];
                 }
                 return ['status' => 'success', 'message' => 'Last waypoint reached, but container return is still pending — trip stays at Delivered until the container is returned.'];
@@ -690,6 +1027,8 @@ class FMS_Dispatch_Model extends Model
 
     // ==============================
     // RELEASE TRIP RESOURCES: free the truck/tractor/chassis/driver/helper
+    // (only those still in a trip status — a status changed by hand during the trip,
+    // e.g. UNDER_MAINTENANCE or ON_LEAVE, is kept)
     // assigned to a trip back to AVAILABLE. Called whenever a trip is marked
     // COMPLETED or CANCELLED, whether via last-waypoint-arrival or a manual
     // dispatch edit.
@@ -706,13 +1045,13 @@ class FMS_Dispatch_Model extends Model
 
         if ($assignment) {
             foreach (array_filter([$assignment->truck_id, $assignment->tractor_id, $assignment->chassis_id]) as $truck_id) {
-                $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE truck_id = ?", [$truck_id]);
+                $this->db->query("UPDATE tbl_trucks SET truck_status = 'AVAILABLE' WHERE truck_id = ? AND truck_status IN ('ASSIGNED','DISPATCHED','IN_TRANSIT','RETURNING')", [$truck_id]);
             }
             if (!empty($assignment->driver_id)) {
-                $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_id = ?", [$assignment->driver_id]);
+                $this->db->query("UPDATE tbl_drivers SET driver_status = 'AVAILABLE' WHERE driver_id = ? AND driver_status IN ('ASSIGNED','ON_TRIP','RETURNING')", [$assignment->driver_id]);
             }
             if (!empty($assignment->helper_id)) {
-                $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_id = ?", [$assignment->helper_id]);
+                $this->db->query("UPDATE tbl_helpers SET helper_status = 'AVAILABLE' WHERE helper_id = ? AND helper_status IN ('ASSIGNED','ON_TRIP')", [$assignment->helper_id]);
             }
         }
     }
@@ -726,6 +1065,17 @@ class FMS_Dispatch_Model extends Model
         if(!$actual_departure) {
             return ['status' => 'error', 'message' => 'Please select departure date/time'];
         }
+
+        $waypoint = $this->db->query("SELECT trip_id FROM tbl_trip_waypoints WHERE waypoint_id = ?", [$waypoint_id])->getRow();
+        if ($waypoint && $this->tripCancelled($waypoint->trip_id)) {
+            return ['status' => 'error', 'message' => 'This trip was cancelled — stops can no longer be recorded.'];
+        }
+        if ($waypoint && $this->tripNotStarted($waypoint->trip_id)) {
+            $gate = $this->getInspectionGate($waypoint->trip_id);
+            if (!$gate['cleared']) {
+                return ['status' => 'error', 'message' => $gate['message']];
+            }
+        }
         
         $query = $this->db->query("
             UPDATE `tbl_trip_waypoints`
@@ -738,6 +1088,10 @@ class FMS_Dispatch_Model extends Model
         ", [$actual_departure, $departure_remarks, $waypoint_id]);
         
         if ($query) {
+            // Leaving a stop means the truck is on the road
+            if ($waypoint) {
+                $this->db->query("UPDATE tbl_trips SET trip_status = 'IN_TRANSIT' WHERE trip_id = ? AND trip_status = 'DISPATCHED'", [$waypoint->trip_id]);
+            }
             return ['status' => 'success', 'message' => 'Departure recorded successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while recording departure.'];

@@ -1,0 +1,850 @@
+ERROR - 2026-09-25 14:30:07 --> mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-09-25 14:30:07 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+[Method: POST, Route: fms-dispatch]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:07 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'FOR_RETURN\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'FOR_RETURN\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:07 --> [Caused by] mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'FOR_RETURN\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'FOR_RETURN\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'FOR_RETURN\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-09-25 14:30:14 --> mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-09-25 14:30:14 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+[Method: POST, Route: fms-dispatch]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:14 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:14 --> [Caused by] mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', \'1\', \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', \'1\', \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-09-25 14:30:24 --> mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-09-25 14:30:24 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+[Method: POST, Route: fms-dispatch]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:24 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', 0, \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', 0, \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:30:24 --> [Caused by] mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', 0, \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', 0, \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'ASDASD\', \'40FT DRY\', \'TEST\', \'1231\', \'CONT-1231231\', \'MANILA PORT\', \'2026-09-25\', \'16:29\', 0, \'2026-09-25\', \'18:29\', \'MANILA PORT\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-09-25 14:31:04 --> mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-09-25 14:31:04 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+[Method: POST, Route: fms-dispatch]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:31:04 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:31:04 --> [Caused by] mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-001 + CHS-001\', \'Anna Lopez\', \'Andres Bonifacio\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-09-25 14:31:41 --> mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code' in C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php:327
+Stack trace:
+#0 C:\xampp\htdocs\larga-fms\system\Database\MySQLi\Connection.php(327): mysqli->query('\r\n            I...', 0)
+#1 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('\r\n            I...')
+#2 C:\xampp\htdocs\larga-fms\system\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('\r\n            I...')
+#3 C:\xampp\htdocs\larga-fms\app\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('\r\n            I...', Array)
+#4 C:\xampp\htdocs\larga-fms\app\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+#5 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+#6 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+#7 C:\xampp\htdocs\larga-fms\system\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\larga-fms\system\Boot.php(334): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\larga-fms\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\larga-fms\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+CRITICAL - 2026-09-25 14:31:41 --> CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+[Method: POST, Route: fms-dispatch]
+in SYSTEMPATH\Database\BaseConnection.php on line 692.
+ 1 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 2 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 4 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 5 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:31:41 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 332.
+ 1 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-002 + CHS-002\', \'Elena Rivera\', \'Antonio Luna\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 2 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-002 + CHS-002\', \'Elena Rivera\', \'Antonio Luna\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 4 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 6 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 7 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-09-25 14:31:41 --> [Caused by] mysqli_sql_exception: Duplicate entry 'DSP-2026-000010' for key 'dispatch_code'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 327.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(327): mysqli->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-002 + CHS-002\', \'Elena Rivera\', \'Antonio Luna\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(738): CodeIgniter\Database\MySQLi\Connection->execute('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-002 + CHS-002\', \'Elena Rivera\', \'Antonio Luna\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 3 SYSTEMPATH\Database\BaseConnection.php(652): CodeIgniter\Database\BaseConnection->simpleQuery('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (\'DSP-2026-000010\', \'34\', \'2026-09-25\', \'06:00\', \'TRC-002 + CHS-002\', \'Elena Rivera\', \'Antonio Luna\', \'MANILA\', \'CAVITE\', \'50000.00\', \'50.00\', 0, \'\', \'\', \'\', \'\', \'\', \'\', \'\', \'\', 0, \'\', \'\', \'\', 0, \'NOT_APPLICABLE\', \'\', \'KYLE ALINO\', \'DISPATCHED\', \'\', \'\', 0, 0, 0, 0, \'\', \'\', \'admin\')')
+ 4 APPPATH\Models\FMS_Dispatch_Model.php(378): CodeIgniter\Database\BaseConnection->query('
+            INSERT INTO `tbl_dispatch`(
+                `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
+                `truck`, `driver`, `helper`, `origin`, `destination`,
+                `odometer_out`, `fuel_level_out`,
+                `container_required`, `container_number`, `container_type`,
+                `container_description`, `container_markings`, `container_reference`,
+                `container_release_port`, `container_release_date`, `container_release_time`,
+                `container_return_required`, `container_return_date`, `container_return_time`,
+                `container_return_port`, `container_return_odometer`, `container_return_status`,
+                `container_return_proof`, `dispatcher_name`, `dispatch_status`,
+                `actual_delivery_date`, `actual_delivery_time`,
+                `odometer_in`, `fuel_level_in`, `total_distance`, `fuel_consumed`,
+                `delay_reason`, `remarks`, `created_by`
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [...])
+ 5 APPPATH\Controllers\FMS_Dispatch.php(35): App\Models\FMS_Dispatch_Model->saveDispatch()
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\FMS_Dispatch->index()
+ 7 SYSTEMPATH\CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\FMS_Dispatch))
+ 8 SYSTEMPATH\CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(334): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

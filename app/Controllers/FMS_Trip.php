@@ -100,6 +100,13 @@ class FMS_Trip extends BaseController
                 echo json_encode($result);
                 break;
 
+            case 'GET_VENDOR_PACKAGE_RATE':
+                $vendor_id = $this->request->getPost('vendor_id');
+                try { $result = $this->tripModel->getVendorPackageRate($vendor_id); }
+                catch (\Throwable $e) { $result = null; }
+                echo json_encode($result);
+                break;
+
             case 'GET_ACTIVE_VENDORS':
                 $result = $this->tripModel->getActiveVendors();
                 echo json_encode($result);
