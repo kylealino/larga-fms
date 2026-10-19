@@ -42,7 +42,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- Scripts -->
 <script src="<?=base_url('assets/js/vendor.min.js')?>"></script>
-<script src="<?=base_url('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')?>"></script>
+<script>
+  // Module views (fms/*-main.php) already load their own Bootstrap bundle. A second copy binds every
+  // data-bs-toggle twice, so the topbar user dropdown opened and closed on the same click — load only if missing.
+  if (!window.bootstrap) {
+    document.write('<script src="<?=base_url('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')?>"><\/script>');
+  }
+</script>
 <script src="<?=base_url('assets/libs/simplebar/dist/simplebar.min.js')?>"></script>
 <script src="<?=base_url('assets/js/theme/app.init.js')?>"></script>
 <script src="<?=base_url('assets/js/theme/theme.js')?>"></script>

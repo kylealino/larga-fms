@@ -51,7 +51,7 @@ class FMS_Invoice_Model extends Model
             LEFT JOIN tbl_customers c ON b.customer_id = c.customer_id
             WHERE b.billing_status != 'CANCELLED'
               AND NOT EXISTS (
-                  SELECT 1 FROM tbl_invoices i WHERE i.billing_id = b.billing_id
+                  SELECT 1 FROM tbl_invoices i WHERE i.billing_id = b.billing_id AND i.invoice_status NOT IN ('CANCELLED', 'VOID')
               )
             ORDER BY b.billing_date DESC
         ")->getResultArray();
@@ -109,7 +109,8 @@ class FMS_Invoice_Model extends Model
             return ['status' => 'error', 'message' => 'Missing billing reference.'];
         }
 
-        $existing = $this->db->query("SELECT invoice_id FROM tbl_invoices WHERE billing_id = ? LIMIT 1", [$billing_id])->getRow();
+        // a cancelled / voided invoice doesn't count — the billing can be invoiced again
+        $existing = $this->db->query("SELECT invoice_id FROM tbl_invoices WHERE billing_id = ? AND invoice_status NOT IN ('CANCELLED', 'VOID') LIMIT 1", [$billing_id])->getRow();
         if ($existing) {
             return ['status' => 'error', 'message' => 'An invoice already exists for this billing.'];
         }
@@ -164,15 +165,29 @@ class FMS_Invoice_Model extends Model
         $invoice_date = $this->request->getPost('invoice_date');
         $due_date = $this->request->getPost('due_date');
         $payment_terms = $this->request->getPost('payment_terms');
-        $discount = $this->request->getPost('discount') ?: 0;
         $invoice_status = $this->request->getPost('invoice_status') ?: 'DRAFT';
         $remarks = $this->request->getPost('remarks');
 
-        $existing = $this->db->query("SELECT subtotal, vat, other_charges, amount_paid FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
+        $existing = $this->db->query("SELECT billing_id, invoice_status, subtotal, discount, vat, other_charges, amount_paid FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
         if (!$existing) {
             return ['status' => 'error', 'message' => 'Invoice not found.'];
         }
 
+        // Cancel / void rules: money already received must be reversed first, and a cancelled
+        // invoice is final (its billing goes back to For Invoice so a new invoice can be issued)
+        $closed = ['CANCELLED', 'VOID'];
+        $was_closed = in_array($existing->invoice_status, $closed);
+        $closing = in_array($invoice_status, $closed);
+        if ($closing && !$was_closed && (float) $existing->amount_paid > 0) {
+            return ['status' => 'error', 'message' => 'This invoice has ₱' . number_format($existing->amount_paid, 2) . ' in cleared payments. Mark those payments Bounced or Cancelled (or delete them) before cancelling the invoice.'];
+        }
+        if ($was_closed && !$closing) {
+            return ['status' => 'error', 'message' => 'A ' . strtolower($existing->invoice_status) . ' invoice is final — create a new invoice from the billing instead.'];
+        }
+
+        // Discount and VAT are set once on the billing and copied here — a different discount on the
+        // invoice would leave VAT computed on the old amount, so the invoice keeps the billing's discount
+        $discount = $existing->discount;
         $taxable_amount = $existing->subtotal - $discount;
         $total_amount = $taxable_amount + $existing->vat + $existing->other_charges;
         $outstanding_balance = $total_amount - $existing->amount_paid;
@@ -191,6 +206,9 @@ class FMS_Invoice_Model extends Model
         ]);
 
         if ($query) {
+            if ($closing && !$was_closed) {
+                $this->db->query("UPDATE tbl_billing SET billing_status = 'FOR_INVOICE', updated_at = NOW() WHERE billing_id = ? AND billing_status = 'INVOICED'", [$existing->billing_id]);
+            }
             return ['status' => 'success', 'message' => 'Invoice Updated Successfully!'];
         } else {
             $error = $this->db->error();

@@ -119,6 +119,18 @@ class FMS_Trip_Model extends Model
     {
         $trip_code = $this->generateTripCode();
         $customer_id = $this->request->getPost('customer_id');
+        $erp_bookslip_id = $this->request->getPost('erp_bookslip_id') ?: null;
+        if ($erp_bookslip_id && !model('App\Models\FMS_ErpBooking_Model')->isBookedTrucking($erp_bookslip_id)) {
+            return ['status' => 'error', 'message' => 'Only BOOKED (approved) ERP booking slips with trucking can be scheduled.'];
+        }
+        if ($erp_bookslip_id && str_starts_with((string) $customer_id, 'erp:')) {
+            $erpBookings = model('App\Models\FMS_ErpBooking_Model');
+            $erpBookings->cuser = $this->cuser;
+            $customer_id = $erpBookings->resolveCustomer($customer_id);
+            if (!$customer_id) {
+                return ['status' => 'error', 'message' => 'Could not find the booking client in the ERP to create the customer.'];
+            }
+        }
         $booking_reference = $this->request->getPost('booking_reference');
         $service_type = $this->request->getPost('service_type');
         $trip_type = $this->request->getPost('trip_type') ?: 'ONE_WAY';
@@ -156,6 +168,13 @@ class FMS_Trip_Model extends Model
 
         if ($query) {
             $trip_id = $this->db->insertID();
+
+            // Created from an ERP booking slip: keep its reference details + trucking quote
+            if ($erp_bookslip_id) {
+                $erpBookings = model('App\Models\FMS_ErpBooking_Model');
+                $erpBookings->cuser = $this->cuser;
+                $erpBookings->snapshotToTrip($trip_id, $erp_bookslip_id);
+            }
 
             // Cargo items added in the New Trip modal are staged client-side (no trip_id
             // exists yet to save them against) and sent together with the trip in one
@@ -206,6 +225,20 @@ class FMS_Trip_Model extends Model
     {
         $trip_id = $this->request->getPost('trip_id');
         $customer_id = $this->request->getPost('customer_id');
+        $erp_bookslip_id = $this->request->getPost('erp_bookslip_id') ?: null;
+        // Checked only when linking a different slip — an already-linked trip keeps its booking
+        $currentLink = $this->db->query("SELECT erp_bookslip_id FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow()->erp_bookslip_id ?? null;
+        if ($erp_bookslip_id && (int) $erp_bookslip_id !== (int) $currentLink && !model('App\Models\FMS_ErpBooking_Model')->isBookedTrucking($erp_bookslip_id)) {
+            return ['status' => 'error', 'message' => 'Only BOOKED (approved) ERP booking slips with trucking can be scheduled.'];
+        }
+        if ($erp_bookslip_id && str_starts_with((string) $customer_id, 'erp:')) {
+            $erpBookings = model('App\Models\FMS_ErpBooking_Model');
+            $erpBookings->cuser = $this->cuser;
+            $customer_id = $erpBookings->resolveCustomer($customer_id);
+            if (!$customer_id) {
+                return ['status' => 'error', 'message' => 'Could not find the booking client in the ERP to create the customer.'];
+            }
+        }
         $booking_reference = $this->request->getPost('booking_reference');
         $service_type = $this->request->getPost('service_type');
         $trip_type = $this->request->getPost('trip_type') ?: 'ONE_WAY';
@@ -256,6 +289,16 @@ class FMS_Trip_Model extends Model
         );
 
         if ($query) {
+            $linked = $this->db->query("SELECT erp_bookslip_id FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow()->erp_bookslip_id ?? null;
+            if ($erp_bookslip_id && (int) $erp_bookslip_id !== (int) $linked) {
+                $erpBookings = model('App\Models\FMS_ErpBooking_Model');
+                $erpBookings->cuser = $this->cuser;
+                $erpBookings->snapshotToTrip($trip_id, $erp_bookslip_id);
+            } elseif (!$erp_bookslip_id && $linked) {
+                $this->db->query("UPDATE tbl_trips SET erp_bookslip_id = NULL, client_reference = NULL, shipper_name = NULL, mode_of_shipment = NULL, incoterms = NULL, commodity_type = NULL WHERE trip_id = ?", [$trip_id]);
+                $this->db->query("DELETE FROM tbl_trip_booking_charges WHERE trip_id = ?", [$trip_id]);
+            }
+
             // A cancelled trip frees its truck/driver/helper (same as cancelling from Dispatch)
             if ($trip_status === 'CANCELLED') {
                 $old = $this->db->query("
@@ -364,6 +407,17 @@ class FMS_Trip_Model extends Model
             $chassis_type = 'RENTED';
         }
 
+        // Keep only what belongs to the chosen setup — the form hides other fields but still posts them
+        if ($vehicle_type != 'RIGID') $truck_id = null;
+        if (!in_array($vehicle_type, ['TRACTOR_CHASSIS', 'TRACTOR_RENTED_CHASSIS'])) $tractor_id = null;
+        if (!in_array($vehicle_type, ['TRACTOR_CHASSIS', 'CHASSIS_ONLY'])) $chassis_id = null;
+        if ($vehicle_type == 'TRACTOR_CHASSIS') $chassis_type = 'OWNED';
+        if (in_array($vehicle_type, ['RIGID', 'TRACTOR_CHASSIS'])) {
+            $vendor_id = null;
+            $rental_rate = 0;
+            $rental_start_date = $rental_end_date = $rental_agreement_no = $vendor_contact_person = $vendor_contact_number = null;
+        }
+
         // Name/plate snapshots kept for history
         $snap = $this->getResourceSnapshot($truck_id, $tractor_id, $chassis_id, $vendor_id, $driver_id, $helper_id);
 
@@ -398,6 +452,14 @@ class FMS_Trip_Model extends Model
             if (!$snap['chassis_plate']) {
                 return ['status' => 'error', 'message' => 'Please enter the vendor chassis plate.'];
             }
+        }
+
+        if ($this->db->query("SELECT 1 FROM tbl_trip_assignments WHERE trip_id = ? LIMIT 1", [$trip_id])->getRow()) {
+            return ['status' => 'error', 'message' => 'This trip already has an assignment — edit it instead.'];
+        }
+        $invalid = $this->validateAssignment($vehicle_type, $truck_id, $tractor_id, $chassis_id, $driver_id, $helper_id);
+        if ($invalid) {
+            return ['status' => 'error', 'message' => $invalid];
         }
 
         $query = $this->db->query("
@@ -461,6 +523,17 @@ class FMS_Trip_Model extends Model
             $chassis_type = 'RENTED';
         }
 
+        // Keep only what belongs to the chosen setup — the form hides other fields but still posts them
+        if ($vehicle_type != 'RIGID') $truck_id = null;
+        if (!in_array($vehicle_type, ['TRACTOR_CHASSIS', 'TRACTOR_RENTED_CHASSIS'])) $tractor_id = null;
+        if (!in_array($vehicle_type, ['TRACTOR_CHASSIS', 'CHASSIS_ONLY'])) $chassis_id = null;
+        if ($vehicle_type == 'TRACTOR_CHASSIS') $chassis_type = 'OWNED';
+        if (in_array($vehicle_type, ['RIGID', 'TRACTOR_CHASSIS'])) {
+            $vendor_id = null;
+            $rental_rate = 0;
+            $rental_start_date = $rental_end_date = $rental_agreement_no = $vendor_contact_person = $vendor_contact_number = null;
+        }
+
         $old = $this->db->query("
             SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
             FROM tbl_trip_assignments WHERE assignment_id = ?
@@ -501,6 +574,11 @@ class FMS_Trip_Model extends Model
             }
         }
 
+        $invalid = $this->validateAssignment($vehicle_type, $truck_id, $tractor_id, $chassis_id, $driver_id, $helper_id, $old);
+        if ($invalid) {
+            return ['status' => 'error', 'message' => $invalid];
+        }
+
         $query = $this->db->query("
             UPDATE `tbl_trip_assignments`
             SET
@@ -539,8 +617,9 @@ class FMS_Trip_Model extends Model
                 );
             }
 
-            // Mark newly/still assigned resources
+            // Mark newly/still assigned resources, then move them to the trip's current stage
             $this->setResourceStatus([$truck_id, $tractor_id, $chassis_id], $driver_id, $helper_id, 'ASSIGNED');
+            model('App\Models\FMS_Dispatch_Model')->syncTripResources($trip_id);
 
             return ['status' => 'success', 'message' => 'Assignment Updated Successfully!'];
         } else {
@@ -628,6 +707,48 @@ class FMS_Trip_Model extends Model
     // ==============================
     // SET RESOURCE STATUS: trucks + driver + helper by ID
     // ==============================
+    // Same rules the Assign form enforces, checked on the server too: the setup's required units,
+    // a driver on company units, and every newly picked unit/driver/helper must be AVAILABLE.
+    // $old = the assignment being edited (its own units are allowed to stay).
+    private function validateAssignment($vehicle_type, $truck_id, $tractor_id, $chassis_id, $driver_id, $helper_id, $old = null)
+    {
+        $need = [
+            'RIGID'                  => [[$truck_id, 'Please select the truck.']],
+            'TRACTOR_CHASSIS'        => [[$tractor_id, 'Please select the tractor.'], [$chassis_id, 'Please select the chassis.']],
+            'TRACTOR_RENTED_CHASSIS' => [[$tractor_id, 'Please select the tractor.']],
+            'CHASSIS_ONLY'           => [[$chassis_id, 'Please select the chassis.']],
+        ];
+        if ($vehicle_type !== 'RENTED_ALL' && !isset($need[$vehicle_type])) {
+            return 'Please select the vehicle type.';
+        }
+        foreach ($need[$vehicle_type] ?? [] as [$id, $message]) {
+            if (!$id) return $message;
+        }
+        if ($vehicle_type !== 'RENTED_ALL' && !$driver_id) {
+            return 'Please select the driver.';
+        }
+
+        $kept = $old ? array_filter([$old->truck_id, $old->tractor_id, $old->chassis_id]) : [];
+        $config = [$truck_id => 'RIGID', $tractor_id => 'TRACTOR', $chassis_id => 'TRAILER'];
+        foreach (array_filter([$truck_id, $tractor_id, $chassis_id]) as $id) {
+            $u = $this->db->query("SELECT plate_number, vehicle_config, truck_status FROM tbl_trucks WHERE truck_id = ?", [$id])->getRow();
+            if (!$u) return 'Selected unit was not found.';
+            if ($u->vehicle_config !== $config[$id]) return "{$u->plate_number} is a " . strtolower($u->vehicle_config) . ', not a ' . strtolower($config[$id]) . '.';
+            if (!in_array($id, $kept) && $u->truck_status !== 'AVAILABLE') {
+                return "{$u->plate_number} is not available (" . str_replace('_', ' ', $u->truck_status) . ').';
+            }
+        }
+        if ($driver_id && !($old && $old->driver_id == $driver_id)) {
+            $d = $this->db->query("SELECT driver_name, driver_status FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRow();
+            if (!$d || $d->driver_status !== 'AVAILABLE') return ($d->driver_name ?? 'Driver') . ' is not available (' . str_replace('_', ' ', $d->driver_status ?? 'not found') . ').';
+        }
+        if ($helper_id && !($old && $old->helper_id == $helper_id)) {
+            $h = $this->db->query("SELECT helper_name, helper_status FROM tbl_helpers WHERE helper_id = ?", [$helper_id])->getRow();
+            if (!$h || $h->helper_status !== 'AVAILABLE') return ($h->helper_name ?? 'Helper') . ' is not available (' . str_replace('_', ' ', $h->helper_status ?? 'not found') . ').';
+        }
+        return null;
+    }
+
     private function setResourceStatus($truck_ids, $driver_id, $helper_id, $status)
     {
         // Releasing only touches units still in a trip status — a status changed by hand

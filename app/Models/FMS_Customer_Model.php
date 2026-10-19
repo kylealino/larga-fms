@@ -27,6 +27,36 @@ class FMS_Customer_Model extends Model
     }
 
     // ==============================
+    // CREATE CUSTOMER FROM ERP CLIENT (mst_orgzn row) — used by Trip Scheduling's booking lookup
+    // ==============================
+    public function createFromErp(array $org)
+    {
+        $clean = function($v) {
+            $v = trim(stripslashes((string) $v));
+            return ($v === '' || $v === '"' || strtoupper($v) === 'NA') ? null : $v;
+        };
+        $address = $clean(implode(' ', array_filter([$org['ORGZN_ADDR1'] ?? '', $org['ORGZN_ADDR2'] ?? '', $org['ORGZN_ADDR3'] ?? ''])));
+        $terms = (int) ($org['ORGZN_TERMS'] ?? 0);
+
+        $this->db->query("
+            INSERT INTO `tbl_customers`(
+                `customer_code`, `erp_orgzn_id`, `customer_name`, `tin`,
+                `contact_person`, `contact_position`, `contact_number`, `email_address`,
+                `business_address`, `billing_address`, `payment_terms`, `credit_limit`,
+                `customer_status`, `remarks`, `created_by`
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?)
+        ", [
+            $this->generateCustomerCode(), $org['recid'], $clean($org['ORGZN_NAME']), $clean($org['ORGZN_TINNO'] ?? null),
+            $clean($org['ORGZN_CPRSN'] ?? null), $clean($org['ORGZN_CPRSN_DESGN'] ?? null),
+            $clean($org['ORGZN_CPRSN_MOBNO'] ?? null) ?: $clean($org['ORGZN_TELNO'] ?? null) ?: $clean($org['ORGZN_MOBNO'] ?? null),
+            $clean($org['ORGZN_CPRSN_EMAIL'] ?? null) ?: $clean($org['ORGZN_EMAIL'] ?? null),
+            $address, $address, $terms > 0 ? $terms . ' Days' : null, (float) ($org['ORGZN_CREDITL'] ?? 0),
+            'Created from ERP client ' . $clean($org['ORGZN_CODE'] ?? '') . ' via booking slip', $this->cuser
+        ]);
+        return $this->db->insertID();
+    }
+
+    // ==============================
     // SAVE CUSTOMER
     // ==============================
     public function saveCustomer() 

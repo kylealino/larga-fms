@@ -81,7 +81,7 @@ echo view('templates/myheader.php');
     /* HEADER - FULL WIDTH, NO EXTRA SPACE */
     /* ============================================ */
     .fleet-header {
-        background: linear-gradient(135deg, #0f5a99 0%, #1a6bb0 100%);
+        background: linear-gradient(135deg, var(--accent-dark, #0f5a99) 0%, var(--accent) 100%);
         padding: 14px 24px;
         margin: -24px -24px 20px -24px;
         display: flex;
@@ -112,14 +112,14 @@ echo view('templates/myheader.php');
     }
 
     .fleet-header .brand-section h2 i {
-        color: #90cdf4;
+        color: var(--primary-tint, #90cdf4);
         font-size: 22px;
     }
 
     .fleet-header .brand-section h2 .real-time-badge {
         font-size: 10px;
         font-weight: 400;
-        color: #90cdf4;
+        color: var(--primary-tint, #90cdf4);
         background: rgba(255, 255, 255, 0.08);
         padding: 2px 12px;
         border-radius: 4px;
@@ -127,7 +127,7 @@ echo view('templates/myheader.php');
     }
 
     .fleet-header .brand-section .user-meta {
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         font-size: 12px;
         display: flex;
         align-items: center;
@@ -164,7 +164,7 @@ echo view('templates/myheader.php');
     }
 
     .header-filter .filter-group label {
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         font-size: 9px;
         font-weight: 600;
         text-transform: uppercase;
@@ -211,7 +211,7 @@ echo view('templates/myheader.php');
     }
 
     .header-filter .btn-filter-header:hover {
-        background: #90cdf4;
+        background: var(--primary-tint, #90cdf4);
         transform: translateY(-1px);
     }
 
@@ -220,7 +220,7 @@ echo view('templates/myheader.php');
         border-radius: 4px;
         border: 1px solid rgba(255, 255, 255, 0.15);
         background: transparent;
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         font-weight: 500;
         font-size: 11px;
         cursor: pointer;
@@ -448,7 +448,7 @@ echo view('templates/myheader.php');
         height: 100%;
         border-radius: 4px;
         transition: width 0.8s ease;
-        background: linear-gradient(90deg, var(--accent), #60a5fa);
+        background: linear-gradient(90deg, var(--accent), var(--lrg-blue-light, #60a5fa));
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -1247,6 +1247,10 @@ echo view('templates/myheader.php');
     // =============================================
     const fuelCtx = document.getElementById('fuelChart');
     if (fuelCtx) {
+        // chart canvas can't read CSS variables — resolve the role palette color here
+        const themeCss = getComputedStyle(document.documentElement);
+        const themeRgb = themeCss.getPropertyValue('--primary-rgb').trim() || '26, 107, 176';
+        const themeDark = themeCss.getPropertyValue('--primary-dark').trim() || '#0f5a99';
         new Chart(fuelCtx, {
             type: 'bar',
             data: {
@@ -1254,8 +1258,10 @@ echo view('templates/myheader.php');
                 datasets: [{
                     label: 'Fuel Cost (₱)',
                     data: <?= json_encode(array_values($monthlyFuel)) ?>,
-                    backgroundColor: 'rgba(26, 107, 176, 0.6)',
-                    borderColor: '#1a6bb0',
+                    // solid bars — a translucent fill washes out on the muted palettes
+                    backgroundColor: 'rgb(' + themeRgb + ')',
+                    hoverBackgroundColor: themeDark,
+                    borderColor: themeDark,
                     borderWidth: 2,
                     borderRadius: 3
                 }]

@@ -132,7 +132,7 @@ echo view('templates/myheader.php');
         width: 40px; height: 40px;
         background: rgba(255,255,255,0.12); border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
-        font-size: 20px; color: #90cdf4;
+        font-size: 20px; color: var(--primary-tint, #90cdf4);
         border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 {
@@ -141,7 +141,7 @@ echo view('templates/myheader.php');
     }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px;
-        background: rgba(255,255,255,0.12); color: #bee3f8;
+        background: rgba(255,255,255,0.12); color: var(--primary-tint-2, #bee3f8);
         border: 1px solid rgba(255,255,255,0.08);
         text-transform: uppercase; letter-spacing: 0.5px;
     }
@@ -174,7 +174,7 @@ echo view('templates/myheader.php');
     }
     .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--gray-300); }
     .stat-card:hover::before { opacity: 1; }
-    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md); }
+    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md); }
     .stat-card.active::before { opacity: 1; }
     .stat-left .stat-label {
         font-size: 10px; font-weight: 600; color: var(--gray-500);
@@ -206,7 +206,7 @@ echo view('templates/myheader.php');
     }
     .form-control:focus, select.form-control:focus {
         outline: none; border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
     textarea.form-control { height: auto; min-height: 60px; resize: vertical; }
     .form-control[readonly] { background: var(--gray-50); cursor: not-allowed; }
@@ -219,7 +219,7 @@ echo view('templates/myheader.php');
     }
     .btn-primary:hover {
         background: var(--primary-dark); transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26,107,176,0.3); color: #ffffff;
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3); color: #ffffff;
     }
     .btn-secondary {
         background: #ffffff; border: 1.5px solid var(--gray-200);
@@ -318,7 +318,7 @@ echo view('templates/myheader.php');
         width: 200px; padding: 6px 12px; border: 1.5px solid var(--gray-200);
         border-radius: 8px; font-size: 12px; transition: all 0.2s; outline: none;
     }
-    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button {
         padding: 4px 10px !important; margin: 0 2px !important; border-radius: 6px !important;
@@ -1199,7 +1199,7 @@ function filterToolTable(status) {
 }
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/tool/tool.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/tool/tool.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/tool/tool.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

@@ -481,6 +481,7 @@ class FMS_DeliveryReceipt_Model extends Model
 
                     // Only move forward — never rewind a trip that's already COMPLETED
                     $this->db->query("UPDATE tbl_trips SET trip_status = 'DELIVERED' WHERE trip_id = ? AND trip_status IN ('DISPATCHED','IN_TRANSIT')", [$dr->trip_id]);
+                    model('App\Models\FMS_Dispatch_Model')->syncTripResources($dr->trip_id);
                 }
             }
 

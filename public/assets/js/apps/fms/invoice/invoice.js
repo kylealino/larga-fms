@@ -223,7 +223,7 @@ function __Invoice() {
                 $('#invoice_pending_billing_id').val('');
                 $('#invoiceModalTitle').html('<i class="bi bi-file-earmark-text me-2"></i>Invoice Details');
                 $('#invoiceSubmitBtnText').text('Save Invoice');
-                $('#invoice_discount').prop('disabled', false);
+                $('#invoice_discount').prop('disabled', true);   // discount (and VAT) come from the billing
                 $('#invoice_status').prop('disabled', false);
 
                 $('#invoice_id').val(data.invoice_id);

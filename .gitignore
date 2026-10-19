@@ -1,0 +1,7 @@
+# CodeIgniter runtime files
+writable/logs/*
+writable/cache/*
+writable/session/*
+writable/debugbar/*
+!writable/**/index.html
+!writable/**/.htaccess

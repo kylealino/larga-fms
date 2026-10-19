@@ -112,6 +112,16 @@ class FMS_UserManagement extends BaseController
                 break;
 
             // ==============================
+            // ROLE THEME (color palette, sidebar color, sidebar + header layout)
+            // ==============================
+            case 'SAVE_ROLE_THEME':
+                if (!user_can('usermanagement', 'edit')) { echo json_encode(['status' => 'error', 'message' => 'You do not have permission to change role themes.']); break; }
+                try { $result = $this->userModel->saveRoleTheme(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
+            // ==============================
             // PERMISSION MATRIX
             // ==============================
             case 'GET_MODULES_MATRIX':

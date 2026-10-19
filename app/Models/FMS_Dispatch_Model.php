@@ -251,10 +251,36 @@ class FMS_Dispatch_Model extends Model
     public function getExpensesByDispatch($dispatch_id)
     {
         return $this->db->query("
-            SELECT * FROM tbl_dispatch_expenses 
-            WHERE dispatch_id = ?
-            ORDER BY expense_date DESC
+            SELECT e.*, b.billing_code, b.billing_status
+            FROM tbl_dispatch_expenses e
+            LEFT JOIN tbl_billing_charges c ON c.expense_id = e.expense_id
+            LEFT JOIN tbl_billing b ON b.billing_id = c.billing_id
+            WHERE e.dispatch_id = ?
+            ORDER BY e.expense_date DESC
         ", [$dispatch_id])->getResultArray();
+    }
+
+    // Expense types; pass-through costs paid for the client default to billable (reimbursable)
+    const EXPENSE_TYPES = ['TOLL', 'PARKING', 'FUEL', 'MEALS', 'LOADING_UNLOADING', 'CONTAINER_RENTAL', 'EMPTY_RETURN_FEE', 'CONTAINER_RETURN_FEE', 'OTHER'];
+    const BILLABLE_BY_DEFAULT = ['TOLL', 'PARKING', 'LOADING_UNLOADING', 'CONTAINER_RENTAL', 'EMPTY_RETURN_FEE', 'CONTAINER_RETURN_FEE'];
+
+    private function postedBillable($expense_type)
+    {
+        $posted = $this->request->getPost('is_billable');
+        if ($posted === null || $posted === '') return in_array($expense_type, self::BILLABLE_BY_DEFAULT) ? 1 : 0;
+        return (int) (bool) $posted;
+    }
+
+    // The billing charge this expense was passed into, if any
+    private function getExpenseCharge($expense_id)
+    {
+        return $this->db->query("
+            SELECT c.charge_id, c.billing_id, c.amount, b.billing_code, b.billing_status
+            FROM tbl_billing_charges c
+            JOIN tbl_billing b ON b.billing_id = c.billing_id
+            WHERE c.expense_id = ?
+            LIMIT 1
+        ", [$expense_id])->getRow();
     }
 
     public function getExpense($expense_id)
@@ -276,22 +302,33 @@ class FMS_Dispatch_Model extends Model
         $reference_no = $this->request->getPost('reference_no');
         $remarks = $this->request->getPost('remarks');
 
+        if (!in_array($expense_type, self::EXPENSE_TYPES, true)) {
+            return ['status' => 'error', 'message' => 'Please select a valid expense type.'];
+        }
+        if (!is_numeric($amount) || $amount <= 0) {
+            return ['status' => 'error', 'message' => 'Enter an expense amount greater than zero.'];
+        }
+        $is_billable = $this->postedBillable($expense_type);
+
         $query = $this->db->query("
             INSERT INTO `tbl_dispatch_expenses`(
                 `expense_code`, `dispatch_id`, `trip_id`, `expense_date`,
-                `expense_type`, `description`, `amount`, `paid_by`,
+                `expense_type`, `description`, `amount`, `is_billable`, `paid_by`,
                 `reference_no`, `remarks`, `created_by`
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $expense_code, $dispatch_id, $trip_id, $expense_date,
-                $expense_type, $description, $amount, $paid_by,
+                $expense_type, $description, $amount, $is_billable, $paid_by,
                 $reference_no, $remarks, $this->cuser
             ]
         );
 
         if ($query) {
-            return ['status' => 'success', 'message' => 'Expense Added Successfully!'];
+            // Billing already open for this trip → the reimbursable shows there under "unbilled", ready to add
+            $open = $is_billable ? $this->db->query("SELECT billing_code FROM tbl_billing WHERE trip_id = ? AND billing_status IN ('DRAFT', 'FOR_INVOICE') LIMIT 1", [$trip_id])->getRow() : null;
+            $message = 'Expense Added Successfully!' . ($open ? " It is listed as an unbilled reimbursable on {$open->billing_code}." : '');
+            return ['status' => 'success', 'message' => $message];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while adding expense.'];
         }
@@ -308,22 +345,46 @@ class FMS_Dispatch_Model extends Model
         $reference_no = $this->request->getPost('reference_no');
         $remarks = $this->request->getPost('remarks');
 
+        if (!in_array($expense_type, self::EXPENSE_TYPES, true)) {
+            return ['status' => 'error', 'message' => 'Please select a valid expense type.'];
+        }
+        if (!is_numeric($amount) || $amount <= 0) {
+            return ['status' => 'error', 'message' => 'Enter an expense amount greater than zero.'];
+        }
+        $is_billable = $this->postedBillable($expense_type);
+
+        // Already passed into a billing: invoiced → amount/billable are final; open billing → keep its charge in step
+        $charge = $this->getExpenseCharge($expense_id);
+        if ($charge) {
+            if (!$is_billable) {
+                return ['status' => 'error', 'message' => "This expense is billed on {$charge->billing_code}. Remove its charge from the billing first, then untick Billable."];
+            }
+            if (in_array($charge->billing_status, ['INVOICED', 'CANCELLED']) && abs((float) $charge->amount - (float) $amount) > 0.001) {
+                return ['status' => 'error', 'message' => "This expense is on {$charge->billing_code}, which is already invoiced — its amount can no longer change."];
+            }
+        }
+
         $query = $this->db->query("
             UPDATE `tbl_dispatch_expenses`
-            SET 
+            SET
                 `expense_date` = ?, `expense_type` = ?, `description` = ?,
-                `amount` = ?, `paid_by` = ?, `reference_no` = ?, `remarks` = ?,
+                `amount` = ?, `is_billable` = ?, `paid_by` = ?, `reference_no` = ?, `remarks` = ?,
                 `updated_at` = NOW()
             WHERE `expense_id` = ?
             ",
             [
                 $expense_date, $expense_type, $description,
-                $amount, $paid_by, $reference_no, $remarks,
+                $amount, $is_billable, $paid_by, $reference_no, $remarks,
                 $expense_id
             ]
         );
 
         if ($query) {
+            if ($charge && !in_array($charge->billing_status, ['INVOICED', 'CANCELLED']) && abs((float) $charge->amount - (float) $amount) > 0.001) {
+                $this->db->query("UPDATE tbl_billing_charges SET amount = ? WHERE charge_id = ?", [$amount, $charge->charge_id]);
+                model('App\Models\FMS_Billing_Model')->recalculateBillingTotals($charge->billing_id);
+                return ['status' => 'success', 'message' => "Expense Updated Successfully! The charge on {$charge->billing_code} was updated to match."];
+            }
             return ['status' => 'success', 'message' => 'Expense Updated Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while updating expense.'];
@@ -333,7 +394,14 @@ class FMS_Dispatch_Model extends Model
     public function deleteExpense()
     {
         $expense_id = $this->request->getPost('expense_id');
-        
+
+        $charge = $this->getExpenseCharge($expense_id);
+        if ($charge) {
+            return ['status' => 'error', 'message' => in_array($charge->billing_status, ['INVOICED', 'CANCELLED'])
+                ? "Cannot delete — this expense was billed on {$charge->billing_code}, which is already invoiced."
+                : "Cannot delete — this expense is billed on {$charge->billing_code}. Remove its charge from the billing first."];
+        }
+
         $query = $this->db->query("DELETE FROM `tbl_dispatch_expenses` WHERE `expense_id` = ?", [$expense_id]);
 
         if ($query) {
@@ -683,6 +751,20 @@ class FMS_Dispatch_Model extends Model
             return ['status' => 'error', 'message' => 'Save the dispatch as Dispatched first, then complete the pre-trip inspection before moving it to ' . ucwords(strtolower(str_replace('_', ' ', $trip_status))) . '.'];
         }
 
+        // One dispatch per trip, and only for an Assigned trip — before, a double-click made two
+        // dispatches, and a Scheduled or Cancelled trip could be pushed straight to Dispatched
+        $trip = $this->db->query("SELECT trip_code, trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow();
+        if (!$trip) {
+            return ['status' => 'error', 'message' => 'Trip not found.'];
+        }
+        $existing = $this->db->query("SELECT dispatch_code FROM tbl_dispatch WHERE trip_id = ? LIMIT 1", [$trip_id])->getRow();
+        if ($existing) {
+            return ['status' => 'error', 'message' => 'Trip ' . $trip->trip_code . ' already has dispatch ' . $existing->dispatch_code . '.'];
+        }
+        if ($trip->trip_status !== 'ASSIGNED') {
+            return ['status' => 'error', 'message' => 'Only an Assigned trip can be dispatched — trip ' . $trip->trip_code . ' is ' . ucwords(strtolower(str_replace('_', ' ', $trip->trip_status))) . '.'];
+        }
+
         $query = $this->db->query("
             INSERT INTO `tbl_dispatch`(
                 `dispatch_code`, `trip_id`, `dispatch_date`, `dispatch_time`,
@@ -720,10 +802,7 @@ class FMS_Dispatch_Model extends Model
             
             // Trip status is the single lifecycle
             $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$trip_status, $trip_id]);
-
-            if (in_array($trip_status, ['COMPLETED', 'CANCELLED'])) {
-                $this->releaseTripResources($trip_id);
-            }
+            $this->syncTripResources($trip_id);
 
             return ['status' => 'success', 'message' => 'Dispatch Saved Successfully!', 'dispatch_id' => $dispatch_id];
         } else {
@@ -840,10 +919,7 @@ class FMS_Dispatch_Model extends Model
         if ($query) {
             // Trip status is the single lifecycle
             $this->db->query("UPDATE tbl_trips SET trip_status = ? WHERE trip_id = ?", [$trip_status, $trip_id]);
-
-            if (in_array($trip_status, ['COMPLETED', 'CANCELLED'])) {
-                $this->releaseTripResources($trip_id);
-            }
+            $this->syncTripResources($trip_id);
 
             if ($completionBlocked) {
                 return ['status' => 'success', 'message' => 'Dispatch Updated — container return is still pending, so it was kept at Delivered instead of Completed.'];
@@ -878,6 +954,7 @@ class FMS_Dispatch_Model extends Model
         if ($query) {
             // Update trip status back to ASSIGNED
             $this->db->query("UPDATE tbl_trips SET trip_status = 'ASSIGNED' WHERE trip_id = ?", [$trip_id]);
+            $this->syncTripResources($trip_id);
             return ['status' => 'success', 'message' => 'Dispatch Deleted Successfully!'];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while deleting dispatch.'];
@@ -1056,6 +1133,49 @@ class FMS_Dispatch_Model extends Model
         }
     }
 
+    // ==============================
+    // KEEP UNIT + CREW STATUS IN STEP WITH THE TRIP
+    // Trip ASSIGNED → units ASSIGNED; DISPATCHED/IN_TRANSIT → units same, crew ON_TRIP;
+    // DELIVERED → units/driver RETURNING; COMPLETED/CANCELLED → released.
+    // Like the release, only units still in a trip status move — a status set by hand
+    // (UNDER_MAINTENANCE, ON_LEAVE…) is kept. Vendor units/crew have no IDs, nothing to move.
+    // ==============================
+    public function syncTripResources($trip_id)
+    {
+        $trip_status = $this->db->query("SELECT trip_status FROM tbl_trips WHERE trip_id = ?", [$trip_id])->getRow()->trip_status ?? null;
+        if (in_array($trip_status, ['COMPLETED', 'CANCELLED'])) {
+            $this->releaseTripResources($trip_id);
+            return;
+        }
+        $map = [
+            'ASSIGNED'   => ['ASSIGNED', 'ASSIGNED', 'ASSIGNED'],
+            'DISPATCHED' => ['DISPATCHED', 'ON_TRIP', 'ON_TRIP'],
+            'IN_TRANSIT' => ['IN_TRANSIT', 'ON_TRIP', 'ON_TRIP'],
+            'DELIVERED'  => ['RETURNING', 'RETURNING', 'ON_TRIP'],
+        ];
+        if (!isset($map[$trip_status])) return;
+        [$unit, $driver, $helper] = $map[$trip_status];
+
+        $assignment = $this->db->query("
+            SELECT truck_id, tractor_id, chassis_id, driver_id, helper_id
+            FROM tbl_trip_assignments
+            WHERE trip_id = ?
+            ORDER BY assignment_id DESC
+            LIMIT 1
+        ", [$trip_id])->getRow();
+        if (!$assignment) return;
+
+        foreach (array_filter([$assignment->truck_id, $assignment->tractor_id, $assignment->chassis_id]) as $truck_id) {
+            $this->db->query("UPDATE tbl_trucks SET truck_status = ? WHERE truck_id = ? AND truck_status IN ('ASSIGNED','DISPATCHED','IN_TRANSIT','RETURNING')", [$unit, $truck_id]);
+        }
+        if (!empty($assignment->driver_id)) {
+            $this->db->query("UPDATE tbl_drivers SET driver_status = ? WHERE driver_id = ? AND driver_status IN ('ASSIGNED','ON_TRIP','RETURNING')", [$driver, $assignment->driver_id]);
+        }
+        if (!empty($assignment->helper_id)) {
+            $this->db->query("UPDATE tbl_helpers SET helper_status = ? WHERE helper_id = ? AND helper_status IN ('ASSIGNED','ON_TRIP')", [$helper, $assignment->helper_id]);
+        }
+    }
+
     public function updateWaypointDeparture()
     {
         $waypoint_id = $this->request->getPost('waypoint_id');
@@ -1091,6 +1211,7 @@ class FMS_Dispatch_Model extends Model
             // Leaving a stop means the truck is on the road
             if ($waypoint) {
                 $this->db->query("UPDATE tbl_trips SET trip_status = 'IN_TRANSIT' WHERE trip_id = ? AND trip_status = 'DISPATCHED'", [$waypoint->trip_id]);
+                $this->syncTripResources($waypoint->trip_id);
             }
             return ['status' => 'success', 'message' => 'Departure recorded successfully!'];
         } else {

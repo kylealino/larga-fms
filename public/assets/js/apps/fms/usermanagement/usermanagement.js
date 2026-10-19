@@ -501,4 +501,100 @@ function __UserManagement() {
             }
         });
     };
+
+    // ==============================
+    // ROLE THEME (colors + UI layout)
+    // ==============================
+    this.__openTheme = function(role_id, role_name, palette, sidebar_style, sidebar_layout, header_layout) {
+        $('#theme_role_id').val(role_id);
+        $('#theme_role_name').text(role_name);
+        __UserManagement.__themeTab('themePaneColors');
+        __UserManagement.__selectPalette(palette);
+        __UserManagement.__selectSidebarStyle(sidebar_style);
+        __UserManagement.__selectSidebarLayout(sidebar_layout);
+        __UserManagement.__selectHeaderLayout(header_layout);
+
+        var modal = new bootstrap.Modal(document.getElementById('themeModal'));
+        modal.show();
+    };
+
+    this.__themeTab = function(pane) {
+        $('#themeModal .theme-pane').hide();
+        $('#' + pane).show();
+        $('#themeModal .theme-tab').removeClass('active');
+        $('#themeModal .theme-tab[data-pane="' + pane + '"]').addClass('active');
+    };
+
+    // Marks the option whose [attr] = key (unknown/empty key → the hidden input's data-default) and stores it
+    function pickThemeOption(attr, input, key) {
+        var option = $('#themeModal [' + attr + '="' + key + '"]');
+        if (!option.length) {
+            key = $(input).attr('data-default');
+            option = $('#themeModal [' + attr + '="' + key + '"]');
+        }
+        $('#themeModal [' + attr + ']').removeClass('active');
+        option.addClass('active');
+        $(input).val(key);
+        __UserManagement.__renderThemePreview();
+    }
+
+    this.__selectPalette = function(key) { pickThemeOption('data-palette', '#theme_palette', key); };
+    this.__selectSidebarStyle = function(key) { pickThemeOption('data-sidebar', '#theme_sidebar_style', key); };
+    this.__selectSidebarLayout = function(key) { pickThemeOption('data-sidebar-layout', '#theme_sidebar_layout', key); };
+    this.__selectHeaderLayout = function(key) { pickThemeOption('data-header-layout', '#theme_header_layout', key); };
+
+    // Preview: CSS variables of the palette × sidebar color (from theme_helper.php) + tp-sb-* / tp-hd-* layout classes
+    this.__renderThemePreview = function() {
+        var preview = document.getElementById('themePreview');
+        var palette = $('#theme_palette').val();
+        var sidebar = $('#theme_sidebar_style').val();
+        if (typeof __themePreviewVars != 'undefined' && __themePreviewVars[palette] && __themePreviewVars[palette][sidebar]) {
+            var vars = __themePreviewVars[palette][sidebar];
+            for (var name in vars) {
+                preview.style.setProperty(name, vars[name]);
+            }
+        }
+        var sbLayout = ($('#theme_sidebar_layout').val() || 'CLASSIC').toLowerCase();
+        var hdLayout = ($('#theme_header_layout').val() || 'CLASSIC').toLowerCase();
+        preview.className = 'theme-preview tp-sb-' + sbLayout + ' tp-hd-' + hdLayout;
+    };
+
+    this.__saveTheme = function() {
+        var mparam = {
+            role_id: $('#theme_role_id').val(),
+            theme_palette: $('#theme_palette').val(),
+            sidebar_style: $('#theme_sidebar_style').val(),
+            sidebar_layout: $('#theme_sidebar_layout').val(),
+            header_layout: $('#theme_header_layout').val(),
+            meaction: 'SAVE_ROLE_THEME'
+        };
+
+        var btn = $('#themeSubmitBtn');
+        btn.prop('disabled', true);
+        btn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Saving...');
+
+        jQuery.ajax({
+            type: "POST",
+            url: mesiteurl + 'usermanagement',
+            data: mparam,
+            dataType: 'json',
+            success: function(data) {
+                btn.prop('disabled', false);
+                btn.html('<i class="bi bi-save"></i> Save Theme');
+                if (data.status == 'success') {
+                    toastr.success(data.message);
+                    var modal = bootstrap.Modal.getInstance(document.getElementById('themeModal'));
+                    modal.hide();
+                    setTimeout(function() { location.reload(); }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                btn.prop('disabled', false);
+                btn.html('<i class="bi bi-save"></i> Save Theme');
+                toastr.error("Error: " + error);
+            }
+        });
+    };
 }

@@ -81,7 +81,7 @@ echo view('templates/myheader.php');
         align-items: center;
         justify-content: center;
         font-size: 20px;
-        color: #90cdf4;
+        color: var(--primary-tint, #90cdf4);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
@@ -103,7 +103,7 @@ echo view('templates/myheader.php');
         padding: 2px 12px;
         border-radius: 4px;
         background: rgba(255, 255, 255, 0.12);
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         border: 1px solid rgba(255, 255, 255, 0.08);
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -194,7 +194,7 @@ echo view('templates/myheader.php');
 
     .stat-card.active {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md);
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md);
     }
 
     .stat-card.active::before {
@@ -410,7 +410,7 @@ echo view('templates/myheader.php');
     .form-control:focus, select.form-control:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
 
     textarea.form-control {
@@ -456,7 +456,7 @@ echo view('templates/myheader.php');
     .btn-primary:hover {
         background: var(--primary-dark);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26,107,176,0.3);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3);
         color: #ffffff;
     }
 
@@ -697,7 +697,7 @@ echo view('templates/myheader.php');
     .dataTables_filter input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
 
     .dataTables_paginate {
@@ -1942,7 +1942,7 @@ function viewTruck(truck_id) {
 }
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/truck/truck.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/truck/truck.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/truck/truck.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

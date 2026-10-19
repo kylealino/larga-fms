@@ -80,7 +80,7 @@ echo view('templates/myheader.php');
         align-items: center;
         justify-content: center;
         font-size: 20px;
-        color: #90cdf4;
+        color: var(--primary-tint, #90cdf4);
         border: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -101,7 +101,7 @@ echo view('templates/myheader.php');
         padding: 2px 12px;
         border-radius: 4px;
         background: rgba(255,255,255,0.12);
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         border: 1px solid rgba(255,255,255,0.08);
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -190,7 +190,7 @@ echo view('templates/myheader.php');
 
     .stat-card.active {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md);
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md);
     }
 
     .stat-card.active::before { opacity: 1; }
@@ -278,7 +278,7 @@ echo view('templates/myheader.php');
     .form-control:focus, select.form-control:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
 
     textarea.form-control {
@@ -309,7 +309,7 @@ echo view('templates/myheader.php');
     .btn-primary:hover {
         background: var(--primary-dark);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26,107,176,0.3);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3);
         color: #ffffff;
     }
 
@@ -551,7 +551,7 @@ echo view('templates/myheader.php');
     .dataTables_filter input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button {
@@ -671,6 +671,24 @@ echo view('templates/myheader.php');
         .btn-icon { width: 28px; height: 28px; font-size: 13px; }
         .modal-body { padding: 16px; }
     }
+
+    /* ERP booking lookup */
+    .erp-lookup { position: relative; }
+    .erp-lookup-list { position: absolute; z-index: 1060; left: 0; right: 0; top: 100%; margin-top: 4px; background: #ffffff; border: 1px solid var(--gray-200); border-radius: 8px; box-shadow: var(--shadow-lg); max-height: 320px; overflow-y: auto; }
+    .erp-lookup-item { padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--gray-100); font-size: 12px; }
+    .erp-lookup-item:last-child { border-bottom: none; }
+    .erp-lookup-item:hover { background: var(--primary-light); }
+    .erp-lookup-item .ref { font-weight: 600; color: var(--gray-800); }
+    .erp-lookup-item .sub { color: var(--gray-500); font-size: 11px; }
+    .erp-lookup-empty { padding: 10px 12px; font-size: 12px; color: var(--gray-500); }
+    .erp-panel { background: var(--primary-light); border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 14px; }
+    .erp-panel-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--gray-700); margin-bottom: 8px; }
+    .erp-panel-head i { color: var(--primary); }
+    .erp-unlink { color: var(--danger); font-size: 12px; text-decoration: none; }
+    .erp-panel-fields span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3px; color: var(--gray-500); }
+    .erp-panel-fields strong { font-size: 12px; color: var(--gray-800); font-weight: 600; }
+    .erp-quote { background: #ffffff; border-radius: 6px; }
+    .erp-quote th, .erp-quote td { padding: 6px 10px !important; font-size: 11px !important; }
 </style>
 
 <div class="me-trp-msg"></div>
@@ -936,8 +954,37 @@ echo view('templates/myheader.php');
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label">Booking Reference</label>
-                                    <input type="text" id="form_booking_reference" class="form-control" placeholder="BK-2026-00125">
+                                    <label class="form-label">Booking Reference <span style="font-weight:400;text-transform:none;color:var(--gray-400);">— type to search ERP bookings</span></label>
+                                    <div class="erp-lookup">
+                                        <input type="text" id="form_booking_reference" class="form-control" placeholder="BKSLP/…, client or client ref" autocomplete="off">
+                                        <input type="hidden" id="form_erp_bookslip_id">
+                                        <div class="erp-lookup-list" id="erp_lookup_list" style="display:none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="erp_booking_panel" class="erp-panel mb-3" style="display:none;">
+                                <div class="erp-panel-head">
+                                    <div>
+                                        <i class="bi bi-link-45deg"></i> <strong>ERP Booking</strong> <span id="erp_panel_ref"></span>
+                                        <span id="erp_panel_status" class="badge"></span>
+                                    </div>
+                                    <a href="javascript:void(0);" onclick="__Trips.__unlinkErpBooking()" class="erp-unlink"><i class="bi bi-x-circle"></i> Unlink</a>
+                                </div>
+                                <div class="row g-2 erp-panel-fields">
+                                    <div class="col-md-3"><span>Client Ref.</span><strong id="erp_panel_client_ref">—</strong></div>
+                                    <div class="col-md-3"><span>Shipper</span><strong id="erp_panel_shipper">—</strong></div>
+                                    <div class="col-md-3"><span>Mode of Shipment</span><strong id="erp_panel_mode">—</strong></div>
+                                    <div class="col-md-3"><span>Incoterms</span><strong id="erp_panel_incoterms">—</strong></div>
+                                    <div class="col-md-3"><span>Commodity Type</span><strong id="erp_panel_commodity_type">—</strong></div>
+                                    <div class="col-md-9"><span>Trips from this booking</span><strong id="erp_panel_trips">—</strong></div>
+                                </div>
+                                <div class="table-wrap mt-2">
+                                    <table class="table erp-quote">
+                                        <thead><tr><th>Trucking Quote</th><th>Basis</th><th class="text-end">Qty</th><th class="text-end">Selling</th><th class="text-end">Selling (PHP)</th><th>Rate Valid</th></tr></thead>
+                                        <tbody id="erp_panel_charges"></tbody>
+                                        <tfoot><tr><th colspan="4" class="text-end">Quoted total, VAT-exclusive (prefills the billing rate; 12% VAT is added once on billing)</th><th class="text-end" id="erp_panel_total">₱0.00</th><th></th></tr></tfoot>
+                                    </table>
                                 </div>
                             </div>
 
@@ -1554,7 +1601,7 @@ function filterTable(status) {
 }
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/trip/trip.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/trip/trip.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/trip/trip.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

@@ -109,7 +109,7 @@ echo view('templates/myheader.php');
         align-items: center;
         justify-content: center;
         font-size: 20px;
-        color: #90cdf4;
+        color: var(--primary-tint, #90cdf4);
         border: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -130,7 +130,7 @@ echo view('templates/myheader.php');
         padding: 2px 12px;
         border-radius: 4px;
         background: rgba(255,255,255,0.12);
-        color: #bee3f8;
+        color: var(--primary-tint-2, #bee3f8);
         border: 1px solid rgba(255,255,255,0.08);
         text-transform: uppercase;
         letter-spacing: 0.5px;
@@ -219,7 +219,7 @@ echo view('templates/myheader.php');
 
     .stat-card.active {
         border-color: var(--primary);
-        box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md);
+        box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md);
     }
 
     .stat-card.active::before { opacity: 1; }
@@ -307,7 +307,7 @@ echo view('templates/myheader.php');
     .form-control:focus, select.form-control:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
 
     textarea.form-control {
@@ -345,7 +345,7 @@ echo view('templates/myheader.php');
     .btn-primary:hover {
         background: var(--primary-dark);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26,107,176,0.3);
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3);
         color: #ffffff;
     }
 
@@ -628,7 +628,7 @@ echo view('templates/myheader.php');
     .dataTables_filter input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button {
@@ -797,7 +797,7 @@ echo view('templates/myheader.php');
     .insp-sign-box .signer { font-size: 13px; font-weight: 600; color: var(--gray-700); }
     .insp-sign-box .signer-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 8px; }
     .insp-sig-wrapper { background: #ffffff; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 6px; }
-    .insp-sig-wrapper.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .insp-sig-wrapper.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .insp-sig-canvas { width: 100%; height: 140px; display: block; border-radius: 6px; background: #fdfdfd; cursor: crosshair; touch-action: none; }
     .insp-signed { text-align: center; }
     .insp-signed img { max-height: 110px; max-width: 100%; border-radius: 6px; border: 1px solid var(--gray-200); background: #ffffff; }
@@ -1544,7 +1544,7 @@ echo view('templates/myheader.php');
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label" style="font-size:9px;color:var(--gray-500);">Type *</label>
-                                    <select class="form-control" id="exp_type">
+                                    <select class="form-control" id="exp_type" onchange="__Dispatch.__defaultExpenseBillable()">
                                         <option value="">— Select —</option>
                                         <option value="TOLL">Toll</option>
                                         <option value="PARKING">Parking</option>
@@ -1555,6 +1555,13 @@ echo view('templates/myheader.php');
                                         <option value="EMPTY_RETURN_FEE">Empty Return Fee</option>
                                         <option value="CONTAINER_RETURN_FEE">Container Return Fee</option>
                                         <option value="OTHER">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label" style="font-size:9px;color:var(--gray-500);" title="Reimbursable cost paid for the client — passed to billing as a charge">Billable to Client</label>
+                                    <select class="form-control" id="exp_billable">
+                                        <option value="0">No — internal cost</option>
+                                        <option value="1">Yes — reimbursable</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2">
@@ -1597,12 +1604,13 @@ echo view('templates/myheader.php');
                                         <th width="100" class="text-end">Amount</th>
                                         <th>Paid By</th>
                                         <th>Reference</th>
+                                        <th>Billing</th>
                                         <th width="80" class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="expensesBody">
                                     <tr>
-                                        <td colspan="8" class="text-center text-muted">No expenses recorded</td>
+                                        <td colspan="9" class="text-center text-muted">No expenses recorded</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1814,7 +1822,7 @@ $('#clearFilterBtn').on('click', function() {
 });
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/dispatch/dispatch.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/dispatch/dispatch.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/dispatch/dispatch.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

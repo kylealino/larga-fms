@@ -72,7 +72,11 @@ class FMS_Billing_Model extends Model
             SELECT b.*,
                    c.customer_name, c.payment_terms as customer_payment_terms,
                    t.trip_code, t.origin, t.destination,
-                   dr.dr_code
+                   dr.dr_code,
+                   (SELECT COALESCE(SUM(e.amount), 0) FROM tbl_dispatch_expenses e WHERE e.trip_id = b.trip_id) as expense_cost,
+                   (SELECT COALESCE(SUM(a.rental_rate), 0) FROM tbl_trip_assignments a WHERE a.trip_id = b.trip_id) as rental_cost,
+                   (SELECT COALESCE(SUM(e.amount), 0) FROM tbl_dispatch_expenses e WHERE e.trip_id = b.trip_id)
+                   + (SELECT COALESCE(SUM(a.rental_rate), 0) FROM tbl_trip_assignments a WHERE a.trip_id = b.trip_id) as trip_cost
             FROM tbl_billing b
             LEFT JOIN tbl_customers c ON b.customer_id = c.customer_id
             LEFT JOIN tbl_trips t ON b.trip_id = t.trip_id
@@ -83,8 +87,104 @@ class FMS_Billing_Model extends Model
     }
 
     // ==============================
+    // BILLABLE (REIMBURSABLE) DISPATCH EXPENSES → CHARGES
+    // One way only: billable expenses become billing charges, linked by expense_id so
+    // an expense is never billed twice. Billing-only charges never go back to dispatch.
+    // ==============================
+    const EXPENSE_CHARGE_TYPE = [
+        'TOLL' => 'TOLL_FEES',
+        'LOADING_UNLOADING' => 'HANDLING',
+    ];
+    const EXPENSE_LABEL = [
+        'TOLL' => 'Toll', 'PARKING' => 'Parking', 'FUEL' => 'Fuel', 'MEALS' => 'Meals',
+        'LOADING_UNLOADING' => 'Loading/Unloading', 'CONTAINER_RENTAL' => 'Container Rental',
+        'EMPTY_RETURN_FEE' => 'Empty Return Fee', 'CONTAINER_RETURN_FEE' => 'Container Return Fee', 'OTHER' => 'Other',
+    ];
+
+    // Charges can only change while the billing is still open (not yet invoiced or cancelled)
+    private function chargesLocked($billing_id)
+    {
+        $b = $this->db->query("SELECT billing_code, billing_status FROM tbl_billing WHERE billing_id = ?", [$billing_id])->getRow();
+        if (!$b) return 'Billing not found.';
+        if (in_array($b->billing_status, ['INVOICED', 'CANCELLED'])) {
+            return "Billing {$b->billing_code} is already " . strtolower($b->billing_status) . ' — its charges can no longer change.';
+        }
+        return null;
+    }
+
+    // Billable expenses of the billing's trip that are not on any billing yet
+    public function getUnbilledExpenses($billing_id)
+    {
+        return $this->db->query("
+            SELECT e.expense_id, e.expense_code, e.expense_date, e.expense_type, e.description, e.amount, e.paid_by, e.reference_no
+            FROM tbl_billing b
+            JOIN tbl_dispatch_expenses e ON e.trip_id = b.trip_id
+            WHERE b.billing_id = ? AND e.is_billable = 1
+              AND NOT EXISTS (SELECT 1 FROM tbl_billing_charges c WHERE c.expense_id = e.expense_id)
+            ORDER BY e.expense_date, e.expense_id
+        ", [$billing_id])->getResultArray();
+    }
+
+    // Add billable expense(s) as charges — one expense_id, or all unbilled ones when empty
+    private function addExpenseCharges($billing_id, $expense_id = null)
+    {
+        $added = 0;
+        foreach ($this->getUnbilledExpenses($billing_id) as $e) {
+            if ($expense_id && (int) $e['expense_id'] !== (int) $expense_id) continue;
+            $label = self::EXPENSE_LABEL[$e['expense_type']] ?? 'Other';
+            $description = $label . ($e['description'] ? ': ' . $e['description'] : '');
+            $remarks = 'Reimbursable — dispatch expense ' . $e['expense_code']
+                . ($e['paid_by'] ? ', paid by ' . $e['paid_by'] : '')
+                . ($e['reference_no'] ? ', ref ' . $e['reference_no'] : '');
+            $this->db->query("
+                INSERT INTO `tbl_billing_charges`(
+                    `billing_id`, `expense_id`, `charge_type`, `description`, `amount`, `remarks`, `created_by`
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ", [$billing_id, $e['expense_id'], self::EXPENSE_CHARGE_TYPE[$e['expense_type']] ?? 'OTHER', mb_substr($description, 0, 255), $e['amount'], $remarks, $this->cuser]);
+            $added++;
+        }
+        if ($added) $this->recalculateBillingTotals($billing_id);
+        return $added;
+    }
+
+    public function addExpenseCharge()
+    {
+        $billing_id = $this->request->getPost('billing_id');
+        $expense_id = $this->request->getPost('expense_id') ?: null;
+
+        $locked = $this->chargesLocked($billing_id);
+        if ($locked) return ['status' => 'error', 'message' => $locked];
+
+        $added = $this->addExpenseCharges($billing_id, $expense_id);
+        if (!$added) {
+            return ['status' => 'error', 'message' => 'That expense is already billed or is not billable.'];
+        }
+        return ['status' => 'success', 'message' => $added . ' reimbursable expense' . ($added > 1 ? 's' : '') . ' added as charge' . ($added > 1 ? 's' : '') . '.'];
+    }
+
+    // ==============================
     // CREATE BILLING FROM DR
     // ==============================
+    // ==============================
+    // AMOUNT RULES — rate/quantity/discount must not produce a negative bill
+    // ==============================
+    private function billingAmountsError($rate, $quantity, $discount)
+    {
+        if (!is_numeric($rate) || $rate < 0) {
+            return 'The rate cannot be negative.';
+        }
+        if (!is_numeric($quantity) || $quantity <= 0) {
+            return 'The quantity must be greater than zero.';
+        }
+        if (!is_numeric($discount) || $discount < 0) {
+            return 'The discount cannot be negative.';
+        }
+        if ($discount > $rate * $quantity) {
+            return 'The discount (₱' . number_format($discount, 2) . ') cannot be more than the subtotal (₱' . number_format($rate * $quantity, 2) . ').';
+        }
+        return null;
+    }
+
     public function createBillingFromDR()
     {
         $dr_id = $this->request->getPost('dr_id');
@@ -120,6 +220,28 @@ class FMS_Billing_Model extends Model
             return ['status' => 'error', 'message' => 'Only delivered or partially delivered receipts can be billed.'];
         }
 
+        // Trip came from an ERP booking slip: prefill the rate from its trucking quote (still editable)
+        if ((float) $rate <= 0) {
+            $quote = $this->db->query("
+                SELECT t.booking_reference, SUM(c.selling_php * c.quantity) as total,
+                       GROUP_CONCAT(CONCAT(c.description, ' ', FORMAT(c.selling_php * c.quantity, 2)) ORDER BY c.charge_id SEPARATOR ' + ') as lines_desc
+                FROM tbl_trip_booking_charges c JOIN tbl_trips t ON t.trip_id = c.trip_id
+                WHERE c.trip_id = ?
+                GROUP BY t.booking_reference
+            ", [$dr->trip_id])->getRow();
+            if ($quote && (float) $quote->total > 0) {
+                $rate = $quote->total;
+                $billing_basis = 'PER_TRIP';
+                $quantity = 1;
+                $remarks = trim(($remarks ? $remarks . ' | ' : '') . 'Rate from ERP booking ' . $quote->booking_reference . ' (VAT-exclusive, 12% VAT added once on this billing): ' . $quote->lines_desc);
+            }
+        }
+
+        $amountsError = $this->billingAmountsError($rate, $quantity, $discount);
+        if ($amountsError) {
+            return ['status' => 'error', 'message' => $amountsError];
+        }
+
         $billing_code = $this->generateBillingCode();
 
         $subtotal = $rate * $quantity;
@@ -144,7 +266,10 @@ class FMS_Billing_Model extends Model
 
         if ($query) {
             $billing_id = $this->db->insertID();
-            return ['status' => 'success', 'message' => 'Billing Created Successfully!', 'billing_id' => $billing_id];
+            // Billable dispatch expenses of the trip come in as reimbursable charges
+            $added = $this->addExpenseCharges($billing_id);
+            $message = 'Billing Created Successfully!' . ($added ? " {$added} reimbursable expense" . ($added > 1 ? 's' : '') . ' added as charge' . ($added > 1 ? 's' : '') . '.' : '');
+            return ['status' => 'success', 'message' => $message, 'billing_id' => $billing_id];
         } else {
             $error = $this->db->error();
             log_message('error', 'Billing Create Error: ' . print_r($error, true));
@@ -165,6 +290,11 @@ class FMS_Billing_Model extends Model
         $discount = $this->request->getPost('discount') ?: 0;
         $billing_status = $this->request->getPost('billing_status') ?: 'DRAFT';
         $remarks = $this->request->getPost('remarks');
+
+        $amountsError = $this->billingAmountsError($rate, $quantity, $discount);
+        if ($amountsError) {
+            return ['status' => 'error', 'message' => $amountsError];
+        }
 
         $existing = $this->db->query("SELECT other_charges FROM tbl_billing WHERE billing_id = ?", [$billing_id])->getRow();
         $other_charges = $existing ? $existing->other_charges : 0;
@@ -224,7 +354,10 @@ class FMS_Billing_Model extends Model
     public function getCharges($billing_id)
     {
         return $this->db->query("
-            SELECT * FROM tbl_billing_charges WHERE billing_id = ? ORDER BY charge_id ASC
+            SELECT c.*, e.expense_code
+            FROM tbl_billing_charges c
+            LEFT JOIN tbl_dispatch_expenses e ON e.expense_id = c.expense_id
+            WHERE c.billing_id = ? ORDER BY c.charge_id ASC
         ", [$billing_id])->getResultArray();
     }
 
@@ -241,6 +374,12 @@ class FMS_Billing_Model extends Model
         $description = $this->request->getPost('description');
         $amount = $this->request->getPost('amount') ?: 0;
         $remarks = $this->request->getPost('remarks');
+
+        $locked = $this->chargesLocked($billing_id);
+        if ($locked) return ['status' => 'error', 'message' => $locked];
+        if (!is_numeric($amount) || $amount <= 0) {
+            return ['status' => 'error', 'message' => 'Enter a charge amount greater than zero.'];
+        }
 
         $query = $this->db->query("
             INSERT INTO `tbl_billing_charges`(
@@ -265,6 +404,11 @@ class FMS_Billing_Model extends Model
         $remarks = $this->request->getPost('remarks');
 
         $row = $this->db->query("SELECT billing_id FROM tbl_billing_charges WHERE charge_id = ?", [$charge_id])->getRow();
+        $locked = $row ? $this->chargesLocked($row->billing_id) : 'Charge not found.';
+        if ($locked) return ['status' => 'error', 'message' => $locked];
+        if (!is_numeric($amount) || $amount <= 0) {
+            return ['status' => 'error', 'message' => 'Enter a charge amount greater than zero.'];
+        }
 
         $query = $this->db->query("
             UPDATE `tbl_billing_charges`
@@ -284,12 +428,17 @@ class FMS_Billing_Model extends Model
     {
         $charge_id = $this->request->getPost('charge_id');
 
-        $row = $this->db->query("SELECT billing_id FROM tbl_billing_charges WHERE charge_id = ?", [$charge_id])->getRow();
+        $row = $this->db->query("SELECT billing_id, expense_id FROM tbl_billing_charges WHERE charge_id = ?", [$charge_id])->getRow();
+        $locked = $row ? $this->chargesLocked($row->billing_id) : 'Charge not found.';
+        if ($locked) return ['status' => 'error', 'message' => $locked];
+
         $query = $this->db->query("DELETE FROM `tbl_billing_charges` WHERE `charge_id` = ?", [$charge_id]);
 
         if ($query) {
-            if ($row) $this->recalculateBillingTotals($row->billing_id);
-            return ['status' => 'success', 'message' => 'Additional Charge Deleted Successfully!'];
+            $this->recalculateBillingTotals($row->billing_id);
+            // A removed reimbursable goes back to the "unbilled" list (untick Billable in dispatch to keep it internal)
+            $message = $row->expense_id ? 'Charge removed — the expense is listed again under unbilled reimbursables.' : 'Additional Charge Deleted Successfully!';
+            return ['status' => 'success', 'message' => $message];
         } else {
             return ['status' => 'error', 'message' => 'An error occurred while deleting charge.'];
         }
@@ -298,7 +447,7 @@ class FMS_Billing_Model extends Model
     // ==============================
     // RECALCULATE BILLING TOTALS (from rate/qty/discount + sum of charges)
     // ==============================
-    private function recalculateBillingTotals($billing_id)
+    public function recalculateBillingTotals($billing_id)
     {
         $billing = $this->db->query("SELECT rate, quantity, discount FROM tbl_billing WHERE billing_id = ?", [$billing_id])->getRow();
         if (!$billing) return;

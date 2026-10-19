@@ -18,12 +18,12 @@ echo view('templates/myheader.php');
     .lrg-module-header .header-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 200px; }
     .lrg-module-header .header-left .module-icon {
         width: 40px; height: 40px; background: rgba(255,255,255,0.12); border-radius: 8px;
-        display: flex; align-items: center; justify-content: center; font-size: 20px; color: #90cdf4; border: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary-tint, #90cdf4); border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 { font-size: 17px; font-weight: 600; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px; background: rgba(255,255,255,0.12);
-        color: #bee3f8; border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
+        color: var(--primary-tint-2, #bee3f8); border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
     }
     .header-actions { display: flex; align-items: center; gap: 10px; }
     .btn-header {
@@ -45,11 +45,11 @@ echo view('templates/myheader.php');
         border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 12px; font-size: 13px;
         color: var(--gray-700); background: #ffffff; transition: all 0.2s; width: 100%; height: 40px;
     }
-    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     textarea.form-control { height: auto; min-height: 60px; resize: vertical; }
 
     .btn-primary { background: var(--primary); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,107,176,0.3); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3); color: #ffffff; }
     .btn-danger { background: var(--danger); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px; }
     .btn-secondary { background: #ffffff; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; color: var(--gray-600); transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
     .btn-secondary:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
@@ -295,7 +295,7 @@ echo view('templates/myheader.php');
 <!-- ============================================ -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="<?=base_url('assets/js/apps/fms/soa/soa.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/soa/soa.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/soa/soa.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

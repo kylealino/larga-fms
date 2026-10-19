@@ -15,6 +15,19 @@ function __Trips() {
     // ==============================
     this.__toggleVehicleFields = function() {
         var type = $('#assignment_vehicle_type').val();
+
+        // Clear what the new setup doesn't use, so hidden picks are never saved
+        if(type != 'RIGID') $('#assignment_truck_id').val('');
+        if(type != 'TRACTOR_CHASSIS' && type != 'TRACTOR_RENTED_CHASSIS') $('#assignment_tractor_id').val('');
+        if(type != 'TRACTOR_CHASSIS') $('#assignment_chassis_id').val('');
+        if(type != 'TRACTOR_RENTED_CHASSIS' && type != 'RENTED_ALL') {
+            $('#assignment_vendor_id, #assignment_rental_agreement_no, #assignment_vendor_contact_person, #assignment_vendor_contact_number').val('');
+            $('#assignment_rental_rate').val('');
+            $('#assignment_vendor_tractor_plate, #assignment_vendor_chassis_plate').val('');
+        }
+        if(type != 'RENTED_ALL') $('#assignment_vendor_tractor_plate, #assignment_vendor_driver_name, #assignment_vendor_helper_name').val('');
+        if(type == 'RENTED_ALL') $('#assignment_driver_id, #assignment_helper_id').val('');
+        if(type == 'TRACTOR_CHASSIS') $('#assignment_chassis_type').val('OWNED');
         
         $('#assignment_truck_field').hide();
         $('#assignment_tractor_field').hide();
@@ -137,6 +150,7 @@ function __Trips() {
         var mparam = {
             customer_id: customer_id,
             booking_reference: $('#form_booking_reference').val(),
+            erp_bookslip_id: $('#form_erp_bookslip_id').val(),
             service_type: $('#form_service_type').val(),
             trip_type: $('#form_trip_type').val(),
             priority: $('#form_priority').val(),
@@ -214,6 +228,7 @@ function __Trips() {
             trip_id: trip_id,
             customer_id: customer_id,
             booking_reference: $('#form_booking_reference').val(),
+            erp_bookslip_id: $('#form_erp_bookslip_id').val(),
             service_type: $('#form_service_type').val(),
             trip_type: $('#form_trip_type').val(),
             priority: $('#form_priority').val(),
@@ -960,7 +975,7 @@ function __Trips() {
             success: function(data) {
                 if(data && data.rate_amount) {
                     $('#assignment_rental_rate').val(data.rate_amount);
-                    toastr.info('Package rate: ₱' + parseFloat(data.rate_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) + ' ' + data.rate_type.replace(/_/g, ' ').toLowerCase());
+                    toastr.info('Package rate: ₱' + parseFloat(data.rate_amount).toLocaleString('en-PH', {minimumFractionDigits: 2}) + ' ' + (data.rate_type || '').replace(/_/g, ' ').toLowerCase());
                 } else {
                     toastr.warning('This vendor has no package service rate on file. Enter the rental rate manually.');
                 }
@@ -990,6 +1005,167 @@ function __Trips() {
     // ==============================
     // OPEN ADD TRIP
     // ==============================
+    // ==============================
+    // ERP BOOKING LOOKUP — type in Booking Reference to find ERP booking slips with trucking
+    // ==============================
+    var erpSearchTimer = null;
+    function erpEsc(s) { return $('<div>').text(s == null ? '' : s).html(); }
+    function erpMoney(n) { return '₱' + (parseFloat(n) || 0).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+
+    $(document).on('input', '#form_booking_reference', function() {
+        // Typing by hand unlinks a booking that was picked before
+        if($('#form_erp_bookslip_id').val()) __Trips.__unlinkErpBooking(true);
+        var term = $(this).val().trim();
+        clearTimeout(erpSearchTimer);
+        if(term.length < 2) { $('#erp_lookup_list').hide(); return; }
+        erpSearchTimer = setTimeout(function() { __Trips.__searchErpBookings(term); }, 300);
+    });
+    $(document).on('click', function(e) {
+        if(!$(e.target).closest('.erp-lookup').length) $('#erp_lookup_list').hide();
+    });
+
+    this.__searchErpBookings = function(term) {
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'fms-trips', data: { term: term, meaction: 'SEARCH_ERP_BOOKINGS' }, dataType: 'json',
+            success: function(data) {
+                var list = $('#erp_lookup_list');
+                if(data && data.status === 'error') {
+                    list.html('<div class="erp-lookup-empty"><i class="bi bi-exclamation-triangle"></i> ' + erpEsc(data.message) + '</div>').show();
+                    return;
+                }
+                if(!data || data.length === 0) {
+                    list.html('<div class="erp-lookup-empty">No BOOKED ERP booking with trucking matches "' + erpEsc(term) + '". You can keep it as a manual reference.</div>').show();
+                    return;
+                }
+                var html = '';
+                $.each(data, function(i, b) {
+                    var status = b.approved ? '<span class="badge badge-success">Booked</span>' : '<span class="badge badge-warning">For approval</span>';
+                    var trips = b.trip_count > 0 ? ' · ' + b.trip_count + ' trip(s) already' : '';
+                    html += '<div class="erp-lookup-item" onclick="__Trips.__pickErpBooking(' + b.id + ')">'
+                        + '<div class="ref">' + erpEsc(b.sysctrlno) + ' ' + status + '</div>'
+                        + '<div class="sub">' + erpEsc(b.client) + ' · Ref ' + erpEsc(b.client_ref_no) + ' · ' + erpEsc(b.mode_of_shipment || '') + trips + '</div>'
+                        + '</div>';
+                });
+                list.html(html).show();
+            },
+            error: function(xhr, status, error) {
+                toastr.error("ERP lookup error: " + error);
+            }
+        });
+    };
+
+    this.__pickErpBooking = function(erp_bookslip_id) {
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'fms-trips', data: { erp_bookslip_id: erp_bookslip_id, meaction: 'GET_ERP_BOOKING' }, dataType: 'json',
+            success: function(b) {
+                if(!b) { toastr.error('Could not load that booking from the ERP.'); return; }
+                __Trips.__fillFromErpBooking(b);
+            },
+            error: function(xhr, status, error) {
+                toastr.error("ERP lookup error: " + error);
+            }
+        });
+    };
+
+    this.__fillFromErpBooking = function(b) {
+        $('#erp_lookup_list').hide();
+        $('#form_booking_reference').val(b.booking_reference);
+        $('#form_erp_bookslip_id').val(b.erp_bookslip_id);
+
+        // Customer: existing FMS customer, or a new one created from the ERP client on save
+        var sel = $('#form_customer_id');
+        sel.find('option[value^="erp:"]').remove();
+        if(b.customer.is_new) {
+            sel.append('<option value="' + erpEsc(b.customer.customer_id) + '">NEW — ' + erpEsc(b.customer.customer_name) + ' (from ERP)</option>');
+        }
+        sel.val(b.customer.customer_id);
+
+        $('#form_service_type').val('Trucking Service');
+        $('#form_origin').val(b.origin);
+        $('#form_destination').val(b.destination);
+        $('#form_cargo_description').val(b.cargo_description);
+        $('#form_quantity').val(Math.round(b.quantity));
+        $('#form_unit').val(b.unit);
+        $('#form_estimated_weight').val(b.estimated_weight);
+        if(b.special_instructions) $('#form_special_instructions').val(b.special_instructions);
+
+        // Cargo items come over only for a new trip (an existing trip keeps its own items)
+        if(!$('#form_trip_id').val()) {
+            stagedCargoItems = $.map(b.cargo_items, function(it) {
+                return { localId: ++stagedCargoItemSeq, item_description: it.item_description, quantity: it.quantity, unit: it.unit, weight: it.weight, remarks: it.remarks };
+            });
+            __Trips.__renderStagedCargoItems();
+        }
+
+        __Trips.__renderErpPanel(b, b.charges, b.charges_total_php);
+        toastr.info(b.customer.is_new
+            ? 'Booking loaded. ' + b.customer.customer_name + ' will be added as a new customer when you save.'
+            : 'Booking loaded from the ERP.');
+    };
+
+    this.__renderErpPanel = function(p, charges, total) {
+        $('#erp_panel_ref').text(p.booking_reference || '');
+        if(p.status === undefined) {
+            $('#erp_panel_status').attr('class', 'badge badge-secondary').text('Linked');
+        } else if(p.approved) {
+            $('#erp_panel_status').attr('class', 'badge badge-success').text('Booked' + (p.approved_by ? ' — approved by ' + p.approved_by : ''));
+        } else {
+            $('#erp_panel_status').attr('class', 'badge badge-warning').text('For approval');
+        }
+        $('#erp_panel_client_ref').text(p.client_reference || '—');
+        $('#erp_panel_shipper').text(p.shipper_name || '—');
+        $('#erp_panel_mode').text(p.mode_of_shipment || '—');
+        $('#erp_panel_incoterms').text(p.incoterms || '—');
+        $('#erp_panel_commodity_type').text(p.commodity_type || '—');
+        if(p.trip_count === undefined) {
+            $('#erp_panel_trips').text('—');
+        } else {
+            var units = p.quantity ? ' (booking: ' + Math.round(p.quantity) + ' ' + (p.unit || 'units').toLowerCase() + ')' : '';
+            $('#erp_panel_trips').text((p.trip_count > 0 ? p.trip_count + ' trip(s) already scheduled' : 'None yet — this is the first') + units);
+        }
+
+        var html = '';
+        $.each(charges || [], function(i, c) {
+            html += '<tr><td>' + erpEsc(c.description) + '<div style="color:var(--gray-400);font-size:10px;">' + erpEsc(c.payment_to || '') + '</div></td>'
+                + '<td>' + erpEsc(c.charge_basis || '') + '</td>'
+                + '<td class="text-end">' + (parseFloat(c.quantity) || 1) + '</td>'
+                + '<td class="text-end">' + erpEsc(c.currency) + ' ' + (parseFloat(c.selling) || 0).toLocaleString('en-PH', {minimumFractionDigits: 2}) + '</td>'
+                + '<td class="text-end">' + erpMoney((parseFloat(c.selling_php) || 0) * (parseFloat(c.quantity) || 1)) + '</td>'
+                + '<td>' + erpEsc(c.rate_validity || '—') + '</td></tr>';
+        });
+        $('#erp_panel_charges').html(html || '<tr><td colspan="6" class="text-center text-muted">No trucking lines</td></tr>');
+        $('#erp_panel_total').text(erpMoney(total));
+        $('#erp_booking_panel').show();
+    };
+
+    this.__unlinkErpBooking = function(silent) {
+        $('#form_erp_bookslip_id').val('');
+        $('#erp_booking_panel').hide();
+        var sel = $('#form_customer_id');
+        if(String(sel.val()).indexOf('erp:') === 0) sel.val('');
+        sel.find('option[value^="erp:"]').remove();
+        if(!silent) toastr.info('Unlinked from the ERP booking. Booking Reference is now a manual reference.');
+    };
+
+    // Existing trip: show its saved booking snapshot, then refresh status/trip count live from the ERP
+    this.__loadTripErpPanel = function(trip) {
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'fms-trips', data: { trip_id: trip.trip_id, meaction: 'GET_TRIP_BOOKING_CHARGES' }, dataType: 'json',
+            success: function(charges) {
+                var total = 0;
+                $.each(charges || [], function(i, c) { total += (parseFloat(c.selling_php) || 0) * (parseFloat(c.quantity) || 1); });
+                __Trips.__renderErpPanel(trip, charges, total);
+                jQuery.ajax({
+                    type: "POST", url: mesiteurl + 'fms-trips', data: { erp_bookslip_id: trip.erp_bookslip_id, meaction: 'GET_ERP_BOOKING' }, dataType: 'json',
+                    success: function(b) {
+                        if(!b) return;
+                        __Trips.__renderErpPanel($.extend({}, trip, { status: b.status, approved: b.approved, approved_by: b.approved_by, trip_count: b.trip_count, quantity: b.quantity, unit: b.unit }), charges, total);
+                    }
+                });
+            }
+        });
+    };
+
     this.__openAddTrip = function() {
         $('#tripModalTitle').html('<i class="bi bi-plus-circle me-2"></i>New Trip');
         $('#formBtnText').text('Save Trip');
@@ -998,6 +1174,8 @@ function __Trips() {
         $('#form_trip_code_display').val('Auto-generated');
         $('#form_customer_id').val('');
         $('#form_booking_reference').val('');
+        __Trips.__unlinkErpBooking(true);
+        $('#erp_lookup_list').hide();
         $('#form_service_type').val('');
         $('#form_trip_type').val('ONE_WAY');
         $('#form_priority').val('NORMAL');
@@ -1050,6 +1228,11 @@ function __Trips() {
                     $('#form_trip_code_display').val(data.trip_code);
                     $('#form_customer_id').val(data.customer_id);
                     $('#form_booking_reference').val(data.booking_reference);
+                    __Trips.__unlinkErpBooking(true);
+                    if(data.erp_bookslip_id) {
+                        $('#form_erp_bookslip_id').val(data.erp_bookslip_id);
+                        __Trips.__loadTripErpPanel(data);
+                    }
                     $('#form_service_type').val(data.service_type);
                     $('#form_trip_type').val(data.trip_type);
                     $('#form_priority').val(data.priority);

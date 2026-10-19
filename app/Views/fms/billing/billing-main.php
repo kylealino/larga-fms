@@ -66,7 +66,7 @@ echo view('templates/myheader.php');
     .lrg-module-header .header-left .module-icon {
         width: 40px; height: 40px; background: rgba(255,255,255,0.12); border-radius: 8px;
         display: flex; align-items: center; justify-content: center; font-size: 20px;
-        color: #90cdf4; border: 1px solid rgba(255,255,255,0.08);
+        color: var(--primary-tint, #90cdf4); border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 {
         font-size: 17px; font-weight: 600; color: #ffffff; margin: 0;
@@ -74,7 +74,7 @@ echo view('templates/myheader.php');
     }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px;
-        background: rgba(255,255,255,0.12); color: #bee3f8; border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.12); color: var(--primary-tint-2, #bee3f8); border: 1px solid rgba(255,255,255,0.08);
         text-transform: uppercase; letter-spacing: 0.5px;
     }
     .header-actions { display: flex; align-items: center; gap: 10px; }
@@ -99,7 +99,7 @@ echo view('templates/myheader.php');
     }
     .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--gray-300); }
     .stat-card:hover::before { opacity: 1; }
-    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md); }
+    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md); }
     .stat-card.active::before { opacity: 1; }
     .stat-left .stat-label { font-size: 10px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
     .stat-left .stat-value { font-size: 24px; font-weight: 700; color: var(--gray-800); line-height: 1.2; }
@@ -120,7 +120,7 @@ echo view('templates/myheader.php');
         border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 12px; font-size: 13px;
         color: var(--gray-700); background: #ffffff; transition: all 0.2s; width: 100%; height: 40px;
     }
-    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .form-control[readonly] { background: var(--gray-50); cursor: not-allowed; }
     textarea.form-control { height: auto; min-height: 60px; resize: vertical; }
 
@@ -128,7 +128,7 @@ echo view('templates/myheader.php');
         background: var(--primary); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600;
         transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px;
     }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,107,176,0.3); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3); color: #ffffff; }
     .btn-danger {
         background: var(--danger); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600;
         transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px;
@@ -185,7 +185,7 @@ echo view('templates/myheader.php');
     .dataTables_filter { float: right; margin-bottom: 16px; }
     .dataTables_filter label { font-size: 12px; font-weight: 500; color: var(--gray-500); display: flex; align-items: center; gap: 8px; }
     .dataTables_filter input { width: 200px; padding: 6px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px; font-size: 12px; transition: all 0.2s; outline: none; }
-    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button {
         padding: 4px 10px !important; margin: 0 2px !important; border-radius: 6px !important; border: 1px solid var(--gray-200) !important;
@@ -226,6 +226,13 @@ echo view('templates/myheader.php');
         .btn-icon { width: 28px; height: 28px; font-size: 13px; }
         .modal-body { padding: 16px; }
     }
+
+    /* Reimbursable expenses in billing */
+    .unbilled-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; font-size: 12px; color: var(--gray-700); }
+    .unbilled-box i { color: var(--warning); }
+    .unbilled-box .table td { padding: 5px 8px !important; font-size: 11px !important; background: transparent; border-bottom: 1px solid #fde68a; }
+    .charges-locked { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 12px; color: var(--gray-500); }
+    .charge-source { display: block; font-size: 10px; color: var(--gray-400); }
 </style>
 
 <div class="me-trp-msg"></div>
@@ -329,7 +336,7 @@ echo view('templates/myheader.php');
                                     <td><?=$row['customer_name'] ?? '—';?></td>
                                     <td><?=$row['trip_code'] ?? '—';?></td>
                                     <td><?=$row['dr_code'] ?? '—';?></td>
-                                    <td><?=date('M d, Y', strtotime($row['billing_date']));?></td>
+                                    <td data-order="<?=$row['billing_date'] . ' ' . str_pad($row['billing_id'], 10, '0', STR_PAD_LEFT);?>"><?=date('M d, Y', strtotime($row['billing_date']));?></td>
                                     <td class="text-end">&#8369;<?=number_format($row['total'], 2);?></td>
                                     <td>
                                         <?php
@@ -475,7 +482,17 @@ echo view('templates/myheader.php');
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <label class="form-label mb-0">Additional Charges</label>
                         </div>
-                        <div class="item-form" style="background:var(--gray-50);border-radius:8px;padding:12px;margin-bottom:12px;border:1px solid var(--gray-200);">
+                        <div id="unbilledExpensesBox" class="unbilled-box" style="display:none;">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span><i class="bi bi-wallet2"></i> <strong>Unbilled reimbursables</strong> — billable dispatch expenses of this trip</span>
+                                <button type="button" class="btn btn-primary" style="font-size:11px;padding:3px 10px;" onclick="__Billing.__addExpenseCharge()"><i class="bi bi-plus"></i> Add all</button>
+                            </div>
+                            <table class="table mb-0"><tbody id="unbilledExpensesBody"></tbody></table>
+                        </div>
+                        <div id="chargesLockedNote" class="charges-locked" style="display:none;">
+                            <i class="bi bi-lock"></i> This billing is already invoiced — its charges are final.
+                        </div>
+                        <div class="item-form" id="chargeFormBox" style="background:var(--gray-50);border-radius:8px;padding:12px;margin-bottom:12px;border:1px solid var(--gray-200);">
                             <div class="row">
                                 <div class="col-md-3 mb-2">
                                     <label class="form-label" style="font-size:9px;">Type</label>
@@ -535,6 +552,11 @@ echo view('templates/myheader.php');
                         <div class="col-md-3"><small class="text-muted">VAT (12%)</small><div id="calc_vat">&#8369;0.00</div></div>
                         <div class="col-md-3"><small class="text-muted">Other Charges</small><div id="calc_other">&#8369;0.00</div></div>
                         <div class="col-md-3"><small class="text-muted"><strong>Total</strong></small><div id="calc_total"><strong>&#8369;0.00</strong></div></div>
+                    </div>
+                    <div class="row text-end mt-2 pt-2" style="border-top:1px dashed var(--gray-200);">
+                        <div class="col-md-4"><small class="text-muted" title="Rate after discount + additional charges (VAT excluded)">Revenue (excl. VAT)</small><div id="calc_revenue">&#8369;0.00</div></div>
+                        <div class="col-md-4"><small class="text-muted" title="Dispatch expenses + vendor rental (rented chassis / package) for this trip">Trip Cost (expenses + rental)</small><div id="calc_cost">&#8369;0.00</div></div>
+                        <div class="col-md-4"><small class="text-muted">Gross Margin</small><div id="calc_margin"><strong>&#8369;0.00</strong></div></div>
                     </div>
                 </div>
             </div>
@@ -610,7 +632,7 @@ function filterTable(status) {
 }
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/billing/billing.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/billing/billing.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/billing/billing.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

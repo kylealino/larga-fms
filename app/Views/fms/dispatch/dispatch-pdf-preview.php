@@ -90,6 +90,14 @@ $items = $this->db->query("
 // BUILD PDF
 // ==============================
 $pdf = new FPDF('P', 'mm', 'A4');
+
+// Shorten text with "..." so it never runs past its cell (uses the current font)
+$fit = function($text, $w) use (&$pdf) {
+    $text = (string) $text;
+    if ($pdf->GetStringWidth($text) <= $w - 2) return $text;
+    while ($text !== '' && $pdf->GetStringWidth($text . '...') > $w - 2) $text = substr($text, 0, -1);
+    return rtrim($text) . '...';
+};
 $pdf->AliasNbPages();
 $pdf->SetMargins($MARGIN_L, 12, $MARGIN_R);
 $pdf->SetAutoPageBreak(false);
@@ -194,7 +202,7 @@ $pdf->SetXY($MARGIN_L + 2, $Y);
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->Cell(30, 5, 'Contact:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($CONTENT_W - 32, 5, ($contact_person ?: '—') . '  |  ' . ($contact_number ?: '—'), 0, 1, 'L');
+$pdf->Cell($CONTENT_W - 32, 5, ($contact_person ?: '-') . '  |  ' . ($contact_number ?: '-'), 0, 1, 'L');
 
 $Y = $pdf->GetY() + 3;
 
@@ -219,33 +227,33 @@ $pdf->SetXY($col1X, $Y + 1);
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->Cell($labelW, 5, 'Truck:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($valueW, 5, $truck ?: '—', 0, 0, 'L');
+$pdf->Cell($valueW, 5, $truck ?: '-', 0, 0, 'L');
 
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->SetXY($col2X, $Y + 1);
 $pdf->Cell($labelW, 5, 'Origin:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($valueW, 5, $origin ?: '—', 0, 1, 'L');
+$pdf->Cell($valueW, 5, $fit($origin ?: '-', $valueW), 0, 1, 'L');
 
 $Y = $pdf->GetY();
 $pdf->SetXY($col1X, $Y);
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->Cell($labelW, 5, 'Driver:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($valueW, 5, $driver ?: '—', 0, 0, 'L');
+$pdf->Cell($valueW, 5, $driver ?: '-', 0, 0, 'L');
 
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->SetXY($col2X, $Y);
 $pdf->Cell($labelW, 5, 'Destination:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($valueW, 5, $destination ?: '—', 0, 1, 'L');
+$pdf->Cell($valueW, 5, $fit($destination ?: '-', $valueW), 0, 1, 'L');
 
 $Y = $pdf->GetY();
 $pdf->SetXY($col1X, $Y);
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->Cell($labelW, 5, 'Helper:', 0, 0, 'L');
 $pdf->SetFont('Helvetica', '', 10);
-$pdf->Cell($valueW, 5, $helper ?: '—', 0, 0, 'L');
+$pdf->Cell($valueW, 5, $helper ?: '-', 0, 0, 'L');
 
 $pdf->SetFont('Helvetica', 'B', 9);
 $pdf->SetXY($col2X, $Y);
@@ -281,6 +289,7 @@ $pdf->Cell(16, 7, 'Short', 1, 0, 'C', true);
 $pdf->Cell(16, 7, 'Damage', 1, 0, 'C', true);
 $pdf->Cell(14, 7, 'Unit', 1, 0, 'C', true);
 $pdf->Cell(16, 7, 'Weight', 1, 0, 'C', true);
+$pdf->SetFont('Helvetica', 'B', 8);
 $pdf->Cell(14, 7, 'Condition', 1, 1, 'C', true);
 
 $Y = $pdf->GetY();
@@ -297,7 +306,7 @@ if (count($items) > 0) {
 
         $pdf->SetXY($MARGIN_L, $Y);
         $pdf->Cell(10, 6, $i, 1, 0, 'C');
-        $pdf->Cell(58, 6, substr($item['item_description'], 0, 42), 1, 0, 'L');
+        $pdf->Cell(58, 6, $fit($item['item_description'], 58), 1, 0, 'L');
         $pdf->Cell(18, 6, number_format($item['quantity'], 2), 1, 0, 'R');
         $pdf->Cell(18, 6, '', 1, 0, 'R');   // Delivered left blank — filled in by hand
         $pdf->Cell(16, 6, '', 1, 0, 'R');   // Shortage blank

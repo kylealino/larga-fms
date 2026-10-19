@@ -12,6 +12,7 @@ class FMS_UserManagement_Model extends Model
         $this->request = \Config\Services::request();
         $this->db = \Config\Database::connect();
         $this->cuser = $this->session->get('__xsys_myuserzicas__');
+        helper('theme');
     }
 
     // ==============================
@@ -174,7 +175,7 @@ class FMS_UserManagement_Model extends Model
     public function getAllRoles()
     {
         return $this->db->query("
-            SELECT r.role_id, r.role_code, r.role_name, r.description, r.role_status, r.created_at,
+            SELECT r.role_id, r.role_code, r.role_name, r.description, r.theme_palette, r.sidebar_style, r.sidebar_layout, r.header_layout, r.role_status, r.created_at,
                    (SELECT COUNT(*) FROM myua_user u WHERE u.role_id = r.role_id) AS user_count
             FROM tbl_roles r
             ORDER BY r.role_id ASC
@@ -251,6 +252,37 @@ class FMS_UserManagement_Model extends Model
             $error = $this->db->error();
             log_message('error', 'Role Update Error: ' . print_r($error, true));
             return ['status' => 'error', 'message' => 'An error occurred while updating the role.'];
+        }
+    }
+
+    // ==============================
+    // ROLES — THEME (color palette, sidebar color, sidebar + header layout)
+    // Keys are whitelisted against app/Config/Themes.php — anything else saves as the default.
+    // ==============================
+    public function saveRoleTheme()
+    {
+        $role_id = $this->request->getPost('role_id');
+        $theme_palette = theme_palette_key($this->request->getPost('theme_palette'));
+        $sidebar_style = theme_sidebar_key($this->request->getPost('sidebar_style'));
+        $sidebar_layout = theme_sidebar_layout_key($this->request->getPost('sidebar_layout'));
+        $header_layout = theme_header_layout_key($this->request->getPost('header_layout'));
+
+        $role = $this->db->query("SELECT role_id FROM tbl_roles WHERE role_id = ?", [$role_id])->getRow();
+        if (!$role) {
+            return ['status' => 'error', 'message' => 'Role not found.'];
+        }
+
+        $query = $this->db->query("
+            UPDATE `tbl_roles` SET `theme_palette` = ?, `sidebar_style` = ?, `sidebar_layout` = ?, `header_layout` = ?, `updated_at` = NOW()
+            WHERE `role_id` = ?
+        ", [$theme_palette, $sidebar_style, $sidebar_layout, $header_layout, $role_id]);
+
+        if ($query) {
+            return ['status' => 'success', 'message' => 'Theme Saved Successfully!'];
+        } else {
+            $error = $this->db->error();
+            log_message('error', 'Role Theme Error: ' . print_r($error, true));
+            return ['status' => 'error', 'message' => 'An error occurred while saving the theme.'];
         }
     }
 

@@ -100,6 +100,25 @@ class FMS_Trip extends BaseController
                 echo json_encode($result);
                 break;
 
+            // ERP BOOKING SLIP LOOKUP (erplogisticdev, read only)
+            case 'SEARCH_ERP_BOOKINGS':
+                try { $result = model('App\Models\FMS_ErpBooking_Model')->searchTruckingBookings($this->request->getPost('term')); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'ERP booking lookup unavailable: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
+            case 'GET_ERP_BOOKING':
+                try { $result = model('App\Models\FMS_ErpBooking_Model')->getTruckingBooking($this->request->getPost('erp_bookslip_id')); }
+                catch (\Throwable $e) { $result = null; }
+                echo json_encode($result);
+                break;
+
+            case 'GET_TRIP_BOOKING_CHARGES':
+                try { $result = model('App\Models\FMS_ErpBooking_Model')->getTripCharges($this->request->getPost('trip_id')); }
+                catch (\Throwable $e) { $result = []; }
+                echo json_encode($result);
+                break;
+
             case 'GET_VENDOR_PACKAGE_RATE':
                 $vendor_id = $this->request->getPost('vendor_id');
                 try { $result = $this->tripModel->getVendorPackageRate($vendor_id); }

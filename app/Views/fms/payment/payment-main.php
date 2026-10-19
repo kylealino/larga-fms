@@ -40,12 +40,12 @@ echo view('templates/myheader.php');
     .lrg-module-header .header-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 200px; }
     .lrg-module-header .header-left .module-icon {
         width: 40px; height: 40px; background: rgba(255,255,255,0.12); border-radius: 8px;
-        display: flex; align-items: center; justify-content: center; font-size: 20px; color: #90cdf4; border: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary-tint, #90cdf4); border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 { font-size: 17px; font-weight: 600; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px; background: rgba(255,255,255,0.12);
-        color: #bee3f8; border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
+        color: var(--primary-tint-2, #bee3f8); border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
     }
     .header-actions { display: flex; align-items: center; gap: 10px; }
     .btn-header {
@@ -65,7 +65,7 @@ echo view('templates/myheader.php');
     .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--primary-light)); opacity: 0; transition: opacity 0.3s ease; }
     .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--gray-300); }
     .stat-card:hover::before { opacity: 1; }
-    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md); }
+    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md); }
     .stat-card.active::before { opacity: 1; }
     .stat-left .stat-label { font-size: 10px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
     .stat-left .stat-value { font-size: 24px; font-weight: 700; color: var(--gray-800); line-height: 1.2; }
@@ -83,12 +83,12 @@ echo view('templates/myheader.php');
         border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 12px; font-size: 13px;
         color: var(--gray-700); background: #ffffff; transition: all 0.2s; width: 100%; height: 40px;
     }
-    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .form-control:focus, select.form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .form-control[readonly] { background: var(--gray-50); cursor: not-allowed; }
     textarea.form-control { height: auto; min-height: 60px; resize: vertical; }
 
     .btn-primary { background: var(--primary); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,107,176,0.3); color: #ffffff; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3); color: #ffffff; }
     .btn-danger { background: var(--danger); border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; transition: all 0.2s; color: #ffffff; display: inline-flex; align-items: center; gap: 6px; }
     .btn-danger:hover { background: var(--danger-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(220,38,38,0.3); color: #ffffff; }
     .btn-secondary { background: #ffffff; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; color: var(--gray-600); transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
@@ -126,7 +126,7 @@ echo view('templates/myheader.php');
     .dataTables_filter { float: right; margin-bottom: 16px; }
     .dataTables_filter label { font-size: 12px; font-weight: 500; color: var(--gray-500); display: flex; align-items: center; gap: 8px; }
     .dataTables_filter input { width: 200px; padding: 6px 12px; border: 1.5px solid var(--gray-200); border-radius: 8px; font-size: 12px; transition: all 0.2s; outline: none; }
-    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button { padding: 4px 10px !important; margin: 0 2px !important; border-radius: 6px !important; border: 1px solid var(--gray-200) !important; background: #ffffff !important; color: var(--gray-600) !important; font-size: 11px !important; font-weight: 600 !important; transition: all 0.2s; }
     .dataTables_paginate .paginate_button.current { background: var(--primary) !important; border-color: var(--primary) !important; color: #ffffff !important; }
@@ -256,7 +256,7 @@ echo view('templates/myheader.php');
                                     <td><span class="badge badge-primary"><?=$row['receipt_number'];?></span></td>
                                     <td><?=$row['customer_name'] ?? '—';?></td>
                                     <td><?=$row['invoice_code'] ?? '—';?></td>
-                                    <td><?=date('M d, Y', strtotime($row['payment_date']));?></td>
+                                    <td data-order="<?=$row['payment_date'] . ' ' . str_pad($row['payment_id'], 10, '0', STR_PAD_LEFT);?>"><?=date('M d, Y', strtotime($row['payment_date']));?></td>
                                     <td class="text-end">&#8369;<?=number_format($row['amount_paid'], 2);?></td>
                                     <td><?=str_replace('_', ' ', $row['payment_method']);?></td>
                                     <td>
@@ -441,7 +441,7 @@ function filterTable(status) {
 }
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/payment/payment.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/payment/payment.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/payment/payment.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

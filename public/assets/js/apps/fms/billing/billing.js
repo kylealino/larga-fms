@@ -104,8 +104,15 @@ function __Billing() {
                 $('#billing_discount').val(data.discount);
                 $('#billing_remarks').val(data.remarks);
 
+                $('#billingModal').data('locked', data.billing_status === 'INVOICED' || data.billing_status === 'CANCELLED');
+                $('#calc_cost').data('value', parseFloat(data.trip_cost || 0));
+                $('#chargeFormBox').toggle(!$('#billingModal').data('locked'));
+                $('#chargesLockedNote').toggle(!!$('#billingModal').data('locked'));
+
                 __Billing.__updateCalcDisplay(data);
+                __Billing.__recalcLive();
                 __Billing.__loadCharges(billing_id);
+                __Billing.__loadUnbilledExpenses(billing_id);
                 __Billing.__resetChargeForm();
 
                 var modal = new bootstrap.Modal(document.getElementById('billingModal'));
@@ -145,6 +152,18 @@ function __Billing() {
         $('#calc_subtotal').text('₱' + subtotal.toLocaleString('en-US', { minimumFractionDigits: 2 }));
         $('#calc_vat').text('₱' + vat.toLocaleString('en-US', { minimumFractionDigits: 2 }));
         $('#calc_total').html('<strong>₱' + total.toLocaleString('en-US', { minimumFractionDigits: 2 }) + '</strong>');
+        __Billing.__renderMargin(taxable + otherCharges);
+    };
+
+    // Gross margin = revenue without VAT (rate after discount + charges) minus all dispatch expenses of the trip
+    this.__renderMargin = function(revenue) {
+        var cost = parseFloat($('#calc_cost').data('value')) || 0;
+        var margin = revenue - cost;
+        var pct = revenue > 0 ? ' (' + (margin / revenue * 100).toFixed(1) + '%)' : '';
+        var fmt = function(n) { return '₱' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+        $('#calc_revenue').text(fmt(revenue));
+        $('#calc_cost').text(fmt(cost));
+        $('#calc_margin').html('<strong style="color:' + (margin < 0 ? 'var(--danger)' : 'var(--success)') + ';">' + fmt(margin) + pct + '</strong>');
     };
 
     this.__refreshBillingCalc = function() {
@@ -268,9 +287,9 @@ function __Billing() {
                     $.each(data, function(i, row) {
                         html += '<tr>';
                         html += '<td>' + (typeLabels[row.charge_type] || row.charge_type) + '</td>';
-                        html += '<td>' + (row.description || '—') + '</td>';
+                        html += '<td>' + (row.description || '—') + (row.expense_code ? '<span class="charge-source"><i class="bi bi-wallet2"></i> Reimbursable · ' + row.expense_code + '</span>' : '') + '</td>';
                         html += '<td class="text-end">₱' + parseFloat(row.amount).toLocaleString('en-US', { minimumFractionDigits: 2 }) + '</td>';
-                        html += '<td class="text-center"><button class="btn-icon btn-icon-delete" onclick="__Billing.__deleteCharge(' + row.charge_id + ')" title="Remove"><i class="bi bi-trash"></i></button></td>';
+                        html += '<td class="text-center">' + ($('#billingModal').data('locked') ? '<i class="bi bi-lock text-muted"></i>' : '<button class="btn-icon btn-icon-delete" onclick="__Billing.__deleteCharge(' + row.charge_id + ')" title="Remove"><i class="bi bi-trash"></i></button>') + '</td>';
                         html += '</tr>';
                     });
                 } else {
@@ -342,6 +361,52 @@ function __Billing() {
                 if (data.status == 'success') {
                     toastr.success(data.message);
                     __Billing.__loadCharges(billing_id);
+                    __Billing.__loadUnbilledExpenses(billing_id);
+                    __Billing.__refreshBillingCalc();
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error("Error: " + error);
+            }
+        });
+    };
+
+    // ==============================
+    // UNBILLED REIMBURSABLES — billable dispatch expenses not on a billing yet
+    // ==============================
+    this.__loadUnbilledExpenses = function(billing_id) {
+        if ($('#billingModal').data('locked')) { $('#unbilledExpensesBox').hide(); return; }
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'billing', data: { billing_id: billing_id, meaction: 'GET_UNBILLED_EXPENSES' }, dataType: 'json',
+            success: function(data) {
+                if (!data || data.length === 0) { $('#unbilledExpensesBox').hide(); return; }
+                var html = '';
+                $.each(data, function(i, e) {
+                    html += '<tr>';
+                    html += '<td>' + e.expense_code + '</td>';
+                    html += '<td>' + e.expense_type.replace(/_/g, ' ') + (e.description ? ' — ' + $('<div>').text(e.description).html() : '') + '</td>';
+                    html += '<td>' + (e.paid_by ? 'Paid by ' + $('<div>').text(e.paid_by).html() : '') + '</td>';
+                    html += '<td class="text-end">₱' + parseFloat(e.amount).toLocaleString('en-US', { minimumFractionDigits: 2 }) + '</td>';
+                    html += '<td class="text-end"><button type="button" class="btn btn-secondary" style="font-size:11px;padding:2px 8px;" onclick="__Billing.__addExpenseCharge(' + e.expense_id + ')"><i class="bi bi-plus"></i> Add</button></td>';
+                    html += '</tr>';
+                });
+                $('#unbilledExpensesBody').html(html);
+                $('#unbilledExpensesBox').show();
+            }
+        });
+    };
+
+    this.__addExpenseCharge = function(expense_id) {
+        var billing_id = $('#billing_id').val();
+        jQuery.ajax({
+            type: "POST", url: mesiteurl + 'billing', data: { billing_id: billing_id, expense_id: expense_id || '', meaction: 'ADD_EXPENSE_CHARGE' }, dataType: 'json',
+            success: function(data) {
+                if (data.status == 'success') {
+                    toastr.success(data.message);
+                    __Billing.__loadCharges(billing_id);
+                    __Billing.__loadUnbilledExpenses(billing_id);
                     __Billing.__refreshBillingCalc();
                 } else {
                     toastr.error(data.message);

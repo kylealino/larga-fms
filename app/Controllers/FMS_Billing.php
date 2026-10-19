@@ -109,6 +109,22 @@ class FMS_Billing extends BaseController
                 echo json_encode($result);
                 break;
 
+            // ==============================
+            // REIMBURSABLE DISPATCH EXPENSES
+            // ==============================
+            case 'GET_UNBILLED_EXPENSES':
+                $billing_id = $this->request->getPost('billing_id');
+                try { $result = $billing_id ? $this->billingModel->getUnbilledExpenses($billing_id) : []; }
+                catch (\Throwable $e) { $result = []; }
+                echo json_encode($result);
+                break;
+
+            case 'ADD_EXPENSE_CHARGE':
+                try { $result = $this->billingModel->addExpenseCharge(); }
+                catch (\Throwable $e) { $result = ['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]; }
+                echo json_encode($result);
+                break;
+
             default:
                 return view('fms/billing/billing-main');
                 break;

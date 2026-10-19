@@ -1134,7 +1134,7 @@ function __Dispatch() {
     // ==============================
     this.__loadExpenses = function(dispatch_id) {
         if(!dispatch_id || dispatch_id == 0) {
-            $('#expensesBody').html('<tr><td colspan="8" class="text-center text-muted">Save dispatch first</td></tr>');
+            $('#expensesBody').html('<tr><td colspan="9" class="text-center text-muted">Save dispatch first</td></tr>');
             $('#total_expenses').text('₱0.00');
             return;
         }
@@ -1152,9 +1152,11 @@ function __Dispatch() {
             success: function(data) {
                 var html = '';
                 var total = 0;
+                var billable = 0;
                 if(data && data.length > 0) {
                     $.each(data, function(index, row) {
                         total += parseFloat(row.amount);
+                        if(row.is_billable == 1) billable += parseFloat(row.amount);
                         var expenseTypeLabels = {
                             'TOLL': 'Toll',
                             'PARKING': 'Parking',
@@ -1175,6 +1177,13 @@ function __Dispatch() {
                         html += '<td class="text-end">₱' + parseFloat(row.amount).toFixed(2) + '</td>';
                         html += '<td>' + (row.paid_by || '—') + '</td>';
                         html += '<td>' + (row.reference_no || '—') + '</td>';
+                        if(row.billing_code) {
+                            html += '<td><span class="badge badge-success" title="Passed to billing as a reimbursable charge">Billed ' + row.billing_code + '</span></td>';
+                        } else if(row.is_billable == 1) {
+                            html += '<td><span class="badge badge-warning" title="Will be added to the billing as a reimbursable charge">Billable</span></td>';
+                        } else {
+                            html += '<td><span class="badge badge-secondary" title="Company cost — not charged to the client">Internal</span></td>';
+                        }
                         html += '<td class="text-center">';
                         html += '<div class="action-group">';
                         html += '<button class="btn-icon btn-icon-edit" onclick="__Dispatch.__editExpenseItem(' + row.expense_id + ')" title="Edit">';
@@ -1190,10 +1199,10 @@ function __Dispatch() {
                     html += '<tr class="table-active">';
                     html += '<td colspan="4" class="text-end"><strong>Total:</strong></td>';
                     html += '<td class="text-end"><strong>₱' + total.toFixed(2) + '</strong></td>';
-                    html += '<td colspan="3"></td>';
+                    html += '<td colspan="4" style="font-size:11px;color:var(--gray-500);">Billable to client: <strong>₱' + billable.toFixed(2) + '</strong> · Internal: ₱' + (total - billable).toFixed(2) + '</td>';
                     html += '</tr>';
                 } else {
-                    html = '<tr><td colspan="8" class="text-center text-muted">No expenses recorded</td></tr>';
+                    html = '<tr><td colspan="9" class="text-center text-muted">No expenses recorded</td></tr>';
                 }
                 $('#expensesBody').html(html);
                 $('#total_expenses').text('₱' + total.toFixed(2));
@@ -1203,6 +1212,12 @@ function __Dispatch() {
                 console.error('Error loading expenses:', error);
             }
         });
+    };
+
+    // Pass-through costs paid for the client default to billable; fuel, meals, other stay internal
+    this.__defaultExpenseBillable = function() {
+        var billableTypes = ['TOLL', 'PARKING', 'LOADING_UNLOADING', 'CONTAINER_RENTAL', 'EMPTY_RETURN_FEE', 'CONTAINER_RETURN_FEE'];
+        $('#exp_billable').val(billableTypes.indexOf($('#exp_type').val()) >= 0 ? '1' : '0');
     };
 
     this.__saveExpenseItem = function() {
@@ -1235,6 +1250,7 @@ function __Dispatch() {
             expense_type: expense_type,
             description: $('#exp_description').val(),
             amount: amount,
+            is_billable: $('#exp_billable').val(),
             paid_by: $('#exp_paid_by').val(),
             reference_no: $('#exp_reference').val(),
             remarks: $('#exp_remarks').val(),
@@ -1255,6 +1271,7 @@ function __Dispatch() {
                 if(data.status == 'success'){
                     toastr.success(data.message);
                     $('#exp_type').val('');
+                    $('#exp_billable').val('0');
                     $('#exp_description').val('');
                     $('#exp_amount').val('');
                     $('#exp_paid_by').val('');
@@ -1295,6 +1312,7 @@ function __Dispatch() {
                     $('#exp_editing_id').val(data.expense_id);
                     $('#exp_date').val(data.expense_date);
                     $('#exp_type').val(data.expense_type);
+                    $('#exp_billable').val(data.is_billable == 1 ? '1' : '0');
                     $('#exp_description').val(data.description);
                     $('#exp_amount').val(data.amount);
                     $('#exp_paid_by').val(data.paid_by);
@@ -1338,6 +1356,7 @@ function __Dispatch() {
             expense_type: expense_type,
             description: $('#exp_description').val(),
             amount: amount,
+            is_billable: $('#exp_billable').val(),
             paid_by: $('#exp_paid_by').val(),
             reference_no: $('#exp_reference').val(),
             remarks: $('#exp_remarks').val(),
@@ -1358,6 +1377,7 @@ function __Dispatch() {
                 if(data.status == 'success'){
                     toastr.success(data.message);
                     $('#exp_type').val('');
+                    $('#exp_billable').val('0');
                     $('#exp_description').val('');
                     $('#exp_amount').val('');
                     $('#exp_paid_by').val('');

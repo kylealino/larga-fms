@@ -115,7 +115,7 @@ echo view('templates/myheader.php');
         width: 40px; height: 40px;
         background: rgba(255,255,255,0.12); border-radius: 8px;
         display: flex; align-items: center; justify-content: center;
-        font-size: 20px; color: #90cdf4;
+        font-size: 20px; color: var(--primary-tint, #90cdf4);
         border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 {
@@ -124,7 +124,7 @@ echo view('templates/myheader.php');
     }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px;
-        background: rgba(255,255,255,0.12); color: #bee3f8;
+        background: rgba(255,255,255,0.12); color: var(--primary-tint-2, #bee3f8);
         border: 1px solid rgba(255,255,255,0.08);
         text-transform: uppercase; letter-spacing: 0.5px;
     }
@@ -158,7 +158,7 @@ echo view('templates/myheader.php');
     }
     .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--gray-300); }
     .stat-card:hover::before { opacity: 1; }
-    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(26,107,176,0.15), var(--shadow-md); }
+    .stat-card.active { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(var(--primary-rgb, 26, 107, 176), 0.15), var(--shadow-md); }
     .stat-card.active::before { opacity: 1; }
     .stat-left .stat-label {
         font-size: 10px; font-weight: 600; color: var(--gray-500);
@@ -190,7 +190,7 @@ echo view('templates/myheader.php');
     }
     .form-control:focus, select.form-control:focus {
         outline: none; border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(26,107,176,0.08);
+        box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08);
     }
     textarea.form-control { height: auto; min-height: 60px; resize: vertical; }
     .form-control[readonly] { background: var(--gray-50); cursor: not-allowed; }
@@ -204,7 +204,7 @@ echo view('templates/myheader.php');
     }
     .btn-primary:hover {
         background: var(--primary-dark); transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(26,107,176,0.3); color: #ffffff;
+        box-shadow: 0 4px 12px rgba(var(--primary-rgb, 26, 107, 176), 0.3); color: #ffffff;
     }
     .btn-secondary {
         background: #ffffff; border: 1.5px solid var(--gray-200);
@@ -286,7 +286,7 @@ echo view('templates/myheader.php');
         width: 200px; padding: 6px 12px; border: 1.5px solid var(--gray-200);
         border-radius: 8px; font-size: 12px; transition: all 0.2s; outline: none;
     }
-    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .dataTables_filter input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     .dataTables_paginate { float: right; margin-top: 16px; }
     .dataTables_paginate .paginate_button {
         padding: 4px 10px !important; margin: 0 2px !important; border-radius: 6px !important;
@@ -336,7 +336,7 @@ echo view('templates/myheader.php');
         padding: 8px;
         position: relative;
     }
-    .sig-pad-wrapper.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,107,176,0.08); }
+    .sig-pad-wrapper.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(var(--primary-rgb, 26, 107, 176), 0.08); }
     #signaturePad {
         width: 100%;
         height: 180px;
@@ -525,7 +525,7 @@ echo view('templates/myheader.php');
                                     <td><?=$row['customer_name'] ?? '—';?></td>
                                     <td><?=$row['truck'] ?? '—';?></td>
                                     <td><?=$row['driver'] ?? '—';?></td>
-                                    <td>—</td>
+                                    <td data-order="9999-12-31 <?=str_pad($row['trip_id'], 10, '0', STR_PAD_LEFT);?>">—</td>
                                     <td>—</td>
                                     <td><span class="badge badge-warning">Pending DR</span></td>
                                     <td class="text-center">
@@ -549,7 +549,7 @@ echo view('templates/myheader.php');
                                     <td><?=$row['customer_name'] ?? '—';?></td>
                                     <td><?=$row['truck'] ?? '—';?></td>
                                     <td><?=$row['driver'] ?? '—';?></td>
-                                    <td><?=$row['dr_date'] ? date('M d, Y', strtotime($row['dr_date'])) : '—';?></td>
+                                    <td data-order="<?=($row['dr_date'] ?: '0000-00-00') . ' ' . str_pad($row['dr_id'], 10, '0', STR_PAD_LEFT);?>"><?=$row['dr_date'] ? date('M d, Y', strtotime($row['dr_date'])) : '—';?></td>
                                     <td><?=$row['received_by'] ?? '—';?></td>
                                     <td>
                                         <?php
@@ -998,7 +998,7 @@ $(document).ready(function () {
     drTable = $('#drTable').DataTable({
         pageLength: 10,
         lengthChange: false,
-        order: [],
+        order: [[5, 'desc']],   // pending trips first, then latest delivery date (data-order keys)
         language: {
             search: "Search:",
             emptyTable: "No delivery receipts found"
@@ -1049,7 +1049,7 @@ $('#drClearFilterBtn').on('click', function() {
 });
 </script>
 
-<script src="<?=base_url('assets/js/apps/fms/delivery_receipt/dr.js');?>"></script>
+<script src="<?=base_url('assets/js/apps/fms/delivery_receipt/dr.js') . '?v=' . filemtime(FCPATH . 'assets/js/apps/fms/delivery_receipt/dr.js');?>"></script>
 
 <?php
 echo view('templates/myfooter.php');

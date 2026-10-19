@@ -18,12 +18,12 @@ echo view('templates/myheader.php');
     .lrg-module-header .header-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 200px; }
     .lrg-module-header .header-left .module-icon {
         width: 40px; height: 40px; background: rgba(255,255,255,0.12); border-radius: 8px;
-        display: flex; align-items: center; justify-content: center; font-size: 20px; color: #90cdf4; border: 1px solid rgba(255,255,255,0.08);
+        display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--primary-tint, #90cdf4); border: 1px solid rgba(255,255,255,0.08);
     }
     .lrg-module-header .header-left .module-info h4 { font-size: 17px; font-weight: 600; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .lrg-module-header .header-left .module-info h4 .module-badge {
         font-size: 9px; font-weight: 600; padding: 2px 12px; border-radius: 4px; background: rgba(255,255,255,0.12);
-        color: #bee3f8; border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
+        color: var(--primary-tint-2, #bee3f8); border: 1px solid rgba(255,255,255,0.08); text-transform: uppercase; letter-spacing: 0.5px;
     }
     .header-actions { display: flex; align-items: center; gap: 10px; }
     .btn-header {

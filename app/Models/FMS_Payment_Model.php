@@ -89,9 +89,12 @@ class FMS_Payment_Model extends Model
             return ['status' => 'error', 'message' => 'Please select an invoice and enter a valid amount.'];
         }
 
-        $invoice = $this->db->query("SELECT customer_id, outstanding_balance FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
+        $invoice = $this->db->query("SELECT customer_id, outstanding_balance, invoice_status FROM tbl_invoices WHERE invoice_id = ?", [$invoice_id])->getRow();
         if (!$invoice) {
             return ['status' => 'error', 'message' => 'Invoice not found.'];
+        }
+        if (in_array($invoice->invoice_status, ['CANCELLED', 'VOID'])) {
+            return ['status' => 'error', 'message' => 'Payments cannot be recorded on a ' . strtolower($invoice->invoice_status) . ' invoice.'];
         }
 
         if ($payment_status === 'CLEARED' && $amount_paid > $invoice->outstanding_balance) {
@@ -140,8 +143,15 @@ class FMS_Payment_Model extends Model
             return ['status' => 'error', 'message' => 'Payment not found.'];
         }
 
+        if (!is_numeric($amount_paid) || $amount_paid <= 0) {
+            return ['status' => 'error', 'message' => 'Enter a payment amount greater than zero.'];
+        }
+
         if ($payment_status === 'CLEARED') {
-            $invoice = $this->db->query("SELECT total_amount FROM tbl_invoices WHERE invoice_id = ?", [$existing->invoice_id])->getRow();
+            $invoice = $this->db->query("SELECT total_amount, invoice_status FROM tbl_invoices WHERE invoice_id = ?", [$existing->invoice_id])->getRow();
+            if ($invoice && in_array($invoice->invoice_status, ['CANCELLED', 'VOID'])) {
+                return ['status' => 'error', 'message' => 'A payment on a ' . strtolower($invoice->invoice_status) . ' invoice cannot be cleared.'];
+            }
             $otherPaid = $this->db->query("
                 SELECT COALESCE(SUM(amount_paid),0) as total FROM tbl_payments
                 WHERE invoice_id = ? AND payment_id != ? AND payment_status = 'CLEARED'

@@ -3,7 +3,7 @@ $this->request = \Config\Services::request();
 $this->db = \Config\Database::connect();
 $this->session = session();
 $this->cuser = $this->session->get('__xsys_myuserzicas__');
-helper('permission');
+helper(['permission', 'theme']);
 
   $query = $this->db->query("
   SELECT
@@ -25,6 +25,7 @@ helper('permission');
   $position = $data['position'];
   $section = $data['section'];
   $division = $data['division'];
+  $theme = role_theme($this->session->get('__xsys_myuserrole__'));
   $role_name = $this->session->get('__xsys_myuserrolename__');
   
   // Get current URL for active menu highlighting
@@ -58,6 +59,7 @@ helper('permission');
       --lrg-blue-light: #3c9eff;
       --lrg-blue-dark: #0f5a99;
       --lrg-blue-pale: #e8f2fa;
+      --lrg-blue-rgb: 26, 107, 176;
       --lrg-text-dark: #0b2a47;
       --lrg-text-mid: #1e4a6e;
       --lrg-text-light: #3f6b8f;
@@ -65,10 +67,23 @@ helper('permission');
       --lrg-white: #ffffff;
       --lrg-border: #dde8f2;
       --lrg-border-light: rgba(0, 80, 200, 0.04);
-      --lrg-hover: rgba(26, 107, 176, 0.04);
-      --lrg-active: rgba(26, 107, 176, 0.06);
+      --lrg-hover: rgba(var(--lrg-blue-rgb), 0.04);
+      --lrg-active: rgba(var(--lrg-blue-rgb), 0.06);
       --lrg-shadow: rgba(0, 50, 100, 0.04);
       --lrg-shadow-hover: rgba(0, 70, 150, 0.06);
+
+      /* Sidebar — defaults are the LIGHT sidebar style; theme_helper.php overrides for TINTED / SOLID */
+      --lrg-side-bg: var(--lrg-sidebar);
+      --lrg-side-text: var(--lrg-text-light);
+      --lrg-side-text-strong: var(--lrg-text-dark);
+      --lrg-side-muted: var(--lrg-text-muted);
+      --lrg-side-icon: var(--lrg-blue);
+      --lrg-side-accent: var(--lrg-blue);
+      --lrg-side-hover: var(--lrg-hover);
+      --lrg-side-active: var(--lrg-active);
+      --lrg-side-border: var(--lrg-sidebar-border);
+      --lrg-side-item-border: var(--lrg-border-light);
+      --lrg-side-chip: var(--lrg-blue-pale);
     }
 
     * {
@@ -87,9 +102,9 @@ helper('permission');
     /* SIDEBAR - Clean white with light blue accents */
     /* ============================================ */
     .left-sidebar {
-      background: var(--lrg-sidebar);
+      background: var(--lrg-side-bg);
       box-shadow: 4px 0 30px var(--lrg-shadow);
-      border-right: 1px solid var(--lrg-sidebar-border);
+      border-right: 1px solid var(--lrg-side-border);
       position: fixed;
       top: 0;
       left: 0;
@@ -135,7 +150,7 @@ helper('permission');
       background: transparent;
     }
     .left-sidebar::-webkit-scrollbar-thumb {
-      background: var(--lrg-blue);
+      background: var(--lrg-side-icon);
       border-radius: 3px;
     }
 
@@ -160,12 +175,12 @@ helper('permission');
 
     .brand-logo {
       padding: 20px 24px;
-      border-bottom: 1px solid var(--lrg-sidebar-border);
-      background: var(--lrg-sidebar);
+      border-bottom: 1px solid var(--lrg-side-border);
+      background: var(--lrg-side-bg);
     }
 
     .brand-logo a {
-      color: var(--lrg-text-dark);
+      color: var(--lrg-side-text-strong);
       font-weight: 700;
       font-size: 1rem;
       display: flex;
@@ -177,30 +192,30 @@ helper('permission');
     .brand-logo .shield-icon {
       width: 40px;
       height: 40px;
-      background: var(--lrg-blue-pale);
+      background: var(--lrg-side-chip);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid var(--lrg-border-light);
+      border: 1px solid var(--lrg-side-item-border);
       box-shadow: 0 4px 12px var(--lrg-shadow);
       flex-shrink: 0;
     }
 
     .brand-logo .shield-icon i {
       font-size: 20px;
-      color: var(--lrg-blue);
+      color: var(--lrg-side-icon);
     }
 
     .brand-text {
       font-size: 0.9rem;
       letter-spacing: 0.5px;
       font-weight: 700;
-      color: var(--lrg-text-dark);
+      color: var(--lrg-side-text-strong);
     }
 
     .brand-text span {
-      color: var(--lrg-blue);
+      color: var(--lrg-side-accent);
       font-weight: 800;
     }
 
@@ -215,7 +230,7 @@ helper('permission');
     }
 
     .nav-small-cap span {
-      color: var(--lrg-text-muted);
+      color: var(--lrg-side-muted);
       font-size: 0.6rem;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -232,7 +247,7 @@ helper('permission');
       gap: 12px;
       padding: 10px 20px;
       margin: 2px 12px;
-      color: var(--lrg-text-light);
+      color: var(--lrg-side-text);
       border-radius: 10px;
       transition: all 0.2s ease;
       text-decoration: none;
@@ -241,20 +256,20 @@ helper('permission');
     }
 
     .sidebar-link:hover {
-      background: var(--lrg-hover);
-      color: var(--lrg-text-dark);
+      background: var(--lrg-side-hover);
+      color: var(--lrg-side-text-strong);
     }
 
     .sidebar-item.active .sidebar-link {
-      background: var(--lrg-active);
-      color: var(--lrg-blue);
-      border: 1px solid var(--lrg-border-light);
+      background: var(--lrg-side-active);
+      color: var(--lrg-side-accent);
+      border: 1px solid var(--lrg-side-item-border);
     }
 
     .sidebar-link i, .sidebar-link .bi {
       font-size: 1.2rem;
       width: 24px;
-      color: var(--lrg-blue);
+      color: var(--lrg-side-icon);
       opacity: 0.6;
     }
 
@@ -271,7 +286,7 @@ helper('permission');
     /* Sidebar Footer - Logout */
     .sidebar-footer {
       padding: 20px 20px 30px 20px;
-      border-top: 1px solid var(--lrg-sidebar-border);
+      border-top: 1px solid var(--lrg-side-border);
       margin-top: auto;
     }
 
@@ -280,29 +295,29 @@ helper('permission');
       align-items: center;
       gap: 12px;
       padding: 10px 16px;
-      color: var(--lrg-text-light);
+      color: var(--lrg-side-text);
       border-radius: 10px;
       transition: all 0.2s ease;
       text-decoration: none;
       font-size: 0.85rem;
       font-weight: 500;
-      background: var(--lrg-hover);
-      border: 1px solid var(--lrg-border-light);
+      background: var(--lrg-side-hover);
+      border: 1px solid var(--lrg-side-item-border);
       cursor: pointer;
       width: 100%;
       text-align: left;
     }
 
     .logout-link:hover {
-      background: rgba(26, 107, 176, 0.08);
-      color: var(--lrg-blue);
-      border-color: rgba(26, 107, 176, 0.12);
+      background: var(--lrg-side-active);
+      color: var(--lrg-side-accent);
+      border-color: var(--lrg-side-border);
     }
 
     .logout-link i {
       font-size: 1.2rem;
       width: 24px;
-      color: var(--lrg-blue);
+      color: var(--lrg-side-icon);
       opacity: 0.6;
     }
 
@@ -377,8 +392,8 @@ helper('permission');
     }
 
     .logout-modal .btn-cancel:hover {
-      background: #dde8f2;
-      border-color: #bccfdf;
+      background: var(--lrg-border);
+      border-color: rgba(var(--lrg-blue-rgb), 0.25);
     }
 
     .logout-modal .btn-logout-confirm {
@@ -395,7 +410,7 @@ helper('permission');
     .logout-modal .btn-logout-confirm:hover {
       background: var(--lrg-blue-dark);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(26, 107, 176, 0.2);
+      box-shadow: 0 4px 12px rgba(var(--lrg-blue-rgb), 0.2);
     }
 
     /* ============================================ */
@@ -601,15 +616,184 @@ helper('permission');
       padding: 12px 24px;
       text-align: center;
     }
+
+    /* ============================================ */
+    /* UI LAYOUTS - body.lrg-sb-* / body.lrg-hd-*   */
+    /* (role setting, app/Config/Themes.php)        */
+    /* ============================================ */
+
+    /* Name & role chip in the topbar — only the Branded / Floating headers show it */
+    .topbar-user {
+      display: none;
+      flex-direction: column;
+      align-items: flex-end;
+      line-height: 1.2;
+      margin-right: 10px;
+    }
+
+    .topbar-user .tu-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--lrg-text-dark);
+    }
+
+    .topbar-user .tu-role {
+      font-size: 0.65rem;
+      color: var(--lrg-text-muted);
+    }
+
+    body.lrg-hd-branded .topbar-user,
+    body.lrg-hd-floating .topbar-user {
+      display: flex;
+    }
+
+    /* Sidebar: COMPACT — icon rail (starts collapsed), expands over the page on hover */
+    @media (min-width: 769px) {
+      body.lrg-sb-compact .left-sidebar.collapsed:hover {
+        width: 280px;
+        box-shadow: 8px 0 30px rgba(var(--lrg-blue-rgb), 0.12);
+      }
+
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .brand-text,
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .sidebar-link span:not(.ti),
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .nav-small-cap span,
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .logout-link span {
+        display: inline;
+      }
+
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .sidebar-link {
+        justify-content: flex-start;
+        padding: 10px 20px;
+      }
+
+      body.lrg-sb-compact .left-sidebar.collapsed:hover .brand-logo a {
+        justify-content: flex-start;
+      }
+    }
+
+    /* Sidebar: FLOATING — detached rounded panel */
+    @media (min-width: 769px) {
+      body.lrg-sb-floating .left-sidebar {
+        top: 12px;
+        left: 12px;
+        height: calc(100vh - 24px);
+        border-radius: 16px;
+        border: 1px solid var(--lrg-side-border);
+        box-shadow: 0 12px 32px rgba(var(--lrg-blue-rgb), 0.12);
+      }
+
+      body.lrg-sb-floating .brand-logo {
+        border-radius: 16px 16px 0 0;
+      }
+
+      body.lrg-sb-floating .page-wrapper {
+        margin-left: 304px;
+      }
+
+      body.lrg-sb-floating .page-wrapper.expanded {
+        margin-left: 104px;
+      }
+    }
+
+    /* Sidebar: LINE — flat full-width items, accent bar on the active one */
+    body.lrg-sb-line .sidebar-link {
+      margin: 1px 0;
+      border-radius: 0;
+      padding: 10px 24px 10px 21px;
+      border-left: 3px solid transparent;
+    }
+
+    body.lrg-sb-line .sidebar-item.active .sidebar-link {
+      border: 0;
+      border-left: 3px solid var(--lrg-side-accent);
+    }
+
+    body.lrg-sb-line .sidebar-link:hover {
+      border-left-color: var(--lrg-side-border);
+    }
+
+    /* Header: BRANDED — palette color bar */
+    body.lrg-hd-branded .topbar {
+      background: linear-gradient(135deg, var(--lrg-blue-dark) 0%, var(--lrg-blue) 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 10px rgba(var(--lrg-blue-rgb), 0.25);
+    }
+
+    body.lrg-hd-branded .topbar .sidebartoggler i,
+    body.lrg-hd-branded .topbar .mobile-menu-toggle i,
+    body.lrg-hd-branded .topbar-user .tu-name {
+      color: #ffffff;
+    }
+
+    body.lrg-hd-branded .topbar-user .tu-role {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    body.lrg-hd-branded .user-profile-img img {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    body.lrg-hd-branded .topbar .sidebartoggler:hover,
+    body.lrg-hd-branded .topbar .mobile-menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Header: FLOATING — detached rounded card */
+    @media (min-width: 769px) {
+      body.lrg-hd-floating .topbar {
+        top: 12px;
+        margin: 12px 24px 0 24px;
+        width: auto;
+        border: 1px solid var(--lrg-border);
+        border-radius: 14px;
+        box-shadow: 0 6px 20px rgba(var(--lrg-blue-rgb), 0.08);
+      }
+
+      body.lrg-hd-floating .body-wrapper {
+        padding-top: 36px;
+      }
+    }
+
+    /* Header: MINIMAL — blends into the page background */
+    body.lrg-hd-minimal .topbar {
+      background: var(--lrg-bg);
+      border-bottom-color: transparent;
+      box-shadow: none;
+    }
+
+    @media (max-width: 768px) {
+      .topbar-user {
+        display: none !important;
+      }
+    }
+
+    /* Bootstrap pagination (DataTables bootstrap5 pager) follows the role palette */
+    .pagination {
+      --bs-pagination-color: var(--lrg-blue);
+      --bs-pagination-hover-color: var(--lrg-blue-dark);
+      --bs-pagination-focus-color: var(--lrg-blue-dark);
+      --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(var(--lrg-blue-rgb), 0.15);
+      --bs-pagination-active-bg: var(--lrg-blue);
+      --bs-pagination-active-border-color: var(--lrg-blue);
+    }
+  </style>
+
+  <style id="lrg-theme">
+    /* ============================================ */
+    /* ROLE COLOR PALETTE - <?=$theme['palette'];?> / SIDEBAR <?=$theme['sidebar'];?> (app/Config/Themes.php) */
+    /* ============================================ */
+    <?=theme_css_vars($theme['palette'], $theme['sidebar']);?>
+
   </style>
 </head>
-<body>
+<body class="<?=theme_body_classes($theme);?>">
   <!-- Mobile Sidebar Overlay -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <div id="main-wrapper">
     <!-- Sidebar Start -->
-    <aside class="left-sidebar" id="sidebar">
+    <?php $sb_compact = $theme['sidebar_layout'] === 'COMPACT'; // icon rail starts collapsed (server-side, no flash) ?>
+    <aside class="left-sidebar<?=$sb_compact ? ' collapsed' : '';?>" id="sidebar">
       <div class="brand-logo d-flex align-items-center justify-content-between">
         <a href="<?=site_url();?>myadmindashboard" class="text-nowrap logo-img">
           <div class="d-flex align-items-center gap-2">
@@ -620,7 +804,7 @@ helper('permission');
           </div>
         </a> 
         <a href="javascript:void(0)" class="sidebartoggler ms-auto text-decoration-none d-block d-xl-none" id="closeSidebar">
-          <i class="bi bi-x" style="color: var(--lrg-text-muted); font-size: 1.2rem;"></i>
+          <i class="bi bi-x" style="color: var(--lrg-side-muted); font-size: 1.2rem;"></i>
         </a>
       </div>
 
@@ -895,7 +1079,7 @@ helper('permission');
     </aside>
     <!-- Sidebar End -->
 
-    <div class="page-wrapper" id="pageWrapper">
+    <div class="page-wrapper<?=$sb_compact ? ' expanded' : '';?>" id="pageWrapper">
       <!-- Header Start -->
       <header class="topbar">
         <div class="with-vertical">
@@ -917,6 +1101,11 @@ helper('permission');
               <li class="nav-item dropdown">
                 <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
                   <div class="d-flex align-items-center">
+                    <!-- name & role chip — shown by the Branded / Floating header layouts -->
+                    <div class="topbar-user">
+                      <span class="tu-name"><?=esc($full_name);?></span>
+                      <span class="tu-role"><?=esc($role_name ?: $position);?></span>
+                    </div>
                     <div class="user-profile-img">
                       <img src="<?=base_url('assets/images/profile/user-1.jpg')?>" class="rounded-circle" alt="profile" />
                     </div>
