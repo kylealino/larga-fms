@@ -27,49 +27,74 @@ class FMS_Driver_Model extends Model
     }
 
     // ==============================
-    // UPLOAD PROFILE PICTURE
+    // CHECK UPLOAD (before saving)
+    // Returns an error message when a file was picked but can't be used, null otherwise
     // ==============================
-    private function uploadProfilePicture($driver_id)
+    private function checkUpload($field, $allowedExt, $label)
     {
-        $file = $this->request->getFile('profile_picture');
-        $filename = '';
-        
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = 'DRV_' . $driver_id . '_' . time() . '.' . $file->getExtension();
-            $uploadPath = ROOTPATH . 'public/uploads/drivers/';
-            
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-            
-            $file->move($uploadPath, $newName);
-            $filename = 'uploads/drivers/' . $newName;
+        $file = $this->request->getFile($field);
+        if (!$file || $file->getError() === UPLOAD_ERR_NO_FILE) {
+            return null;
         }
-        
-        return $filename;
+
+        if (!$file->isValid()) {
+            return $label . ': ' . $file->getErrorString();
+        }
+
+        $ext = strtolower($file->getClientExtension());
+        if (!in_array($ext, $allowedExt)) {
+            return $label . ': only ' . strtoupper(implode(', ', $allowedExt)) . ' files are allowed.';
+        }
+
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return $label . ': file too large. Max 5MB.';
+        }
+
+        return null;
     }
 
     // ==============================
-    // UPLOAD LICENSE ATTACHMENT
+    // STORE UPLOAD
+    // Returns the relative path, '' when no file was sent, false when the file couldn't be saved
     // ==============================
+    private function storeUpload($field, $folder, $newBaseName)
+    {
+        $file = $this->request->getFile($field);
+        if (!$file || !$file->isValid() || $file->hasMoved()) {
+            return '';
+        }
+
+        $newName = $newBaseName . '_' . time() . '.' . strtolower($file->getClientExtension());
+        $uploadPath = FCPATH . 'uploads/' . $folder . '/';
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        try {
+            $file->move($uploadPath, $newName);
+        } catch (\Throwable $e) {
+            log_message('error', 'Driver upload failed (' . $field . '): ' . $e->getMessage());
+            return false;
+        }
+
+        return 'uploads/' . $folder . '/' . $newName;
+    }
+
+    private function uploadProfilePicture($driver_id)
+    {
+        return $this->storeUpload('profile_picture', 'drivers', 'DRV_' . $driver_id);
+    }
+
     private function uploadLicenseAttachment($driver_id)
     {
-        $file = $this->request->getFile('license_attachment');
-        $filename = '';
-        
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = 'DRV_LIC_' . $driver_id . '_' . time() . '.' . $file->getExtension();
-            $uploadPath = ROOTPATH . 'public/uploads/driver_licenses/';
-            
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-            
-            $file->move($uploadPath, $newName);
-            $filename = 'uploads/driver_licenses/' . $newName;
-        }
-        
-        return $filename;
+        return $this->storeUpload('license_attachment', 'driver_licenses', 'DRV_LIC_' . $driver_id);
+    }
+
+    private function checkDriverUploads()
+    {
+        return $this->checkUpload('profile_picture', ['jpg', 'jpeg', 'png', 'gif'], 'Profile picture')
+            ?: $this->checkUpload('license_attachment', ['pdf', 'jpg', 'jpeg', 'png'], 'License attachment');
     }
 
     // ==============================
@@ -115,12 +140,16 @@ class FMS_Driver_Model extends Model
         $restriction_code = $this->request->getPost('restriction_code');
         $issue_date = $this->request->getPost('issue_date');
         $expiration_date = $this->request->getPost('expiration_date');
-        $has_license = (!empty($license_number)) ? 'YES' : 'NO';
 
         // Check if driver name already exists
         $check = $this->db->query("SELECT COUNT(*) as count FROM tbl_drivers WHERE driver_name = ?", [$driver_name])->getRow();
         if($check->count > 0) {
             return ['status' => 'error', 'message' => 'Driver name already exists!'];
+        }
+
+        $upload_error = $this->checkDriverUploads();
+        if($upload_error) {
+            return ['status' => 'error', 'message' => $upload_error];
         }
 
         $this->db->transStart();
@@ -202,19 +231,21 @@ class FMS_Driver_Model extends Model
 
         $driver_id = $this->db->insertID();
 
-        // Upload profile picture
+        // Upload profile picture and license attachment
         if($query && $driver_id) {
             $profile_pic = $this->uploadProfilePicture($driver_id);
+            $attachment_path = $this->uploadLicenseAttachment($driver_id);
+
+            if($profile_pic === false || $attachment_path === false) {
+                $this->db->transRollback();
+                return ['status' => 'error', 'message' => 'The uploaded file could not be saved on the server. Please try again.'];
+            }
+
             if($profile_pic) {
                 $this->db->query("UPDATE tbl_drivers SET profile_picture = ? WHERE driver_id = ?", [$profile_pic, $driver_id]);
             }
-            
-            // Upload license attachment if license exists
-            if($has_license == 'YES') {
-                $attachment_path = $this->uploadLicenseAttachment($driver_id);
-                if($attachment_path) {
-                    $this->db->query("UPDATE tbl_drivers SET license_attachment = ? WHERE driver_id = ?", [$attachment_path, $driver_id]);
-                }
+            if($attachment_path) {
+                $this->db->query("UPDATE tbl_drivers SET license_attachment = ? WHERE driver_id = ?", [$attachment_path, $driver_id]);
             }
         }
 
@@ -277,29 +308,34 @@ class FMS_Driver_Model extends Model
             return ['status' => 'error', 'message' => 'Driver name already exists!'];
         }
 
+        $upload_error = $this->checkDriverUploads();
+        if($upload_error) {
+            return ['status' => 'error', 'message' => $upload_error];
+        }
+
         // Get existing driver data for file management
         $existing = $this->db->query("SELECT profile_picture, license_attachment FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRowArray();
         $profile_pic = $existing ? $existing['profile_picture'] : '';
         $license_attachment = $existing ? $existing['license_attachment'] : '';
 
-        // Handle profile picture upload
-        $file = $this->request->getFile('profile_picture');
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Delete old profile picture if exists
-            if($profile_pic && file_exists(ROOTPATH . 'public/' . $profile_pic)) {
-                unlink(ROOTPATH . 'public/' . $profile_pic);
-            }
-            $profile_pic = $this->uploadProfilePicture($driver_id);
+        $new_profile_pic = $this->uploadProfilePicture($driver_id);
+        $new_license_attachment = $this->uploadLicenseAttachment($driver_id);
+        if($new_profile_pic === false || $new_license_attachment === false) {
+            return ['status' => 'error', 'message' => 'The uploaded file could not be saved on the server. Please try again.'];
         }
 
-        // Handle license attachment upload
-        $file_lic = $this->request->getFile('license_attachment');
-        if ($file_lic && $file_lic->isValid() && !$file_lic->hasMoved()) {
-            // Delete old license attachment if exists
-            if($license_attachment && file_exists(ROOTPATH . 'public/' . $license_attachment)) {
-                unlink(ROOTPATH . 'public/' . $license_attachment);
+        // Replace old files only once the new ones are saved
+        if($new_profile_pic) {
+            if($profile_pic && is_file(FCPATH . $profile_pic)) {
+                unlink(FCPATH . $profile_pic);
             }
-            $license_attachment = $this->uploadLicenseAttachment($driver_id);
+            $profile_pic = $new_profile_pic;
+        }
+        if($new_license_attachment) {
+            if($license_attachment && is_file(FCPATH . $license_attachment)) {
+                unlink(FCPATH . $license_attachment);
+            }
+            $license_attachment = $new_license_attachment;
         }
 
         $query = $this->db->query("
@@ -397,11 +433,11 @@ class FMS_Driver_Model extends Model
         $driver = $this->db->query("SELECT profile_picture, license_attachment FROM tbl_drivers WHERE driver_id = ?", [$driver_id])->getRowArray();
         
         if($driver) {
-            if($driver['profile_picture'] && file_exists(ROOTPATH . 'public/' . $driver['profile_picture'])) {
-                unlink(ROOTPATH . 'public/' . $driver['profile_picture']);
+            if($driver['profile_picture'] && is_file(FCPATH . $driver['profile_picture'])) {
+                unlink(FCPATH . $driver['profile_picture']);
             }
-            if($driver['license_attachment'] && file_exists(ROOTPATH . 'public/' . $driver['license_attachment'])) {
-                unlink(ROOTPATH . 'public/' . $driver['license_attachment']);
+            if($driver['license_attachment'] && is_file(FCPATH . $driver['license_attachment'])) {
+                unlink(FCPATH . $driver['license_attachment']);
             }
         }
 

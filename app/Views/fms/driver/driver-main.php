@@ -767,6 +767,111 @@ echo view('templates/myheader.php');
     /* ============================================ */
     /* LICENSE ZOOM MODAL */
     /* ============================================ */
+    .profile-pic-preview.has-photo {
+        cursor: zoom-in;
+    }
+
+    /* Uploaded / selected file card in the driver form */
+    .attach-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 10px;
+        padding: 8px 10px;
+        background: #ffffff;
+        border: 1px solid var(--gray-200);
+        border-radius: 10px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .attach-thumb {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        cursor: zoom-in;
+    }
+
+    .attach-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .attach-thumb i {
+        font-size: 22px;
+        color: var(--gray-500);
+    }
+
+    .attach-thumb i.bi-file-earmark-pdf {
+        color: var(--danger);
+    }
+
+    .attach-info {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        line-height: 1.3;
+    }
+
+    .attach-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--success);
+    }
+
+    .attach-label.is-new {
+        color: var(--primary);
+    }
+
+    .attach-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--gray-700);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .attach-view-btn {
+        flex: 0 0 auto;
+        width: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--primary);
+        background: var(--primary-light);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+
+    .attach-view-btn:hover {
+        color: #ffffff;
+        background: var(--primary);
+    }
+
+    /* Opens on top of the driver form modal */
+    .license-zoom-modal {
+        z-index: 1065;
+    }
+
+    .modal-backdrop + .modal-backdrop {
+        z-index: 1060;
+    }
+
     .license-zoom-modal .modal-dialog {
         max-width: 90%;
         max-height: 90vh;
@@ -780,11 +885,21 @@ echo view('templates/myheader.php');
         border-radius: 0 0 16px 16px;
     }
 
+    .license-zoom-modal .zoom-img-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        padding: 16px;
+    }
+
     .license-zoom-modal .modal-body img {
-        width: 100%;
+        max-width: 100%;
+        max-height: calc(85vh - 32px);
         height: auto;
-        max-height: 85vh;
         object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.35);
     }
 
     .license-zoom-modal .modal-body embed,
@@ -1270,7 +1385,7 @@ echo view('templates/myheader.php');
                         <div class="col-md-12">
                             <div class="d-flex align-items-center gap-4">
                                 <div>
-                                    <img id="profilePreview" src="<?=base_url('assets/images/profile/user-1.jpg');?>" class="profile-pic-preview" alt="Profile Preview">
+                                    <img id="profilePreview" src="<?=base_url('assets/images/profile/user-1.jpg');?>" class="profile-pic-preview" alt="Profile Preview" onclick="viewFormProfilePicture()">
                                 </div>
                                 <div>
                                     <label class="form-label">Profile Picture</label>
@@ -1504,10 +1619,17 @@ echo view('templates/myheader.php');
                         <div class="row mb-0">
                             <div class="col-md-12">
                                 <label class="form-label">License Attachment</label>
-                                <input type="file" id="form_license_attachment" class="form-control-file" accept=".pdf,.jpg,.jpeg,.png">
+                                <input type="file" id="form_license_attachment" class="form-control-file" accept=".pdf,.jpg,.jpeg,.png" onchange="previewLicenseAttachment(this)">
                                 <small class="text-muted">Upload license image or PDF (optional)</small>
-                                <div id="licenseAttachmentPreview" style="display:none;margin-top:6px;">
-                                    <span class="badge badge-success"><i class="bi bi-file-earmark-check"></i> <span id="licenseFileName"></span></span>
+                                <div id="licenseAttachmentPreview" class="attach-card" style="display:none;">
+                                    <div class="attach-thumb" id="licenseFileThumb" onclick="viewFormLicense()" title="View file"></div>
+                                    <div class="attach-info">
+                                        <span class="attach-label" id="licenseFileLabel"></span>
+                                        <span class="attach-name" id="licenseFileName"></span>
+                                    </div>
+                                    <button type="button" class="attach-view-btn" onclick="viewFormLicense()">
+                                        <i class="bi bi-eye"></i> View
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -1563,7 +1685,7 @@ echo view('templates/myheader.php');
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-file-earmark me-2"></i>License Document</h5>
+                <h5 class="modal-title"><i class="bi bi-file-earmark me-2"></i><span id="licenseZoomTitle">License Document</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="licenseZoomContent">
@@ -1832,20 +1954,87 @@ function previewProfilePicture(input) {
         var reader = new FileReader();
         reader.onload = function(e) {
             preview.src = e.target.result;
+            $(preview).addClass('has-photo');
         }
         reader.readAsDataURL(input.files[0]);
     }
 }
 
+function viewFormProfilePicture() {
+    var preview = document.getElementById('profilePreview');
+    if (!$(preview).hasClass('has-photo')) return;
+    openLicenseZoom(preview.src, 'jpg', 'Profile Picture');
+}
+
+// =============================================
+// LICENSE ATTACHMENT IN THE ADD/EDIT FORM
+// Shows the saved file (edit) or the newly picked file, with a View button
+// =============================================
+var formLicense = { url: '', ext: '', blobUrl: '' };
+
+function setFormLicense(url, ext, label, name) {
+    formLicense.url = url;
+    formLicense.ext = ext;
+    if (url) {
+        var thumb = $('#licenseFileThumb').empty();
+        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(ext)) {
+            thumb.append($('<img>', { src: url, alt: '' }));
+        } else {
+            thumb.append($('<i>', { 'class': ext === 'pdf' ? 'bi bi-file-earmark-pdf' : 'bi bi-file-earmark' }));
+        }
+        $('#licenseFileLabel').text(label).toggleClass('is-new', label === 'Selected file');
+        $('#licenseFileName').text(name).attr('title', name);
+        $('#licenseAttachmentPreview').css('display', 'flex');
+    } else {
+        $('#licenseAttachmentPreview').hide();
+    }
+}
+
+function resetFormLicense(existingPath) {
+    if (formLicense.blobUrl) {
+        URL.revokeObjectURL(formLicense.blobUrl);
+        formLicense.blobUrl = '';
+    }
+    $('#form_license_attachment').val('');
+    if (existingPath) {
+        setFormLicense('<?=base_url();?>' + existingPath, existingPath.split('.').pop().toLowerCase(), 'Current file', existingPath.split('/').pop());
+    } else {
+        setFormLicense('', '', '', '');
+    }
+}
+
+function previewLicenseAttachment(input) {
+    if (formLicense.blobUrl) {
+        URL.revokeObjectURL(formLicense.blobUrl);
+        formLicense.blobUrl = '';
+    }
+    if (input.files && input.files[0]) {
+        var file = input.files[0];
+        formLicense.blobUrl = URL.createObjectURL(file);
+        setFormLicense(formLicense.blobUrl, file.name.split('.').pop().toLowerCase(), 'Selected file', file.name);
+    } else {
+        // Picker cancelled: fall back to the saved file, if any
+        resetFormLicense($('#form_existing_license').val());
+    }
+}
+
+function viewFormLicense() {
+    if (formLicense.url) {
+        openLicenseZoom(formLicense.url, formLicense.ext);
+    }
+}
+
 // =============================================
 // OPEN ZOOM MODAL FOR LICENSE
+// fileExt/title are optional (needed for picked files, whose blob: URL has no extension)
 // =============================================
-function openLicenseZoom(fileUrl) {
-    var fileExt = fileUrl.split('.').pop().toLowerCase();
+function openLicenseZoom(fileUrl, fileExt, title) {
+    fileExt = fileExt || fileUrl.split('.').pop().toLowerCase();
+    $('#licenseZoomTitle').text(title || 'License Document');
     var content = '';
     
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(fileExt)) {
-        content = '<img src="' + fileUrl + '" alt="License Document" style="width:100%;height:auto;max-height:85vh;object-fit:contain;">';
+        content = '<div class="zoom-img-wrap"><img src="' + fileUrl + '" alt="' + (title || 'License Document') + '"></div>';
     } else if (['pdf'].includes(fileExt)) {
         content = '<embed src="' + fileUrl + '#toolbar=1" style="width:100%;height:85vh;" type="application/pdf">';
     } else {
@@ -1902,10 +2091,9 @@ function openAddDriver() {
     $('#form_expiration_date').val('');
     $('#form_existing_profile').val('');
     $('#form_existing_license').val('');
-    $('#profilePreview').attr('src', '<?=base_url('assets/images/profile/user-1.jpg');?>');
+    $('#profilePreview').attr('src', '<?=base_url('assets/images/profile/user-1.jpg');?>').removeClass('has-photo');
     $('#form_profile_picture').val('');
-    $('#form_license_attachment').val('');
-    $('#licenseAttachmentPreview').hide();
+    resetFormLicense('');
     $('#driverForm').removeClass('was-validated');
     var modal = new bootstrap.Modal(document.getElementById('driverModal'));
     modal.show();
@@ -1968,10 +2156,9 @@ function editDriver(driver_id) {
                 $('#form_expiration_date').val(data.expiration_date);
                 $('#form_existing_profile').val(data.profile_picture);
                 $('#form_existing_license').val(data.license_attachment);
-                $('#profilePreview').attr('src', profile_pic);
+                $('#profilePreview').attr('src', profile_pic).toggleClass('has-photo', !!data.profile_picture);
                 $('#form_profile_picture').val('');
-                $('#form_license_attachment').val('');
-                $('#licenseAttachmentPreview').hide();
+                resetFormLicense(data.license_attachment);
                 $('#driverForm').removeClass('was-validated');
                 
                 var modal = new bootstrap.Modal(document.getElementById('driverModal'));
@@ -2067,7 +2254,7 @@ function viewDriver(driver_id) {
                 var html = `
                     <div class="row">
                         <div class="col-md-3 text-center">
-                            <img src="${profile_pic}" class="profile-pic-preview" style="width:120px;height:120px;" alt="Profile">
+                            <img src="${profile_pic}" class="profile-pic-preview${data.profile_picture ? ' has-photo' : ''}" style="width:120px;height:120px;" alt="Profile"${data.profile_picture ? ` onclick="openLicenseZoom('${profile_pic}', null, 'Profile Picture')"` : ''}>
                             <h5 class="mt-2">${data.driver_name}</h5>
                             <span class="badge badge-primary">${data.driver_code}</span>
                         </div>

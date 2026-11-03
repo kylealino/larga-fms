@@ -6,6 +6,26 @@ function __Drivers() {
     console.log('Drivers initialized, URL: ' + mesiteurl);
 
     // ==============================
+    // ATTACH PROFILE PICTURE + LICENSE FILES (max 5MB each)
+    // ==============================
+    function appendDriverFiles(formData) {
+        var fields = [
+            { id: 'form_profile_picture', name: 'profile_picture', label: 'Profile picture' },
+            { id: 'form_license_attachment', name: 'license_attachment', label: 'License attachment' }
+        ];
+        for (var i = 0; i < fields.length; i++) {
+            var input = document.getElementById(fields[i].id);
+            if (!input || input.files.length === 0) continue;
+            if (input.files[0].size > 5 * 1024 * 1024) {
+                toastr.warning(fields[i].label + ' is too large. Max 5MB.', 'File too large');
+                return false;
+            }
+            formData.append(fields[i].name, input.files[0]);
+        }
+        return true;
+    }
+
+    // ==============================
     // SAVE DRIVER - MODAL VERSION
     // ==============================
     this.__saveDriverModal = function() {
@@ -87,17 +107,7 @@ function __Drivers() {
         formData.append('expiration_date', expiration_date);
         formData.append('meaction', 'SAVE');
 
-        // Add profile picture if selected
-        var profileFile = document.getElementById('form_profile_picture');
-        if(profileFile && profileFile.files.length > 0) {
-            formData.append('profile_picture', profileFile.files[0]);
-        }
-
-        // Add license attachment if selected
-        var licenseFile = document.getElementById('form_license_attachment');
-        if(licenseFile && licenseFile.files.length > 0) {
-            formData.append('license_attachment', licenseFile.files[0]);
-        }
+        if(!appendDriverFiles(formData)) return false;
 
         jQuery.ajax({
             type: "POST",
@@ -208,17 +218,7 @@ function __Drivers() {
         formData.append('expiration_date', expiration_date);
         formData.append('meaction', 'EDIT');
 
-        // Add profile picture if selected
-        var profileFile = document.getElementById('form_profile_picture');
-        if(profileFile && profileFile.files.length > 0) {
-            formData.append('profile_picture', profileFile.files[0]);
-        }
-
-        // Add license attachment if selected
-        var licenseFile = document.getElementById('form_license_attachment');
-        if(licenseFile && licenseFile.files.length > 0) {
-            formData.append('license_attachment', licenseFile.files[0]);
-        }
+        if(!appendDriverFiles(formData)) return false;
 
         jQuery.ajax({
             type: "POST",

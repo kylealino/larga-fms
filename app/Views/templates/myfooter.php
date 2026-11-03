@@ -19,7 +19,7 @@
             <div class="modal-body text-center py-4">
                 <i class="ti ti-alert-triangle" style="font-size: 48px; color: #dc2626; opacity: 0.6; margin-bottom: 16px;"></i>
                 <h4 class="mb-2">Are you sure?</h4>
-                <p class="text-muted mb-0">You are about to log out of the QCPD Shooting Range Management System.</p>
+                <p class="text-muted mb-0">You are about to log out of the Larga Fleet Management System.</p>
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
