@@ -92,7 +92,38 @@ class FMS_Invoice_Model extends Model
             LEFT JOIN tbl_billing b ON i.billing_id = b.billing_id
             WHERE i.invoice_id = ?
         ", [$invoice_id]);
-        return $query->getRowArray();
+        $invoice = $query->getRowArray();
+        if ($invoice) {
+            $invoice['booking_charges'] = $this->getBookingCharges($invoice_id);
+        }
+        return $invoice;
+    }
+
+    // ==============================
+    // INVOICE BOOKING CHARGES
+    // The trip's ERP booking quote (tbl_trip_booking_charges) is copied onto the invoice when it's
+    // generated, so the invoice keeps its own breakdown even if the trip's booking changes later
+    // ==============================
+    private function copyBookingCharges($invoice_id, $trip_id)
+    {
+        if (!$trip_id) return;
+
+        $this->db->query("
+            INSERT INTO tbl_invoice_booking_charges(
+                invoice_id, trip_id, trip_charge_id, erp_bookslip_dt_id, description, charge_basis, currency,
+                quantity, cost, selling, selling_php, payment_to, rate_validity, created_by
+            )
+            SELECT ?, trip_id, charge_id, erp_bookslip_dt_id, description, charge_basis, currency,
+                   quantity, cost, selling, selling_php, payment_to, rate_validity, ?
+            FROM tbl_trip_booking_charges
+            WHERE trip_id = ?
+            ORDER BY charge_id
+        ", [$invoice_id, $this->cuser, $trip_id]);
+    }
+
+    public function getBookingCharges($invoice_id)
+    {
+        return $this->db->query("SELECT * FROM tbl_invoice_booking_charges WHERE invoice_id = ? ORDER BY charge_id", [$invoice_id])->getResultArray();
     }
 
     // ==============================
@@ -147,6 +178,7 @@ class FMS_Invoice_Model extends Model
 
         if ($query) {
             $invoice_id = $this->db->insertID();
+            $this->copyBookingCharges($invoice_id, $billing->trip_id);
             $this->db->query("UPDATE tbl_billing SET billing_status = 'INVOICED' WHERE billing_id = ?", [$billing_id]);
             return ['status' => 'success', 'message' => 'Invoice Generated Successfully!', 'invoice_id' => $invoice_id];
         } else {
@@ -235,6 +267,7 @@ class FMS_Invoice_Model extends Model
         $query = $this->db->query("DELETE FROM `tbl_invoices` WHERE `invoice_id` = ?", [$invoice_id]);
 
         if ($query) {
+            $this->db->query("DELETE FROM tbl_invoice_booking_charges WHERE invoice_id = ?", [$invoice_id]);
             $this->db->query("UPDATE tbl_billing SET billing_status = 'FOR_INVOICE' WHERE billing_id = ?", [$invoice->billing_id]);
             return ['status' => 'success', 'message' => 'Invoice Deleted Successfully!'];
         } else {

@@ -152,6 +152,13 @@ echo view('templates/myheader.php');
     .modal-footer { border-top: 1px solid var(--gray-200); padding: 16px 24px; gap: 10px; background: var(--gray-50); border-radius: 0 0 16px 16px; }
 
     .invoice-info-box { background: var(--gray-50); border-radius: 8px; padding: 16px; margin-bottom: 16px; border-left: 4px solid var(--primary); }
+    .invoice-charges-box { border: 1px solid var(--gray-200); border-radius: 8px; overflow: hidden; }
+    .invoice-charges-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 12px; background: var(--gray-50); border-bottom: 1px solid var(--gray-200); }
+    .invoice-charges-head span { font-size: 12px; font-weight: 600; color: var(--gray-700); text-transform: uppercase; letter-spacing: 0.04em; }
+    .invoice-charges-head small { font-size: 11px; color: var(--gray-500); }
+    .erp-quote { background: #ffffff; }
+    .erp-quote th, .erp-quote td { padding: 6px 10px !important; font-size: 11px !important; }
+    .erp-quote tfoot th { background: var(--gray-50); color: var(--gray-700); font-weight: 600; border-top: 1.5px solid var(--gray-200); }
 
     @media (max-width: 992px) {
         .lrg-module-header { flex-direction: column; align-items: stretch; padding: 16px 20px; }
@@ -438,6 +445,20 @@ echo view('templates/myheader.php');
                 <div class="row mt-2">
                     <div class="col-md-12">
                         <textarea class="form-control" id="invoice_remarks" placeholder="Remarks"></textarea>
+                    </div>
+                </div>
+
+                <div id="invoice_booking_charges_box" class="invoice-charges-box mt-3" style="display:none;">
+                    <div class="invoice-charges-head">
+                        <span><i class="bi bi-receipt me-1"></i>Booking Charges</span>
+                        <small>Copied from the trip's booking when this invoice was generated</small>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table erp-quote mb-0">
+                            <thead><tr><th>Trucking Quote</th><th>Basis</th><th class="text-end">Qty</th><th class="text-end">Selling</th><th class="text-end">Selling (PHP)</th><th>Rate Valid</th></tr></thead>
+                            <tbody id="invoice_booking_charges"></tbody>
+                            <tfoot><tr><th colspan="4" class="text-end">Quoted total, VAT-exclusive</th><th class="text-end" id="invoice_booking_charges_total">&#8369;0.00</th><th></th></tr></tfoot>
+                        </table>
                     </div>
                 </div>
 

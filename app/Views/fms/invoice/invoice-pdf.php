@@ -57,16 +57,15 @@ $invoice_status = $data['invoice_status'];
 // ==============================
 // LINE ITEMS
 // ==============================
-// Service: the ERP booking quote lines when the billed amount still equals the quote, otherwise one service line
+// Service: the invoice's own copy of the booking quote (taken when the invoice was generated) when the
+// billed amount still equals the quote, otherwise one service line
 $subtotal = (float) $data['subtotal'];
 $basisLabel = ['PER_TRIP' => 'trip', 'PER_KILOMETER' => 'km', 'PER_HOUR' => 'hr', 'PER_DAY' => 'day', 'FIXED_RATE' => 'lot'];
 $serviceRef = trim(($trip_code ?: '') . ($data['dr_code'] ? '  /  ' . $data['dr_code'] : ''));
 $route = trim(($data['origin'] ?: '') . ($data['destination'] ? '  to  ' . $data['destination'] : ''));
 
 $items = [];
-$quote = $data['erp_bookslip_id']
-    ? $this->db->query("SELECT description, quantity, selling_php FROM tbl_trip_booking_charges WHERE trip_id = ? ORDER BY charge_id", [$data['trip_id']])->getResultArray()
-    : [];
+$quote = $this->db->query("SELECT description, quantity, selling_php FROM tbl_invoice_booking_charges WHERE invoice_id = ? ORDER BY charge_id", [$invoice_id])->getResultArray();
 $quoteTotal = array_sum(array_map(fn($q) => (float) $q['selling_php'] * (float) $q['quantity'], $quote));
 if ($quote && abs($quoteTotal - $subtotal) < 0.01) {
     foreach ($quote as $q) {

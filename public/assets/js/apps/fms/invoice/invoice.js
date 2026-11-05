@@ -78,6 +78,7 @@ function __Invoice() {
 
     this.__openCreateInvoice = function(billing) {
         isCreatingInvoice = true;
+        __Invoice.__renderBookingCharges([]);   // copied from the trip once the invoice is generated
 
         $('#invoice_id').val('');
         $('#invoice_pending_billing_id').val(billing.billing_id);
@@ -239,6 +240,7 @@ function __Invoice() {
                 $('#invoice_remarks').val(data.remarks);
 
                 __Invoice.__updateCalcDisplay(data);
+                __Invoice.__renderBookingCharges(data.booking_charges);
 
                 var modal = new bootstrap.Modal(document.getElementById('invoiceModal'));
                 modal.show();
@@ -247,6 +249,27 @@ function __Invoice() {
                 toastr.error("Error loading invoice: " + error);
             }
         });
+    };
+
+    // The invoice's own copy of the trip booking quote (same columns as the trip's booking panel)
+    this.__renderBookingCharges = function(charges) {
+        var esc = function(s) { return $('<div>').text(s == null ? '' : String(s)).html(); };
+        var money = function(n) { return '₱' + (parseFloat(n) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+        var html = '', total = 0;
+        $.each(charges || [], function(i, c) {
+            var qty = parseFloat(c.quantity) || 1;
+            var amount = (parseFloat(c.selling_php) || 0) * qty;
+            total += amount;
+            html += '<tr><td>' + esc(c.description) + '<div style="color:var(--gray-400);font-size:10px;">' + esc(c.payment_to || '') + '</div></td>'
+                + '<td>' + esc(c.charge_basis || '') + '</td>'
+                + '<td class="text-end">' + qty + '</td>'
+                + '<td class="text-end">' + esc(c.currency) + ' ' + (parseFloat(c.selling) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</td>'
+                + '<td class="text-end">' + money(amount) + '</td>'
+                + '<td>' + esc(c.rate_validity || '—') + '</td></tr>';
+        });
+        $('#invoice_booking_charges').html(html);
+        $('#invoice_booking_charges_total').text(money(total));
+        $('#invoice_booking_charges_box').toggle(!!html);
     };
 
     this.__updateCalcDisplay = function(data) {
